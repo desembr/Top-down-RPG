@@ -1,0 +1,6 @@
+# Ignore all IDE/platform-specific files
+.project
+.settings
+.classpath
+*.class
+bin
