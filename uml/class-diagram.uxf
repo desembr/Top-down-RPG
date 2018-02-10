@@ -5,12 +5,14 @@
     <id>UMLClass</id>
     <coordinates>
       <x>606</x>
-      <y>330</y>
+      <y>726</y>
       <w>180</w>
-      <h>84</h>
+      <h>102</h>
     </coordinates>
-    <panel_attributes>GameEngine:ActionListener
+    <panel_attributes>GameEngine
 --
+-players:List&lt;Player&gt;
+-startRoom:Room
 --
 +GameEngine():GameEngine
 -createRooms():void
@@ -18,23 +20,24 @@
 -endGame():void
 --
 Responsibilities
--- Manage the core game logic (controller).</panel_attributes>
+-- Manage the core game logic.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>582</x>
-      <y>480</y>
+      <y>876</y>
       <w>156</w>
-      <h>156</h>
+      <h>180</h>
     </coordinates>
-    <panel_attributes>Room
+    <panel_attributes>Room:Serializable
 --
 -description:String
 -exits:HashMap&lt;String,Room&gt;
 -entities:List&lt;Entity&gt;
 -items:List&lt;Item&gt;
+-iconFilePath:String
 --
 +Room():Room
 +setExit(dir:String,r:Room)
@@ -44,29 +47,17 @@ Responsibilities
 +getExit(direction:String):Room
 +getItems():List&lt;Item&gt;
 +getEntities():List&lt;Entity&gt;
++getIconFilePath():String
 --
 Responsibilities
 -- Store and provide info for a room.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>732</x>
-      <y>474</y>
-      <w>186</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=*
-m2=1</panel_attributes>
-    <additional_attributes>290.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>378</x>
-      <y>372</y>
+      <y>768</y>
       <w>168</w>
       <h>90</h>
     </coordinates>
@@ -76,18 +67,18 @@ m2=1</panel_attributes>
 --
 -Parser():Parser
 +getInstance():Parser
-+getCommand(inputLine:String):Command
++getCommand(commandLine:String):Command
 +showCommands():String
 --
 Responsibilities
--- Parses commands from player.</panel_attributes>
+-- Parses commands from players.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>378</x>
-      <y>516</y>
+      <y>912</y>
       <w>162</w>
       <h>96</h>
     </coordinates>
@@ -107,14 +98,727 @@ Responsibilities
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>882</x>
-      <y>114</y>
+      <x>606</x>
+      <y>564</y>
+      <w>210</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>GameServer
+--
+-gui:UserInterface
+-engine:GameEngine
+-serverSocket:DatagramSocket
+--
++GameServer():GameServer
++receiveCommand():void
++sendResponse(players:List&lt;Player&gt;,
+currentRoom:Room):void
++main(arg:String[])
+--
+Responsibilities
+-- Main class on the server-side which
+handles the game-logic and communicates with players.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>384</x>
+      <y>642</y>
+      <w>162</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Command
+--
+--
++Command():Command
++execute(p:Player):void
+--
+Responsibilities
+-- Base class for commands.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>666</x>
+      <y>678</y>
+      <w>18</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>444</x>
+      <y>852</y>
+      <w>18</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>462</x>
+      <y>720</y>
+      <w>18</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>804</x>
+      <y>972</y>
+      <w>156</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Item:Serializable
+--
+-name:String
+-weight:int
+-iconFilePath:String
+--
+#Item(name:String):Item
++use(currHealth:int):void
++getName():String
++getWeight():int
++isUsable():boolean
++getIconFilePath():String
+--
+Responsibilities
+-- Base class for all items.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1050</x>
+      <y>1116</y>
+      <w>156</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Apple:Serializable
+--
+--
++Apple(name:String,weight:int,
+healthGain:int,iconFilePath:String):Apple
+--
+Responsibilities
+Grants a certain health amount to players
+on use.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>876</x>
+      <y>1116</y>
+      <w>162</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Pie:Serializable
+--
+--
++Pie(name:String,weight:int,
+healthGain:int,iconFilePath:String):Pie
+--
+Responsibilities
+-- Grants a certain health amount to players
+on use.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>996</x>
+      <y>966</y>
+      <w>180</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Food:Serializable
+--
+-healthGain
+--
++Food(name:String, weight:int,
+healthGain:int,iconFilePath:String):Food
++use(currHealth:int):void
++isUsable():boolean
+--
+Responsibilities
+-- Base class for items which can be
+used (consumed) for health.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1002</x>
+      <y>1068</y>
+      <w>18</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1122</x>
+      <y>1068</y>
+      <w>18</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>906</x>
+      <y>702</y>
+      <w>180</w>
+      <h>192</h>
+    </coordinates>
+    <panel_attributes>Player:Serializable
+--
+-score:int
+-highscore:int
+-weight:int
+-maxWeight:static int
+-currentRoom:Room
+-items:List&lt;Item&gt;
+--
++Player(name:String,iconFilePath:String):Player
++addItem(item:Item):boolean
++dropItem(index:int):Item
++useItem(index:int):void
++goRoom(room:Room):void
++getRoom():Room
++getHighscore():int
++saveHighscore(highscore:int):void
++attack(e:Entity):void
+--
+Responsibilities
+-- Stores a player's state.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>954</x>
+      <y>1008</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>978</y>
+      <w>84</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+m1=*
+m2=1</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>888</y>
+      <w>18</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>696</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Exit
+--
+--
++Exit():Exit
++execute(p:Player):void
+--
+Responsibilities
+-- Exit-game command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>528</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Drop
+--
+--
++Drop():Drop
++execute(p:Player):void
+--
+Responsibilities
+-- Drop-item command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>780</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Go
+--
+--
++Go():Go
++execute(p:Player):void
+--
+Responsibilities
+-- Go-to-another-room command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>612</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Use
+--
+--
++Use():Use
++execute(p:Player):void
+--
+Responsibilities
+-- Use-item command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>180</x>
+      <y>450</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Pick
+--
+--
++Pick():Pick
++execute(p:Player):void
+--
+Responsibilities
+-- Pick-item command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>720</y>
+      <w>60</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;200.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>708</y>
+      <w>60</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>648</y>
+      <w>60</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>558</y>
+      <w>60</w>
+      <h>132</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;200.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>336</x>
+      <y>450</y>
+      <w>60</w>
+      <h>204</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;320.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>780</y>
+      <w>78</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>648</y>
+      <w>162</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Look
+--
+--
++Look():Exit
++execute(p:Player):void
+--
+Responsibilities
+-- Display-info-of-current-room command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>684</y>
+      <w>240</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>558</y>
+      <w>162</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Back
+--
+--
++Back():Back
++execute(p:Player):void
+--
+Responsibilities
+-- Go-back-to-previous-room command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>612</y>
+      <w>240</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>380.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>378</x>
+      <y>516</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Save
+--
+--
++Save():Save
++execute(p:Player):void
+--
+Responsibilities
+-- Save-player-highscore command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>456</x>
+      <y>582</y>
+      <w>18</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1128</x>
+      <y>792</y>
+      <w>180</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Entity:Serializable
+--
+-health:int
+-damage:int
+-defence:int
+-name:String
+-iconFilePath:String
+--
+#Entity(name:String,iconFilePath:String):Entity
++getHealth():int
++lowerHealth(healthDiff:int):void
++attack(e:Entity):void
++getIconFilePath():String
+--
+Responsibilities
+-- Base class for all entities</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1182</x>
+      <y>972</y>
+      <w>162</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Monster:Serializable
+--
+
+--
+Monster(name:String,damage:int,
+defence:int,iconFilePath:String):Monster
++attack(e:Entity):void
+--
+Responsibilities
+-- Attack players</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>804</y>
+      <w>60</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1206</x>
+      <y>936</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>588</x>
+      <y>1086</y>
+      <w>180</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Equipment:Serializable
+--
+--
+#Equipment(name:String,weight:int,
+iconFilePath:String):Equipment
++isUsable():boolean
+--
+Responsibilities
+-- Base class for items which only grants
+some stats to a player.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>762</x>
+      <y>1080</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>486</x>
+      <y>1206</y>
+      <w>156</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Shield:Serializable
+--
+-defence:int
+--
++Shield(name:String,weight:int,
+defence:int,iconFilePath:String):Shield
+--
+Responsibilities
+-- Grants a certain defence amount.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>684</x>
+      <y>1206</y>
+      <w>156</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Sword:Serializable
+--
+-damage:int
+--
++Sword(name:String,weight:int,
+damage:int,iconFilePath:String):Sword
+--
+Responsibilities
+-- Grants a certain damage amount.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>702</x>
+      <y>1170</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>618</x>
+      <y>1170</y>
+      <w>18</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>732</x>
+      <y>918</y>
+      <w>408</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;660.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>684</x>
+      <y>822</y>
+      <w>18</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>768</x>
+      <y>510</y>
+      <w>174</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>ZuulServer - server-side program</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>744</x>
+      <y>96</y>
+      <w>132</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>ZuulClient - client-side program.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>588</x>
+      <y>156</y>
       <w>186</w>
       <h>174</h>
     </coordinates>
     <panel_attributes>UserInterface:Observer
 --
--engine:GameEngine
 -myFrame:JFrame
 -entryField:JTextField
 -log:JTextArea
@@ -137,872 +841,179 @@ Responsibilities
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>606</x>
-      <y>198</y>
+      <x>1056</x>
+      <y>162</y>
       <w>162</w>
-      <h>78</h>
+      <h>120</h>
     </coordinates>
-    <panel_attributes>Game
+    <panel_attributes>Client:Observable
 --
--gui:UserInterface
--engine:GameEngine
+-clientSocket:DatagramSocket
+-players:List&lt;Player&gt;
+-currentRoom:Room
+-thread:Thread
 --
-+Game():Game
++Client():Client
++run():void
++sendCommand(cmd:String):void
++receiveResponse():void
 --
 Responsibilities
--- Creates and contains core objects.</panel_attributes>
+-- Interface between players and the server.</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>780</x>
-      <y>282</y>
-      <w>114</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;80.0;170.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>378</x>
-      <y>198</y>
+      <x>846</x>
+      <y>156</y>
       <w>162</w>
-      <h>132</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;abstract&gt;&gt;
-Command
---
--commandWord:String
--secondWord:String
---
-+Command(firstWord:String,
-secondWord:String):Command
-+execute():void
-+getCommandWord()():String
-+getSecondWord():String
-+hasSecondWord():boolean
---
-Responsibilities
--- Base class for commands.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>762</x>
-      <y>216</y>
-      <w>132</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;200.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>666</x>
-      <y>270</y>
-      <w>18</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>444</x>
-      <y>456</y>
-      <w>18</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>462</x>
-      <y>324</y>
-      <w>18</w>
-      <h>60</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=*
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>804</x>
-      <y>576</y>
-      <w>156</w>
       <h>108</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;abstract&gt;&gt;
-Item
+    <panel_attributes>GameClient
 --
--name:String
--weight:int
+-gui:UserInterface
+-client:Client
 --
-#Item(name:String):Item
-+use(Player p):void
-+getName():String
-getWeight():int
++GameClient():GameClient
++main(arg:String[])
 --
 Responsibilities
--- Base class for all items.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1050</x>
-      <y>690</y>
-      <w>156</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Apple
---
-
---
-+Apple(name:String,weight:int,
-healthGain:int):Apple
---
-Responsibilities
-Grants a certain health amount to players
-on use.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>876</x>
-      <y>690</y>
-      <w>156</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Pie
---
-
---
-+Pie(name:String,weight:int,
-healthGain:int):Pie
---
-Responsibilities
--- Grants a certain health amount to players
-on use.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>996</x>
-      <y>570</y>
-      <w>180</w>
-      <h>84</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;abstract&gt;&gt;
-Food
---
--healthGain
---
-+Food(name:String, weight:int,
-healthGain:int):Food
-+use(Player p):void
---
-Responsibilities
--- Implement common behavior for food items.</panel_attributes>
+-- Main class on the client-side, which
+creates core objects and stores state.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1002</x>
-      <y>648</y>
-      <w>18</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1122</x>
-      <y>648</y>
-      <w>18</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>906</x>
-      <y>306</y>
-      <w>156</w>
-      <h>210</h>
-    </coordinates>
-    <panel_attributes>Player:Observable
---
--score:int
--weight:int
--maxWeight:int
--highscore:int
--items:List&lt;Item&gt;
--currentRoom:Room
--client:Client
---
--Player(name:String):Player
-+getInstance():Player
-+addItem(item:Item):boolean
-+dropItem(index:int):Item
-+useItem(index:int):void
-+goRoom(room:Room):void
-+getRoom():Room
-+getHighscore():int
-+saveHighscore():void
-+attack():void
---
-Responsibilities
--- Stores player state.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>954</x>
-      <y>612</y>
-      <w>54</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>732</x>
-      <y>582</y>
-      <w>84</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=*
-m2=1</panel_attributes>
-    <additional_attributes>120.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>882</x>
-      <y>282</y>
-      <w>192</w>
-      <h>42</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=*
-m2=1</panel_attributes>
-    <additional_attributes>300.0;40.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>912</x>
-      <y>510</y>
-      <w>18</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>942</x>
-      <y>510</y>
-      <w>18</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1116</x>
-      <y>402</y>
-      <w>162</w>
-      <h>102</h>
-    </coordinates>
-    <panel_attributes>Client:Thread
---
--clientSocket:DatagramSocket
---
-+Client():Client
-+run():void
-+connect():void
-+getHighscore():int
-saveHighscore(highscore:int):void
---
-Responsibilities
--- Interface between player and server.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1116</x>
-      <y>270</y>
-      <w>162</w>
-      <h>84</h>
-    </coordinates>
-    <panel_attributes>Server
---
--serverSocket:DatagramSocket
---
-+Server(port:int):Server
-+main():void
---
-Responsibilities
--- Handles highscores.
--- Establish connections with players</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1056</x>
-      <y>420</y>
-      <w>72</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;100.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1188</x>
-      <y>348</y>
-      <w>18</w>
-      <h>66</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>606</x>
-      <y>72</y>
-      <w>162</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>Main
---
--game:Game
---
-+main(args:String[])
---
-Responsibilities
---Contains main loop and creates the 
-single Game object.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>678</x>
-      <y>138</y>
-      <w>18</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>180</x>
-      <y>300</y>
-      <w>162</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Exit
---
---
-+Exit(firstWord:String,
-secondWord:String):Exit
-+execute():void
---
-Responsibilities
--- Exit-game command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>180</x>
-      <y>132</y>
-      <w>162</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>Drop
---
---
-+Drop(firstWord:String,
-secondWord:String):Drop
-+execute():void
---
-Responsibilities
--- Drop-item command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>180</x>
-      <y>384</y>
-      <w>162</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>Go
---
---
-+Go(firstWord:String,
-secondWord:String):Go
-+execute():void
---
-Responsibilities
--- Go-to-another-room command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>180</x>
       <y>216</y>
-      <w>162</w>
-      <h>72</h>
+      <w>66</w>
+      <h>24</h>
     </coordinates>
-    <panel_attributes>Use
---
---
-+Use(firstWord:String,
-secondWord:String):Use
-+execute():void
---
-Responsibilities
--- Use-item command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>180</x>
-      <y>54</y>
-      <w>162</w>
-      <h>72</h>
-    </coordinates>
-    <panel_attributes>Pick
---
---
-+Pick(firstWord:String,
-secondWord:String):Pick
-+execute():void
---
-Responsibilities
--- Pick-item command.</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;90.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>336</x>
-      <y>324</y>
-      <w>54</w>
-      <h>138</h>
+      <x>768</x>
+      <y>192</y>
+      <w>90</w>
+      <h>24</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;210.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>336</x>
-      <y>270</y>
-      <w>54</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>336</x>
-      <y>252</y>
-      <w>54</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>336</x>
-      <y>162</y>
-      <w>54</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;130.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>336</x>
-      <y>54</y>
-      <w>54</w>
-      <h>156</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>70.0;240.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>540</x>
-      <y>384</y>
+      <y>720</y>
       <w>78</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;.
-m1=1
+m1=*
 m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>534</x>
-      <y>312</y>
-      <w>384</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>620.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>0</x>
-      <y>252</y>
-      <w>162</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Look
---
---
-+Look(firstWord:String,
-secondWord:String):Exit
-+execute():void
---
-Responsibilities
--- Display-info-of-current-room command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>156</x>
-      <y>288</y>
-      <w>234</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>0</x>
-      <y>162</y>
-      <w>162</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Back
---
---
-+Back(firstWord:String,
-secondWord:String):Back
-+execute():void
---
-Responsibilities
--- Go-back-to-previous-room command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>156</x>
-      <y>204</y>
-      <w>234</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>370.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
       <x>780</x>
-      <y>378</y>
+      <y>774</y>
       <w>138</w>
       <h>24</h>
     </coordinates>
-    <panel_attributes>lt=&lt;.
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
-m2=1</panel_attributes>
-    <additional_attributes>210.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>0</x>
-      <y>342</y>
-      <w>162</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Save
---
---
-+Save(firstWord:String,
-secondWord:String):Save
-+execute():void
---
-Responsibilities
--- Save-player-highscore command.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>156</x>
-      <y>306</y>
-      <w>234</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>370.0;10.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>534</x>
-      <y>324</y>
-      <w>84</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>120.0;20.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1338</x>
-      <y>306</y>
-      <w>162</w>
-      <h>126</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;abstract&gt;&gt;
-Entity
---
--health:int
--attack:int
--defence:int
-name:String
---
-#Entity(name:String):Entity
-+getHealth():int
-+lowerHealth(healthDiff:int):void
-+attack():void
---
-Responsibilities
--- Base class for all entities</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>1332</x>
-      <y>456</y>
-      <w>162</w>
-      <h>78</h>
-    </coordinates>
-    <panel_attributes>Monster
---
-
---
-Monster(name:String,attack:int,
-defence:int):Monster
-+attack():void
---
-Responsibilities
--- Attack player</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1056</x>
-      <y>390</y>
-      <w>294</w>
-      <h>18</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>470.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>1410</x>
-      <y>426</y>
-      <w>18</w>
-      <h>42</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>588</x>
-      <y>690</y>
-      <w>180</w>
-      <h>84</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;abstract&gt;&gt;
-Equipment
---
--healthGain
---
-#Equipment(name:String):Equipment
---
-Responsibilities
--- Implement common behavior for food items.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>762</x>
-      <y>672</y>
-      <w>54</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;30.0;70.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>486</x>
-      <y>810</y>
-      <w>156</w>
-      <h>66</h>
-    </coordinates>
-    <panel_attributes>Shield
---
--defence:int
---
-+Shield(name:String,defence:int):Shield
---
-Responsibilities
--- Grants a certain defence amount.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>684</x>
-      <y>810</y>
-      <w>156</w>
-      <h>66</h>
-    </coordinates>
-    <panel_attributes>Sword
---
--damage:int
---
-+Sword(name:String,damage:int):Sword
---
-Responsibilities
--- Grants a certain damage amount.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>702</x>
-      <y>768</y>
-      <w>18</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>618</x>
-      <y>768</y>
-      <w>18</w>
-      <h>54</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>732</x>
-      <y>426</y>
-      <w>618</w>
-      <h>150</h>
+      <y>870</y>
+      <w>186</w>
+      <h>24</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;220.0;1010.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;290.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>702</y>
+      <w>378</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>610.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>492</x>
+      <y>1008</y>
+      <w>102</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=*
+m2=*</panel_attributes>
+    <additional_attributes>150.0;10.0;90.0;20.0;40.0;50.0;10.0;90.0;60.0;120.0;110.0;100.0;150.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>738</y>
+      <w>162</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Attack
+--
+--
++Attack():Attack
++execute(p:Player):void
+--
+Responsibilities
+-- Attack-a-monster command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>678</y>
+      <w>240</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>380.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>276</y>
+      <w>18</w>
+      <h>438</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+m2=*</panel_attributes>
+    <additional_attributes>10.0;710.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
