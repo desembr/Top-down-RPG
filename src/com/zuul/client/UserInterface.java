@@ -1,11 +1,10 @@
 package com.zuul.client;
+
 import javax.swing.*;
-
-import com.zuul.server.GameEngine;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
+import com.zuul.server.GameEngine;
 
 /**
  * This class implements a simple graphical user interface with a text entry
