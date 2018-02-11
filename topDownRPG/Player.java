@@ -1,4 +1,4 @@
-package com.zuul.server.entity;
+ 
 
 /*
  * Class Player - contains state for the player (current room, items etc).

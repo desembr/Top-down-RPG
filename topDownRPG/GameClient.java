@@ -1,4 +1,4 @@
-package com.zuul.client;
+ 
 
 /**
  * Interface between players and the server.

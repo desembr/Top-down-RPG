@@ -1,4 +1,4 @@
-package com.zuul.server.command;
+ 
 
 /**
  * Display-info-of-current-room command.

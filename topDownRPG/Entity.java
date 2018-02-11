@@ -1,4 +1,4 @@
-package com.zuul.server.entity;
+ 
 
 /*
  * Class Entity - base class for all entities (player, monsters etc).

@@ -1,4 +1,4 @@
-package com.zuul.server.command;
+ 
 
 /**
  * Go-back-to-previous-room command.

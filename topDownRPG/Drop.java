@@ -1,4 +1,4 @@
-package com.zuul.server.command;
+ 
 
 /**
  * Drop-item command.
