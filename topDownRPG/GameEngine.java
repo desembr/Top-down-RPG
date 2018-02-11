@@ -45,6 +45,8 @@ public class GameEngine
         {
             gui.showImage( currentRoom.getImage() ); 
         }
+        
+        gui.showPlayer("player_no_armor_64x64.png"); // test
     }
 
     /**

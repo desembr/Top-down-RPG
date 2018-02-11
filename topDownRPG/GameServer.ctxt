@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=GameServer
+comment0.text=\r\n\ \ This\ class\ creates\ the\ necessary\ implementation\ objects\ and\ starts\ the\ game\ off.\r\n\ \r\n\ @author\ \ Tom\ Bjurenlind,\ Jan\ Rasmussen,\ Christer\ Sonesson,\ Emir\ Zivcic\r\n\ @version\ 1.0\r\n
+comment1.params=
+comment1.target=GameServer()
+comment1.text=\r\n\ Create\ the\ game\ and\ initialize\ its\ internal\ map.\r\n
+comment2.params=
+comment2.target=void\ run()
+numComments=3

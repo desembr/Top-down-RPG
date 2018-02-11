@@ -18,6 +18,8 @@ public class UserInterface implements ActionListener
     private JTextField entryField;
     private JTextArea log;
     private JLabel image;
+    
+    private JLabel playerSprite; // ny
 
     /**
      * Construct a UserInterface. As a parameter, a Game Engine
@@ -64,6 +66,22 @@ public class UserInterface implements ActionListener
             myFrame.pack();
         }
     }
+    
+    /**
+     * Show an image file on the other imageFile.
+     */
+    public void showPlayer(String imageName) // ny 
+    {
+        URL imageURL = this.getClass().getClassLoader().getResource(imageName);
+        if(imageURL == null)
+            System.out.println("image not found");
+        else {
+            ImageIcon icon = new ImageIcon(imageURL);
+            playerSprite.setIcon(icon);
+            myFrame.pack();
+        }
+    }
+    
 
     /**
      * Enable or disable input in the input field.
@@ -90,13 +108,19 @@ public class UserInterface implements ActionListener
         listScroller.setMinimumSize(new Dimension(100,100));
 
         JPanel panel = new JPanel();
-        image = new JLabel();
+        image = new JLabel(); // ändrad
+        
+        playerSprite = new JLabel(); // ny
+        playerSprite.setBounds(365,400, 64, 64); // test
 
         panel.setLayout(new BorderLayout());
         panel.add(image, BorderLayout.NORTH);
+        
+        image.add(playerSprite, BorderLayout.SOUTH); // ny
+        
         panel.add(listScroller, BorderLayout.CENTER);
         panel.add(entryField, BorderLayout.SOUTH);
-
+        
         myFrame.getContentPane().add(panel, BorderLayout.CENTER);
 
         // add some event listeners to some components
