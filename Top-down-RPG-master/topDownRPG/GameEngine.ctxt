@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.target=GameEngine
+comment0.text=\r\n\ \ This\ class\ is\ part\ of\ the\ "World\ of\ Zuul"\ application.\ \r\n\ \ "World\ of\ Zuul"\ is\ a\ very\ simple,\ text\ based\ adventure\ game.\r\n\ \r\n\ \ This\ class\ creates\ all\ rooms,\ creates\ the\ parser\ and\ starts\r\n\ \ the\ game.\ \ It\ also\ evaluates\ and\ executes\ the\ commands\ that\ \r\n\ \ the\ parser\ returns.\r\n\ \r\n\ @author\ \ (NN)\r\n\ @version\ (date)\r\n
+comment1.params=
+comment1.target=GameEngine()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ GameEngine\r\n
+comment2.params=userInterface
+comment2.target=void\ setGUI(UserInterface)
+comment3.params=
+comment3.target=void\ printWelcome()
+comment3.text=\r\n\ Print\ out\ the\ opening\ message\ for\ the\ player.\r\n
+comment4.params=
+comment4.target=void\ createRooms()
+comment4.text=\r\n\ Create\ all\ the\ rooms\ and\ link\ their\ exits\ together.\r\n
+comment5.params=commandLine
+comment5.target=void\ interpretCommand(java.lang.String)
+comment5.text=\r\n\ Given\ a\ command,\ process\ (that\ is\:\ execute)\ the\ command.\r\n\ If\ this\ command\ ends\ the\ game,\ true\ is\ returned,\ otherwise\ false\ is\r\n\ returned.\r\n
+comment6.params=
+comment6.target=void\ printHelp()
+comment6.text=\r\n\ Print\ out\ some\ help\ information.\r\n\ Here\ we\ print\ some\ stupid,\ cryptic\ message\ and\ a\ list\ of\ the\ \r\n\ command\ words.\r\n
+comment7.params=command
+comment7.target=void\ goRoom(Command)
+comment7.text=\ \r\n\ Try\ to\ go\ to\ one\ direction.\ If\ there\ is\ an\ exit,\ enter\ the\ new\r\n\ room,\ otherwise\ print\ an\ error\ message.\r\n
+comment8.params=
+comment8.target=void\ endGame()
+numComments=9
