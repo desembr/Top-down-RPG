@@ -38,6 +38,13 @@ public class GameEngine
         gui.print("\n");
         gui.println(currentRoom.getLongDescription());
         gui.println(currentRoom.showEnemiesInRoom());
+        
+        // för att startrummet ska få ett image, kan tas bort om första rummet är en meny 
+        // och goto används internt för att komma från menyn till första rummet 
+        if (currentRoom.hasImage() ) 
+        {
+            gui.showImage( currentRoom.getImage() ); 
+        }
     }
 
     /**
@@ -45,15 +52,17 @@ public class GameEngine
      */
     private void createRooms()
     {
-        Room outside, frozen, abandoned, furnished, occult, warped;
+        Room outside, frozen, abandoned, furnished, occult, warped, imageTestRoom;
       
         // create the rooms
-        outside = new Room("outside the Main Entrance");
-        frozen = new Room("in a Frozen Room");
-        abandoned = new Room("in an Abandoned Room");
-        furnished = new Room("in a Furnished Room");
-        occult = new Room("in an Occult Room");
-        warped = new Room("in a Warped Room");
+        outside = new Room("outside the Main Entrance", "outside800x600.png");
+        frozen = new Room("in a Frozen Room", "dungeon_room800x600.png");
+        abandoned = new Room("in an Abandoned Room", "dungeon_room800x600.png");
+        furnished = new Room("in a Furnished Room", "dungeon_room800x600.png");
+        occult = new Room("in an Occult Room", "dungeon_room800x600.png");
+        warped = new Room("in a Warped Room", "dungeon_room800x600.png");
+        
+        imageTestRoom = new Room("There should be an image here", "dungeon_room800x600.png"); // test
         
         // initialise room exits
         outside.setExit("east", frozen);
@@ -62,14 +71,18 @@ public class GameEngine
 
         frozen.setExit("west", outside);
 
-        abandoned.setExit("east", outside);
+        abandoned.setExit("south", imageTestRoom); // test
+        abandoned.setExit("north", outside); // test
 
         furnished.setExit("north", outside);
         occult.setExit("east", warped);
 
         warped.setExit("west", frozen);
+        
+        imageTestRoom.setExit("north", abandoned); // test
 
         currentRoom = outside;  // start game outside
+        
     }
 
     /**
@@ -137,7 +150,16 @@ public class GameEngine
             currentRoom = nextRoom;
             gui.println(currentRoom.getLongDescription());
             gui.println(currentRoom.showEnemiesInRoom());
+            
+            if (nextRoom.hasImage() ) // visar en bild om nästa rum har en 
+        {
+            gui.showImage( nextRoom.getImage() ); 
         }
+        
+        }
+        
+        
+        
     }
 
     private void endGame()
