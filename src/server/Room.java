@@ -3,6 +3,7 @@ package server;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ArrayList;
 
 /*
@@ -18,12 +19,12 @@ import java.util.ArrayList;
  * @author  (NNI)
  * @version (date)
  */
-
 public class Room 
 {
     private String description;
     private HashMap<String,Room> exits;        // stores exits of this room.
-    private ArrayList<Enemy> enemiesInRoom; 
+    private ArrayList<Enemy> enemiesInRoom;
+    private List<Item> itemsInRoom;
     
     private boolean hasImage; // boolean used in room-creation
     private String imageName; // set in room creation and passed to userInterface via GameEngine
@@ -38,6 +39,7 @@ public class Room
         this.description = description;
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
+        itemsInRoom = new ArrayList<Item>();
         
         hasImage = false; 
     }
@@ -47,6 +49,7 @@ public class Room
         this.description = description;
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
+        itemsInRoom = new ArrayList<Item>();
         
         this.imageName = imageName; 
         hasImage = true; 
@@ -55,6 +58,13 @@ public class Room
     public String showEnemiesInRoom(){
         if(enemiesInRoom.isEmpty()){
             return "This Room is Empty";
+        }
+        return "";
+    }
+    
+    public String showItemsInRoom(){
+        if(itemsInRoom.isEmpty()){
+            return "No items in here";
         }
         return "";
     }

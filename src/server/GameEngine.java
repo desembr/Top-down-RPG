@@ -107,7 +107,7 @@ public class GameEngine
     {
         gui.println(commandLine);
         Command command = parser.getCommand(commandLine);
-        command.execute((players.size() > 0) ? players.get(0) : null);
+        command.execute(null /* TODO:execute on the sending client's corresponding player object */);
         
         return players;
         /*if(command.isUnknown()) {

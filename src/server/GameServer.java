@@ -43,7 +43,7 @@ public class GameServer extends Thread
     }
     
     public void run() {
-    	while (true) {
+    	while (!interrupted()) {
     		String cmdLine = receiveCommand();
     		List<Player> players = engine.interpretCommand(cmdLine);
     		sendResponse(players);

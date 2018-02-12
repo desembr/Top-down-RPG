@@ -1,4 +1,7 @@
-package server;  
+package server;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Class Player - contains state for the player (current room, items etc).
@@ -6,14 +9,21 @@ package server;
  * @version 1.0
  */
 public class Player extends Entity {
+	private static final long serialVersionUID = 1L;
+	private static int damage = 30, defence = 32, num = 0;
+	
+	private static String name = "Player", iconFilePath = "player_no_armor_64x64.png";
+	private List<Item> items;
     
-    //private String spritePath; // filnamnet för bilden som representerar spelaren
-    private static int num = 0;
-    
-    public Player(int damage, int defence, String iconFilePath)
+    public Player()
     {
-    	super("Player" + (++num), damage, defence, iconFilePath);
+    	super(name + (++num), damage, defence, iconFilePath);
+    	items = new ArrayList<>();
         //spritePath = "player_no_armor_64x64.png"; 
+    }
+    
+    public List<Item> getItems() {
+    	return items;
     }
       
     /*public String getGraphic()

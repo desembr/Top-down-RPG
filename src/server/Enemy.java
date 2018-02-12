@@ -7,7 +7,9 @@ package server;
  */
 public abstract class Enemy extends Entity
 {   
-    protected Enemy(String name, int damage, int defence, String iconFilePath) {
+	private static final long serialVersionUID = 1L;
+
+	protected Enemy(String name, int damage, int defence, String iconFilePath) {
     	super(name, damage, defence, iconFilePath);
     }
 }
