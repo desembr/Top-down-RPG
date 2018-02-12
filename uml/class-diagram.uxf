@@ -16,7 +16,7 @@
 --
 +GameEngine():GameEngine
 -createRooms():void
-+interpretCommand(commandLine:String):void
++interpretCommand(commandLine:String):List&lt;Player&gt;
 -endGame():void
 --
 Responsibilities
@@ -105,14 +105,12 @@ Responsibilities
     </coordinates>
     <panel_attributes>GameServer
 --
--gui:UserInterface
 -engine:GameEngine
 -serverSocket:DatagramSocket
 --
 +GameServer():GameServer
 +receiveCommand():void
-+sendResponse(players:List&lt;Player&gt;,
-currentRoom:Room):void
++sendResponse(players:List&lt;Player&gt;):void
 +main(arg:String[])
 --
 Responsibilities
@@ -858,7 +856,7 @@ Responsibilities
 +Client():Client
 +run():void
 +sendCommand(cmd:String):void
-+receiveResponse():void
+-receiveResponse():void
 --
 Responsibilities
 -- Interface between players and the server.</panel_attributes>
@@ -1032,7 +1030,6 @@ m2=*</panel_attributes>
 --
 Orc(name:String,damage:int,
 defence:int,iconFilePath:String):Orc
-+attack(e:Entity):void
 --
 Responsibilities
 -- Attack players.</panel_attributes>
