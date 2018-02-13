@@ -42,14 +42,18 @@ public class GameServer extends Thread
     	//TODO: implement communication with clients.
     }
     
+    /**
+     * The continuous listening/responding main loop of the server program.
+     */
     public void run() {
     	while (!interrupted()) {
-    		String cmdLine = receiveCommand();
-    		List<Player> players = engine.interpretCommand(cmdLine);
-    		sendResponse(players);
+    		String s = receiveCommand();
     	}
     }
     
+    /**
+     * Entry point to server program.
+     */
     public static void main(String[] args) {
     	new GameServer();
     }

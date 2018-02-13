@@ -5,9 +5,15 @@ package server;
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
-public class Equipment extends Item {
+public abstract class Equipment extends Item {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Constructor for Equipment.
+	 * @param name The name of this equipment.
+	 * @param weight The weight of this equipment.
+	 * @param The iconFilePath of this equipment.
+	 */
 	protected Equipment(String name, int weight, String iconFilePath) {
 		super(name, weight, iconFilePath);
 	}

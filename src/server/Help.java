@@ -1,15 +1,15 @@
  package server; 
 
 /**
- * Go-back-to-previous-room command.
+ * Print-help-to-a-user command.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
-public class Back extends Command {
+public class Help extends Command {
 	/**
 	 * Constructor for this class.
 	 */
-	public Back() {
+	public Help() {
 	}
 	
 	/**
@@ -18,9 +18,6 @@ public class Back extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		if (p.goBackARoom()) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 }

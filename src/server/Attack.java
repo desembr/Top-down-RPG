@@ -15,8 +15,9 @@ public class Attack extends Command {
 	/**
 	 * Executes this command.
 	 * @param p The player object which this function affects.
+	 * @return Whether execution of this command changed some player state.
 	 */
-	public void execute(Player p) {
-		
+	public boolean execute(Player p) {
+		return true;
 	}
 }

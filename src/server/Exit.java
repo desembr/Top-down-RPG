@@ -15,8 +15,9 @@ public class Exit extends Command {
 	/**
 	 * Executes this command.
 	 * @param p The player object which this function affects.
+	 * @return Whether execution of this command changed some player state.
 	 */
-	public void execute(Player p) {
-		//TODO: Disconnect calling player and make his client exit with a message.
+	public boolean execute(Player p) {
+		return false;
 	}
 }

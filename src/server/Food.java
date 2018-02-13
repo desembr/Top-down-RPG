@@ -10,13 +10,25 @@ import java.io.Serializable;
 public abstract class Food extends Item implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private int healthGain;
-
+	protected int healthGain;
+	
+	/**
+	 * Constructor for Food.
+	 * @param name The name of this Food.
+	 * @param weight The weight of this Food.
+	 * @param healthGain The healthGain on use of this Food.
+	 * @param iconFilePath The iconFilePath of this Food.
+	 */
 	protected Food(String name, int weight, int healthGain, String iconFilePath) {
 		super(name, weight, iconFilePath);
 		this.healthGain = healthGain;
 	}
 	
+	/**
+	 * Returns an increased health.
+	 * @param currentHealth The current health of the consuming/using player.
+	 * @return The new increased health for the consuming player to use.
+	 */
 	public int use(int currentHealth) {
 		return currentHealth + healthGain;
 	}

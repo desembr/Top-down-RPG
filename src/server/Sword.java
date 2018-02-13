@@ -8,10 +8,19 @@ package server;
 public class Sword extends Equipment {
 	private static final long serialVersionUID = 1L;
 	
-	private static int weight = 25;
-	private static String name = "Sword", iconFilePath = "sword.png";
-	
+	/**
+	 * Constructor for Sword.
+	 */
 	public Sword() {
-		super(name, weight, iconFilePath);
+		super("Sword", 25, "sword.png");
+	}
+	
+	/**
+	 * Returns the same health.
+	 * @param currentHealth The current health of the consuming/using player.
+	 * @return The same health for the consuming player to use (not usable).
+	 */
+	public int use(int currentHealth) {
+		return currentHealth;
 	}
 }

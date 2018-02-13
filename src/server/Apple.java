@@ -8,10 +8,10 @@ package server;
 public class Apple extends Food {
 	private static final long serialVersionUID = 1L;
 	
-	private static int weight = 5, healthGain = 8;
-	private static String name = "Apple", iconFilePath = "apple.png";
-	
+	/**
+	 * Constructor for Apple.
+	 */
 	public Apple() {
-		super(name, weight, healthGain, iconFilePath);
+		super("Apple", 5, 8, "apple.png");
 	}
 }

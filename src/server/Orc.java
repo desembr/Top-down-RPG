@@ -2,11 +2,13 @@ package server;
 
 public class Orc extends Enemy {
 	private static final long serialVersionUID = 1L;
-	private static int damage = 10, defence = 15, num = 0;
 	
-	private static String name = "Orc", iconFilePath = "sword.png";
+	private static int num = 0;
 	
+	/**
+	 * Constructor for Orc.
+	 */
     public Orc(){
-        super(name + (++num), damage, defence, iconFilePath);
+        super("Orc" + (++num), 10, 15, 40, "Orc.png");
     }
 }

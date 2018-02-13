@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -24,11 +25,13 @@ import server.GameEngine;
  * This class implements a simple graphical user interface with a text entry
  * area, a text output area and an optional image.
  * 
- * @author (NN)
- * @version (date)
+ * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @version 1.0
  */
 public class UserInterface implements ActionListener, Observer
 {
+	private static final int WIDTH = 640, HEIGHT = 480;
+	
     //private GameEngine engine;
 	Client client;
     private JFrame myFrame;
@@ -45,10 +48,10 @@ public class UserInterface implements ActionListener, Observer
      * 
      * @param gameEngine  The GameEngine object implementing the game logic.
      */
-    public UserInterface(/*GameEngine gameEngine*/)
+    public UserInterface(Client client/*GameEngine gameEngine*/)
     {
         //engine = gameEngine;
-    	client = new Client();
+    	this.client = client;
         createGUI();
     }
 
@@ -152,9 +155,10 @@ public class UserInterface implements ActionListener, Observer
 
         entryField.addActionListener(this);
 
-        myFrame.setPreferredSize(new Dimension(640, 480));
+        myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        myFrame.setLocationRelativeTo(null);
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        myFrame.setLocation((int)d.getWidth() / 2 - WIDTH / 2, (int)d.getHeight() / 2 - HEIGHT / 2);
         myFrame.pack();
         myFrame.setVisible(true);
         entryField.requestFocus();
@@ -183,6 +187,9 @@ public class UserInterface implements ActionListener, Observer
         client.sendCommand(input);
     }
     
+    /**
+     * Gets called by client object (observable) on response from server (if state changed).
+     */
     public void update(Observable o, Object ob) {
     	//TODO:Display this client's current room, items, that room's items and that room's entities
     }

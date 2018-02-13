@@ -7,11 +7,19 @@ package client;
  */
 public class GameClient {
 	private UserInterface gui;
+	Client client;
 	
+	/**
+     * Constructor of this class.
+     */
 	public GameClient() {
-		gui = new UserInterface();
+		client = new Client();
+		gui = new UserInterface(client);
 	}
 	
+	/**
+     * Entry point to Client program.
+     */
 	public static void main(String[] args) {
 		new GameClient();
 	}

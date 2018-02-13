@@ -8,10 +8,19 @@ package server;
 public class Shield extends Equipment {
 	private static final long serialVersionUID = 1L;
 	
-	private static int weight = 30;
-	private static String name = "Shield", iconFilePath = "Shield.png";
-	
+	/**
+	 * Constructor for Shield.
+	 */
 	public Shield() {
-		super(name, weight, iconFilePath);
+		super("Shield", 30, "Shield.png");
+	}
+
+	/**
+	 * Returns the same health.
+	 * @param currentHealth The current health of the consuming/using player.
+	 * @return The same health for the consuming player to use (not usable).
+	 */
+	public int use(int currentHealth) {
+		return currentHealth;
 	}
 }

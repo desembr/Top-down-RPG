@@ -7,7 +7,7 @@
       <x>606</x>
       <y>630</y>
       <w>180</w>
-      <h>102</h>
+      <h>108</h>
     </coordinates>
     <panel_attributes>GameEngine
 --
@@ -15,6 +15,7 @@
 -startRoom:Room
 --
 +GameEngine():GameEngine
++getPlayers():List&lt;Player&gt;
 -createRooms():void
 +interpretCommand(commandLine:String):List&lt;Player&gt;
 -endGame():void
@@ -124,14 +125,16 @@ handles the game-logic and communicates with players.</panel_attributes>
       <x>384</x>
       <y>546</y>
       <w>162</w>
-      <h>84</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Command
 --
+#secondWord:String
 --
 +Command():Command
-+execute(p:Player):void
++setSecondWord(sw:String):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Base class for commands.</panel_attributes>
@@ -167,14 +170,14 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>462</x>
-      <y>624</y>
+      <y>630</y>
       <w>18</w>
-      <h>60</h>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=*
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -187,9 +190,9 @@ m2=1</panel_attributes>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Item:Serializable
 --
--name:String
--weight:int
--iconFilePath:String
+#name:String
+#weight:int
+#iconFilePath:String
 --
 #Item(name:String):Item
 +use(currHealth:int):int
@@ -249,7 +252,7 @@ on use.</panel_attributes>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Food:Serializable
 --
--healthGain
+#healthGain
 --
 +Food(name:String, weight:int,
 healthGain:int,iconFilePath:String):Food
@@ -289,7 +292,7 @@ used (consumed) for health.</panel_attributes>
       <x>906</x>
       <y>606</y>
       <w>180</w>
-      <h>192</h>
+      <h>204</h>
     </coordinates>
     <panel_attributes>Player:Serializable
 --
@@ -299,12 +302,14 @@ used (consumed) for health.</panel_attributes>
 -maxWeight:static int
 -currentRoom:Room
 -items:List&lt;Item&gt;
+-previousRooms:List&lt;Room&gt;
 --
-+Player():Player
++Player(startRoom:Room):Player
 +addItem(item:Item):boolean
 +dropItem(index:int):Item
 +useItem(index:int):void
-+goRoom(room:Room):void
++goBackARoom():boolean
++goRoom(room:Room):boolean
 +getRoom():Room
 +getHighscore():int
 +saveHighscore(highscore:int):void
@@ -342,14 +347,14 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>912</x>
-      <y>792</y>
+      <y>804</y>
       <w>18</w>
-      <h>96</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;140.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -363,7 +368,7 @@ m2=*</panel_attributes>
 --
 --
 +Exit():Exit
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Exit-game command.</panel_attributes>
@@ -381,7 +386,7 @@ Responsibilities
 --
 --
 +Drop():Drop
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Drop-item command.</panel_attributes>
@@ -399,7 +404,7 @@ Responsibilities
 --
 --
 +Go():Go
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Go-to-another-room command.</panel_attributes>
@@ -417,7 +422,7 @@ Responsibilities
 --
 --
 +Use():Use
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Use-item command.</panel_attributes>
@@ -435,7 +440,7 @@ Responsibilities
 --
 --
 +Pick():Pick
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Pick-item command.</panel_attributes>
@@ -445,12 +450,12 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>336</x>
-      <y>624</y>
+      <y>630</y>
       <w>60</w>
-      <h>132</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>80.0;10.0;10.0;190.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -521,7 +526,7 @@ m2=1</panel_attributes>
 --
 --
 +Look():Exit
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Display-info-of-current-room command.</panel_attributes>
@@ -550,7 +555,7 @@ Responsibilities
 --
 --
 +Back():Back
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Go-back-to-previous-room command.</panel_attributes>
@@ -579,7 +584,7 @@ Responsibilities
 --
 --
 +Save():Save
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Save-player-highscore command.</panel_attributes>
@@ -600,26 +605,29 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>1128</x>
-      <y>696</y>
+      <y>654</y>
       <w>180</w>
-      <h>168</h>
+      <h>198</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Entity:Serializable
 --
--health:int
--damage:int
--defence:int
--name:String
--iconFilePath:String
+#health:int
+#damage:int
+#defence:int
+#name:String
+#iconFilePath:String
+#isDead:boolean
 --
-#Entity(name:String,iconFilePath:String):Entity
+#Entity(name:String,damage:int,defence:int,
+health:int,iconFilePath:String):Entity
 +getHealth():int
 +lowerHealth(healthDiff:int):void
 +attack(e:Entity):void
 +getIconFilePath():String
 +getName():String
 +getIconFilePath():string
++getIsDead():boolean
 --
 Responsibilities
 -- Base class for all entities.</panel_attributes>
@@ -635,10 +643,9 @@ Responsibilities
     </coordinates>
     <panel_attributes>Enemy:Serializable
 --
-
 --
-Enemy(name:String,damage:int,
-defence:int,iconFilePath:String):Enemy
+Enemy(name:String,damage:int,defence:int,
+health:int,iconFilePath:String):Enemy
 +attack(e:Entity):void
 --
 Responsibilities
@@ -660,12 +667,12 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1206</x>
-      <y>858</y>
+      <y>846</y>
       <w>18</w>
-      <h>30</h>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -774,14 +781,14 @@ m2=*</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>684</x>
-      <y>726</y>
+      <y>732</y>
       <w>18</w>
-      <h>66</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
@@ -811,7 +818,7 @@ m2=1</panel_attributes>
       <x>588</x>
       <y>60</y>
       <w>186</w>
-      <h>174</h>
+      <h>198</h>
     </coordinates>
     <panel_attributes>UserInterface:Observer
 --
@@ -828,10 +835,13 @@ m2=1</panel_attributes>
 -createGUI():void
 -printWelcome():void
 -printHelp():void
--update(o:Observable,arg:Object):void
++update(o:Observable,arg:Object):void
+-showEntities():void
+-showItems():void
 --
 Responsibilities
--- Manages and creates all the gui components.</panel_attributes>
+-- Manages and creates all the gui components, 
+handles user input and updates of gui.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -840,7 +850,7 @@ Responsibilities
       <x>1056</x>
       <y>66</y>
       <w>162</w>
-      <h>120</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>Client:Observable
 --
@@ -864,7 +874,7 @@ Responsibilities
       <x>846</x>
       <y>60</y>
       <w>162</w>
-      <h>108</h>
+      <h>102</h>
     </coordinates>
     <panel_attributes>GameClient
 --
@@ -982,7 +992,7 @@ m2=*</panel_attributes>
 --
 --
 +Attack():Attack
-+execute(p:Player):void
++execute(p:Player):boolean
 --
 Responsibilities
 -- Attack-a-monster command.</panel_attributes>
@@ -1003,14 +1013,14 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1050</x>
-      <y>180</y>
+      <y>186</y>
       <w>18</w>
-      <h>438</h>
+      <h>432</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=*
 m2=*</panel_attributes>
-    <additional_attributes>10.0;710.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;700.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1022,7 +1032,6 @@ m2=*</panel_attributes>
     </coordinates>
     <panel_attributes>Orc:Serializable
 --
-
 --
 Orc():Orc
 --
@@ -1040,5 +1049,34 @@ Responsibilities
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>372</y>
+      <w>162</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>Help
+--
+--
++Help():Help
++execute(p:Player):boolean
+--
+Responsibilities
+-- Print-help command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>156</x>
+      <y>414</y>
+      <w>240</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>380.0;230.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

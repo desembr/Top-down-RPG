@@ -13,14 +13,13 @@ import client.UserInterface;
  *  the game.  It also evaluates and executes the commands that 
  *  the parser returns.
  * 
- * @author  (NN)
- * @version (date)
+ * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @version 1.0
  */
 public class GameEngine
 {
     private Parser parser;
-    private Room currentRoom;
-    private UserInterface gui;
+    //private UserInterface gui;
     private List<Player> players;
 
     /**
@@ -32,17 +31,25 @@ public class GameEngine
         players = new ArrayList<>();
         createRooms();
     }
+    
+    /**
+     * 
+     * @return The registered/connected players on this server.
+     */
+    public List<Player> getPlayers() {
+    	return players;
+    }
 
-    public void setGUI(UserInterface userInterface)
+    /*public void setGUI(UserInterface userInterface)
     {
         gui = userInterface;
         printWelcome();
-    }
+    }*/
 
     /**
      * Print out the opening message for the player.
      */
-    private void printWelcome()
+   /* private void printWelcome()
     {
         gui.print("\n");
         gui.println(currentRoom.getLongDescription());
@@ -56,7 +63,7 @@ public class GameEngine
         }
         
         gui.showPlayer("player_no_armor_64x64.png"); // test
-    }
+    }*/
 
     /**
      * Create all the rooms and link their exits together.
@@ -92,7 +99,7 @@ public class GameEngine
         
         imageTestRoom.setExit("north", abandoned); // test
 
-        currentRoom = outside;  // start game outside
+        //currentRoom = outside;  // start game outside
         
     }
 
@@ -105,7 +112,7 @@ public class GameEngine
      */
     public List<Player> interpretCommand(String commandLine) 
     {
-        gui.println(commandLine);
+        //gui.println(commandLine);
         Command command = parser.getCommand(commandLine);
         command.execute(null /* TODO:execute on the sending client's corresponding player object */);
         
@@ -135,13 +142,13 @@ public class GameEngine
      * Here we print some stupid, cryptic message and a list of the 
      * command words.
      */
-    @SuppressWarnings("unused")
+    /*
 	private void printHelp() 
     {
         gui.println("You are lost. You are alone. You wander");
         gui.println("around the Maze.\n");
         gui.print("Your command words are: " + parser.showCommands());
-    }
+    }*/
 
     /** 
      * Try to go to one direction. If there is an exit, enter the new
