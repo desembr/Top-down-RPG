@@ -47,35 +47,39 @@ public class Player extends Entity {
     
     /**
      * Attempts to consume a food in inventory.
-     * @param itemIndex The index of the food to use/consume.
+     * @param itemName The name of the food to consume.
      * @return Whether the item could be consumed or not.
      */
-    public boolean useItem(int itemIndex) {
-    	if (itemIndex < 0 || itemIndex >= items.size()) {
-    		return false;
+    public boolean useItem(String itemName) {
+    	for (int i = 0; i < items.size(); i++) {
+        	Item item = items.get(i);
+        	if (item instanceof Food) {
+	        	if (item.getName().equals(itemName)) {
+	        		this.health = item.use(health);
+	        		weight -= item.getWeight();
+	        		items.remove(i);
+	        		return true;
+	        	}
+        	}
     	}
-    	Item item = items.get(itemIndex);
-    	if (item.isUsable()) {
-    		this.health = item.use(health);
-    		weight -= items.get(itemIndex).getWeight();
-    		items.remove(itemIndex);
-    		return true;
-    	}
-    	return false;
+        return false;
     }
     
     /**
      * Attempts to drop an item in inventory of this player.
-     * @param itemIndex The index of the item to drop.
+     * @param itemName The name of the item to drop.
      * @return Whether the player could drop the specified item or not (invalid index).
      */
-    public boolean dropItem(int itemIndex) {
-    	if (itemIndex < 0 || itemIndex >= items.size()) {
-    		return false;
-    	}
-    	weight -= items.get(itemIndex).getWeight();
-		items.remove(itemIndex);
-		return true;
+    public boolean dropItem(String itemName) {
+    	for (int i = 0; i < items.size(); i++) {
+        	Item item = items.get(i);
+        	if (item.getName().equals(itemName)) {
+        		weight -= item.getWeight();
+        		items.remove(i);
+        		return true;
+        	}
+        }
+        return false;
     }
     
     /**

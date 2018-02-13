@@ -15,9 +15,10 @@ public class Help extends Command {
 	/**
 	 * Executes this command.
 	 * @param p The player object which this function affects.
-	 * @return Whether execution of this command changed some player state.
+	 * @return Always false to signal to GameEngine that a help message
+	 * should be sent back to the initiating client/user.
 	 */
 	public boolean execute(Player p) {
-		return true;
+		return false;
 	}
 }

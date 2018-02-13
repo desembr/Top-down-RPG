@@ -14,25 +14,17 @@ public class Pick extends Command {
 	}
 	
 	/**
-	 * Executes this command.
+	 * Executes this command, sets a return message if something to write back to client.
 	 * @param p The player object which this function affects.
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
 		if (secondWord != null) {
-			try {
-				int itemIndex = Integer.parseInt(secondWord);
-				Item item = p.getRoom().pickItem(itemIndex);
-				if (item != null) {
-					if (p.pickItem(item)) {
-						return true;
-					}
-				}
-				if (p.dropItem(itemIndex)) {
+			Item item = p.getRoom().pickItem(secondWord);
+			if (item != null) {
+				if (p.pickItem(item)) {
 					return true;
 				}
-			} catch (NumberFormatException e) {
-				return false;
 			}
 		}
 		return false;

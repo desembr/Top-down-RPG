@@ -35,11 +35,14 @@ public class GameServer extends Thread
     }
     
     /**
-     * Send responses to communicating clients.
-     * @param players The list of players to send to a client.
+     * Send responses to communicating clients, consisting of all connected players and possibly 
+     * also a responseMessage from the executed command.
+     * @param responseMessage The message returned by the input, processed command. It's null
+     * if the command didn't return one, and should then not be sent back to the client/user.
      */
-    private void sendResponse(List<Player> players) {
+    private void sendResponse(String responseMessage) {
     	//TODO: implement communication with clients.
+    	List<Player> players = engine.getPlayers();
     }
     
     /**
@@ -47,7 +50,9 @@ public class GameServer extends Thread
      */
     public void run() {
     	while (!interrupted()) {
-    		String s = receiveCommand();
+    		String commandLine = receiveCommand();
+    		String returnMessage = engine.interpretCommand(commandLine);
+    		sendResponse(returnMessage);
     	}
     }
     

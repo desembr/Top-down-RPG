@@ -8,7 +8,9 @@ import server.Room;
 import server.Player;
 
 /**
- * Interface between players and the server.
+ * Interface between players and the server, passes updated information returned from
+ * the server back to the calling gui through setChanged() and notifyObservers() methods
+ * of the Observable base class.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */

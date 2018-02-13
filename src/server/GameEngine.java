@@ -87,17 +87,17 @@ public class GameEngine
         outside.setExit("south", abandoned);
         outside.setExit("west", furnished);
 
-        frozen.setExit("west", outside);
+        //frozen.setExit("west", outside);
 
         abandoned.setExit("south", imageTestRoom); // test
-        abandoned.setExit("north", outside); // test
+        //abandoned.setExit("north", outside); // test
 
-        furnished.setExit("north", outside);
+        //furnished.setExit("north", outside);
         occult.setExit("east", warped);
 
-        warped.setExit("west", frozen);
+        //warped.setExit("west", occult);
         
-        imageTestRoom.setExit("north", abandoned); // test
+        //imageTestRoom.setExit("north", abandoned); // test
 
         //currentRoom = outside;  // start game outside
         
@@ -110,13 +110,17 @@ public class GameEngine
      * @param commandLine The command to process.
      * @return A list of players to send back to the sender of this command.
      */
-    public List<Player> interpretCommand(String commandLine) 
+    public String interpretCommand(String commandLine) 
     {
         //gui.println(commandLine);
         Command command = parser.getCommand(commandLine);
-        command.execute(null /* TODO:execute on the sending client's corresponding player object */);
+        //TODO:execute on the sending client's corresponding player object, stored in players.
+        boolean ret = command.execute(null);
+        if (ret == false) {
+        	return printHelp();
+        }
         
-        return players;
+        return command.getReturnMessage();
         /*if(command.isUnknown()) {
             gui.println("I don't know what you mean...");
             return;
@@ -141,14 +145,16 @@ public class GameEngine
      * Print out some help information.
      * Here we print some stupid, cryptic message and a list of the 
      * command words.
+     * @return The help string.
      */
-    /*
-	private void printHelp() 
+	private String printHelp() 
     {
-        gui.println("You are lost. You are alone. You wander");
+        /*gui.println("You are lost. You are alone. You wander");
         gui.println("around the Maze.\n");
-        gui.print("Your command words are: " + parser.showCommands());
-    }*/
+        gui.print("Your command words are: " + parser.showCommands());*/
+		return "You are lost. You are alone. You wander\naround the Maze.\n" + 
+		"Your command words are: " + parser.showCommands();
+    }
 
     /** 
      * Try to go to one direction. If there is an exit, enter the new

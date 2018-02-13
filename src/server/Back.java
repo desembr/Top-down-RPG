@@ -13,7 +13,7 @@ public class Back extends Command {
 	}
 	
 	/**
-	 * Executes this command.
+	 * Executes this command, sets a return message if something to write back to client.
 	 * @param p The player object which this function affects.
 	 * @return Whether execution of this command changed some player state.
 	 */

@@ -17,7 +17,7 @@
 +GameEngine():GameEngine
 +getPlayers():List&lt;Player&gt;
 -createRooms():void
-+interpretCommand(commandLine:String):List&lt;Player&gt;
++interpretCommand(commandLine:String):String
 -endGame():void
 --
 Responsibilities
@@ -30,7 +30,7 @@ Responsibilities
       <x>582</x>
       <y>780</y>
       <w>156</w>
-      <h>180</h>
+      <h>198</h>
     </coordinates>
     <panel_attributes>Room:Serializable
 --
@@ -49,6 +49,8 @@ Responsibilities
 +getItems():List&lt;Item&gt;
 +getEntities():List&lt;Entity&gt;
 +getIconFilePath():String
+-showEnemiesInRoom():String
+-showItemsInRoom():String
 --
 Responsibilities
 -- Store and provide info for a room.</panel_attributes>
@@ -58,7 +60,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>378</x>
-      <y>672</y>
+      <y>684</y>
       <w>168</w>
       <h>90</h>
     </coordinates>
@@ -123,18 +125,20 @@ handles the game-logic and communicates with players.</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>384</x>
-      <y>546</y>
+      <y>534</y>
       <w>162</w>
-      <h>90</h>
+      <h>108</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Command
 --
 #secondWord:String
+#returnMessage:String
 --
 +Command():Command
 +setSecondWord(sw:String):void
 +execute(p:Player):boolean
++getReturnMessage():String
 --
 Responsibilities
 -- Base class for commands.</panel_attributes>
@@ -157,27 +161,27 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>444</x>
-      <y>756</y>
+      <y>768</y>
       <w>18</w>
-      <h>72</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>462</x>
-      <y>630</y>
+      <y>636</y>
       <w>18</w>
-      <h>54</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=*
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -450,23 +454,23 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>336</x>
-      <y>630</y>
+      <y>636</y>
       <w>60</w>
-      <h>126</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;190.0</additional_attributes>
+    <additional_attributes>80.0;10.0;10.0;180.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>336</x>
-      <y>612</y>
+      <y>600</y>
       <w>60</w>
-      <h>48</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;60.0</additional_attributes>
+    <additional_attributes>80.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -474,10 +478,10 @@ Responsibilities
       <x>336</x>
       <y>552</y>
       <w>60</w>
-      <h>72</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>80.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -485,10 +489,10 @@ Responsibilities
       <x>336</x>
       <y>462</y>
       <w>60</w>
-      <h>132</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;200.0;10.0;10.0</additional_attributes>
+    <additional_attributes>80.0;180.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -496,16 +500,16 @@ Responsibilities
       <x>336</x>
       <y>354</y>
       <w>60</w>
-      <h>204</h>
+      <h>192</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>80.0;320.0;10.0;10.0</additional_attributes>
+    <additional_attributes>80.0;300.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>540</x>
-      <y>684</y>
+      <y>696</y>
       <w>78</w>
       <h>24</h>
     </coordinates>
@@ -536,12 +540,12 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>156</x>
-      <y>588</y>
+      <y>576</y>
       <w>240</w>
-      <h>18</h>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;30.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -567,10 +571,10 @@ Responsibilities
       <x>156</x>
       <y>516</y>
       <w>240</w>
-      <h>54</h>
+      <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>380.0;70.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;50.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -596,10 +600,10 @@ Responsibilities
       <x>456</x>
       <y>486</y>
       <w>18</w>
-      <h>72</h>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -856,7 +860,6 @@ handles user input and updates of gui.</panel_attributes>
 --
 -clientSocket:DatagramSocket
 -players:List&lt;Player&gt;
--currentRoom:Room
 -thread:Thread
 --
 +Client():Client
@@ -978,7 +981,7 @@ m2=*</panel_attributes>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=*
 m2=*</panel_attributes>
-    <additional_attributes>150.0;10.0;90.0;20.0;40.0;50.0;10.0;90.0;60.0;120.0;110.0;100.0;150.0;80.0</additional_attributes>
+    <additional_attributes>150.0;10.0;90.0;20.0;40.0;50.0;10.0;90.0;60.0;120.0;110.0;100.0;150.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1002,25 +1005,25 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>156</x>
-      <y>582</y>
+      <y>570</y>
       <w>240</w>
-      <h>108</h>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;160.0</additional_attributes>
+    <additional_attributes>380.0;10.0;10.0;180.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1050</x>
+      <x>1062</x>
       <y>186</y>
       <w>18</w>
       <h>432</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=*
 m2=*</panel_attributes>
-    <additional_attributes>10.0;700.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;700.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1074,9 +1077,9 @@ Responsibilities
       <x>156</x>
       <y>414</y>
       <w>240</w>
-      <h>150</h>
+      <h>138</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>380.0;230.0;10.0;10.0</additional_attributes>
+    <additional_attributes>380.0;210.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

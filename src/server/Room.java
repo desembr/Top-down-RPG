@@ -70,22 +70,30 @@ public class Room implements Serializable
      * 
      * @return Contained enemies description.
      */
-    public String showEnemiesInRoom(){
+    private String showEnemiesInRoom(){
         if(enemiesInRoom.isEmpty()){
-            return "This Room is Empty";
+            return "No enemies in here.";
         }
-        return "";
+        String returnString = "Enemies:";
+        for (Entity e : enemiesInRoom) {
+        	returnString += " " + e.getName();
+        }
+        return returnString;
     }
     
     /**
      * 
      * @return Contained items description.
      */
-    public String showItemsInRoom(){
+    private String showItemsInRoom(){
         if(itemsInRoom.isEmpty()){
-            return "No items in here";
+            return "No items in here.";
         }
-        return "";
+        String returnString = "Items:";
+        for (Item i : itemsInRoom) {
+        	returnString += " " + i.getName();
+        }
+        return returnString;
     }
 
     /**
@@ -94,6 +102,20 @@ public class Room implements Serializable
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
+        switch (direction) {
+        case "north":
+        	neighbor.setExit("south", this);
+        break;
+        case "south":
+        	neighbor.setExit("north", this);
+        break;
+        case "east":
+        	neighbor.setExit("west", this);
+        break;
+        case "west":
+        	neighbor.setExit("east", this);
+        break;
+        }
     }
 
     /**
@@ -112,7 +134,8 @@ public class Room implements Serializable
      */
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        return "You are " + description + ".\n" + getExitString() + 
+        		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom();
     }
 
     /**
@@ -139,6 +162,15 @@ public class Room implements Serializable
     
     /**
      * 
+     * @return The enemies contained in this room.
+     */
+    public List<Enemy> getEnemies()
+    {
+        return enemiesInRoom; 
+    }
+    
+    /**
+     * 
      * @return The items contained in this room.
      */
     public List<Item> getItems()
@@ -147,20 +179,23 @@ public class Room implements Serializable
     }
     
     /**
-     * 
+     * @param itemName The name of the item to pick up.
      * @return The item picked up if itemIndex is valid, else null.
      */
-    public Item pickItem(int itemIndex)
+    public Item pickItem(String itemName)
     {
-        if (itemIndex < 0 || itemIndex >= itemsInRoom.size()) {
-        	return null;
+        for (int i = 0; i < itemsInRoom.size(); i++) {
+        	Item item = itemsInRoom.get(i);
+        	if (item.getName().equals(itemName)) {
+        		return itemsInRoom.remove(i);
+        	}
         }
-        return itemsInRoom.remove(itemIndex);
+        return null;
     }
     
     /**
      * 
-     * @return Whether this room has image.
+     * @return Whether this room has an image or not.
      */
     public boolean hasImage() // used by gameEnginge
     {
