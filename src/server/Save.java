@@ -1,7 +1,7 @@
  package server; 
 
 /**
- * Save-player-highscore command.
+ * Save-player-high-score command.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
@@ -18,6 +18,7 @@ public class Save extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
+		//TODO:implement saving of player high-score to file.
 		return false;
 	}
 }

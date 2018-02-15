@@ -35,7 +35,9 @@ public class Entity implements Serializable {
      * @param e The entity to attack.
      */
     public void attack(Entity e) {
-    	
+    	if (e != null) {
+    		e.lowerHealth(damage);
+    	}
     }
     
     /**

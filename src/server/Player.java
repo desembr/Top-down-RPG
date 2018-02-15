@@ -20,18 +20,19 @@ public class Player extends Entity {
     
 	/**
 	 * Constructor for Player
+	 * @param startRoom The starting room.
 	 */
     public Player(Room startRoom)
     {
     	super("Player" + (++num), 30, 32, 100, "player_no_armor_64x64.png");
     	this.currentRoom = startRoom;
     	items = new ArrayList<>();
+    	previousRooms = new ArrayList<>();
     	score = highScore = weight = 0;
-        //spritePath = "player_no_armor_64x64.png"; 
     }
     
     /**
-     * 
+     * Returns this player's inventory (items).
      * @return The items in this player's inventory.
      */
     public List<Item> getItems() {
@@ -39,7 +40,7 @@ public class Player extends Entity {
     }
     
     /**
-     * Attempts to save a highscore for this player on this server.
+     * Saves current score as high-score for this player, called by command Save.
      */
     public void saveHighScore() {
     	//TODO: implement.
@@ -155,14 +156,4 @@ public class Player extends Entity {
 	public Room getRoom() {
     	return currentRoom;
     }
-      
-    /*public String getGraphic()
-    {
-        return spritePath; 
-    }
-    
-    public void setGraphic(String spritePath)
-    {
-        this.spritePath = spritePath; 
-    }*/
 }

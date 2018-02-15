@@ -1,5 +1,10 @@
 package server; 
 
+/*
+ * Class Orc - represents a particular enemy in the game.
+ * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @version 1.0
+ */
 public class Orc extends Enemy {
 	private static final long serialVersionUID = 1L;
 	

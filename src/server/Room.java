@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /*
@@ -24,29 +25,12 @@ public class Room implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private String description;
+	private String description, imageName;
     private HashMap<String,Room> exits;        // stores exits of this room.
     private ArrayList<Enemy> enemiesInRoom;
     private List<Item> itemsInRoom;
     
-    private boolean hasImage; // boolean used in room-creation
-    private String imageName; // set in room creation and passed to userInterface via GameEngine
-
-    /**
-     * Create a room described "description". Initially, it has no exits.
-     * "description" is something like "in a kitchen" or "in an open court 
-     * yard".
-     * @param description The description of this room.
-     */
-    public Room(String description) 
-    {
-        this.description = description;
-        exits = new HashMap<String,Room>();
-        enemiesInRoom = new ArrayList<Enemy>();
-        itemsInRoom = new ArrayList<Item>();
-        
-        hasImage = false; 
-    }
+    private static Random randomGen = new Random();
     
     /**
      * * Create a room described "description". Initially, it has no exits.
@@ -55,15 +39,19 @@ public class Room implements Serializable
      * @param description The description of this room.
      * @param imageName The imageFilePath of this room.
      */
-    public Room(String description, String imageName) // constructor for rooms with images
+    public Room(String description, String imageName)
     {
         this.description = description;
+        this.imageName = imageName; 
+        
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
         itemsInRoom = new ArrayList<Item>();
         
-        this.imageName = imageName; 
-        hasImage = true; 
+        // Add some enemies to this room.
+        for (int i = 0; i < randomGen.nextInt(5) + 1; i++) {
+        	enemiesInRoom.add(new Orc());
+        }
     }
     
     /**
@@ -102,20 +90,6 @@ public class Room implements Serializable
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
-        switch (direction) {
-        case "north":
-        	neighbor.setExit("south", this);
-        break;
-        case "south":
-        	neighbor.setExit("north", this);
-        break;
-        case "east":
-        	neighbor.setExit("west", this);
-        break;
-        case "west":
-        	neighbor.setExit("east", this);
-        break;
-        }
     }
 
     /**
@@ -161,7 +135,7 @@ public class Room implements Serializable
     }
     
     /**
-     * 
+     * Returns enemies contained within this room.
      * @return The enemies contained in this room.
      */
     public List<Enemy> getEnemies()
@@ -170,7 +144,7 @@ public class Room implements Serializable
     }
     
     /**
-     * 
+     * Returns items contained within this room.
      * @return The items contained in this room.
      */
     public List<Item> getItems()
@@ -178,7 +152,7 @@ public class Room implements Serializable
         return itemsInRoom; 
     }
     
-    /**
+    /** Attempts to pick up (remove) an item from this room.
      * @param itemName The name of the item to pick up.
      * @return The item picked up if itemIndex is valid, else null.
      */
@@ -194,19 +168,10 @@ public class Room implements Serializable
     }
     
     /**
-     * 
-     * @return Whether this room has an image or not.
-     */
-    public boolean hasImage() // used by gameEnginge
-    {
-        return this.hasImage; 
-    }
-    
-    /**
-     * 
+     * Returns the imageFilePath of this room, used for display on Client.
      * @return The imageFilePath of this room.
      */
-    public String getImage() // used by gameEnginge
+    public String getImage()
     {
         return imageName; 
     }

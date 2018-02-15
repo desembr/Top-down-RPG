@@ -18,7 +18,7 @@ public class Exit extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		returnMessage = "Thank you for playing. Good bye.";
+		returnMessage = "Thank you for playing. Goodbye.";
 		return true;
 	}
 }
