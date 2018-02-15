@@ -19,6 +19,7 @@ public class Exit extends Command {
 	 */
 	public boolean execute(Player p) {
 		returnMessage = "Thank you for playing. Goodbye.";
+		p.kill();
 		return true;
 	}
 }

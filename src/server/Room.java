@@ -28,6 +28,7 @@ public class Room implements Serializable
 	private String description, imageName;
     private HashMap<String,Room> exits;        // stores exits of this room.
     private ArrayList<Enemy> enemiesInRoom;
+    private ArrayList<Player> playersInRoom;
     private List<Item> itemsInRoom;
     
     private static Random randomGen = new Random();
@@ -46,6 +47,7 @@ public class Room implements Serializable
         
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
+        playersInRoom = new ArrayList<Player>();
         itemsInRoom = new ArrayList<Item>();
         
         // Add some enemies to this room.
@@ -55,22 +57,43 @@ public class Room implements Serializable
     }
     
     /**
-     * 
+     * Returns info about enemies in this room.
      * @return Contained enemies description.
      */
     private String showEnemiesInRoom(){
         if(enemiesInRoom.isEmpty()){
             return "No enemies in here.";
         }
-        String returnString = "Enemies:";
+        String returnString = "Alive enemies:";
         for (Entity e : enemiesInRoom) {
+        	if (!e.getIsDead())
+        		returnString += " " + e.getName();
+        }
+        returnString += "\nDead enemies:";
+        for (Entity e : enemiesInRoom) {
+        	if (e.getIsDead())
+        		returnString += " " + e.getName();
+        }
+        return returnString;
+    }
+    
+    /**
+     * Returns info about players in this room.
+     * @return Contained players description.
+     */
+    private String showPlayerInRoom(){
+        if(enemiesInRoom.size() == 1){
+            return "There are currently no other players in here.";
+        }
+        String returnString = "Players:";
+        for (Entity e : playersInRoom) {
         	returnString += " " + e.getName();
         }
         return returnString;
     }
     
     /**
-     * 
+     * Returns info about items in this room.
      * @return Contained items description.
      */
     private String showItemsInRoom(){
@@ -86,6 +109,8 @@ public class Room implements Serializable
 
     /**
      * Define an exit from this room.
+     * @param direction The direction.
+     * @param neighbor
      */
     public void setExit(String direction, Room neighbor) 
     {
@@ -109,7 +134,8 @@ public class Room implements Serializable
     public String getLongDescription()
     {
         return "You are " + description + ".\n" + getExitString() + 
-        		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom();
+        		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom() + 
+        		".\n" + showPlayerInRoom();
     }
 
     /**
@@ -144,6 +170,15 @@ public class Room implements Serializable
     }
     
     /**
+     * Returns players contained within this room.
+     * @return The players contained in this room.
+     */
+    public List<Player> getPlayers()
+    {
+        return playersInRoom; 
+    }
+    
+    /**
      * Returns items contained within this room.
      * @return The items contained in this room.
      */
@@ -175,5 +210,29 @@ public class Room implements Serializable
     {
         return imageName; 
     }
+
+    /**
+     * Adds a player currently residing in this room.
+     * @param player The player to add.
+     */
+	public synchronized void addPlayer(Player player) {
+		playersInRoom.add(player);
+	}
+
+	/**
+     * Adds an item to this room.
+     * @param item The item to add.
+     */
+	public void addItem(Item item) {
+		itemsInRoom.add(item);
+	}
+
+	/**
+     * Removes a player from this room
+     * @param player The player to remove.
+     */
+	public void removePlayer(Player player) {
+		playersInRoom.remove(player);
+	}
 }
 

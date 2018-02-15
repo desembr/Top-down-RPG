@@ -1,19 +1,21 @@
 package server;
 
-import java.net.DatagramSocket;
-import java.util.List;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
- *  Main class on the server-side which handles the game-logic and communicates with players.
- * 
+ * Main class on the server-side which manages the game-logic and listens/accepts
+ * client connections. Inserts a new, managed Player object for every new Client.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
 public class GameServer extends Thread
 {
-	//private UserInterface gui;
+	private static final int serverPort = 44120;
+	
 	private GameEngine engine;
-	private DatagramSocket serverSocket;
+	private ServerSocket serverSocket;
 
     /**
      * Create the game and initialize its internal map.
@@ -21,28 +23,14 @@ public class GameServer extends Thread
     public GameServer() 
     {
 		engine = new GameEngine();
-		//gui = new UserInterface(engine);
-		//engine.setGUI(gui);
-    }
-    
-    /**
-     * Listen for commands from a client.
-     * @return The received command to process.
-     */
-    private String receiveCommand() {
-    	//TODO: implement communication with clients.
-    	return "";
-    }
-    
-    /**
-     * Send responses to communicating clients, consisting of all connected players and possibly 
-     * also a responseMessage from the executed command.
-     * @param responseMessage The message returned by the input, processed command. It's null
-     * if the command didn't return one, and should then not be sent back to the client/user.
-     */
-    private void sendResponse(String responseMessage) {
-    	//TODO: implement communication with clients.
-    	List<Player> players = engine.getPlayers();
+		try {
+			serverSocket = new ServerSocket(serverPort);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
+		System.out.println("Server started...listening on port " + serverPort);
+		start();
     }
     
     /**
@@ -50,10 +38,23 @@ public class GameServer extends Thread
      */
     public void run() {
     	while (!interrupted()) {
-    		String commandLine = receiveCommand();
-    		String returnMessage = engine.interpretCommand(commandLine);
-    		sendResponse(returnMessage);
+    		try {
+				Socket clientSocket = serverSocket.accept();
+				System.out.println("New client connected");
+				Player newPlayer = new Player(engine.getStartRoom());
+				engine.addPlayer(newPlayer);
+				new ClientHandler(clientSocket, engine, newPlayer);
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			}
     	}
+    	System.out.println("Server exiting...bye");
+    	try {
+    		if (serverSocket != null)
+    			serverSocket.close();
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
     }
     
     /**

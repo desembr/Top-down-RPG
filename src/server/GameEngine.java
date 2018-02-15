@@ -106,7 +106,8 @@ public class GameEngine
      * Removes a player object from the game, called when a client disconnects.
      * @param newPlayer The player object to remove; associated with the disconnecting Client.
      */
-    public void removePlayer(Player disconnectedPlayer) {
+    public synchronized void removePlayer(Player disconnectedPlayer) {
+    	disconnectedPlayer.getRoom().removePlayer(disconnectedPlayer);
     	players.remove(disconnectedPlayer);
     }
 
@@ -118,9 +119,6 @@ public class GameEngine
      */
 	private String printHelp() 
     {
-        /*gui.println("You are lost. You are alone. You wander");
-        gui.println("around the Maze.\n");
-        gui.print("Your command words are: " + parser.showCommands());*/
 		return "You are lost. You are alone. You wander\naround the Maze.\n" + 
 		"Your command words are: " + parser.showCommands();
     }

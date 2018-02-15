@@ -15,6 +15,8 @@ public class GameClient {
 	public GameClient() {
 		client = new Client();
 		gui = new UserInterface(client);
+		client.addObserver(gui);
+		client.start();
 	}
 	
 	/**

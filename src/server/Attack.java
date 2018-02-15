@@ -21,7 +21,7 @@ public class Attack extends Command {
 		if (secondWord != null) {
 			for (int i = 0; i < p.getRoom().getEnemies().size(); i++) {
 				Enemy e = p.getRoom().getEnemies().get(i);
-				if (e.getName().equals(secondWord)) {
+				if (e.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					p.attack(e);
 					return true;
 				}

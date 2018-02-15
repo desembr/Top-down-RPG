@@ -24,11 +24,13 @@ public class Player extends Entity {
 	 */
     public Player(Room startRoom)
     {
-    	super("Player" + (++num), 30, 32, 100, "player_no_armor_64x64.png");
+    	super("Player" + (++num), 15, 32, 100, "player_no_armor_64x64.png");
     	this.currentRoom = startRoom;
     	items = new ArrayList<>();
     	previousRooms = new ArrayList<>();
     	score = highScore = weight = 0;
+    	
+    	currentRoom.addPlayer(this);
     }
     
     /**
@@ -76,6 +78,7 @@ public class Player extends Entity {
         	Item item = items.get(i);
         	if (item.getName().equals(itemName)) {
         		weight -= item.getWeight();
+        		currentRoom.addItem(item);
         		items.remove(i);
         		return true;
         	}
@@ -107,7 +110,9 @@ public class Player extends Entity {
     	}
     	else {
     		previousRooms.add(currentRoom);
+    		currentRoom.removePlayer(this);
     		currentRoom = r;
+    		currentRoom.addPlayer(this);
     		return true;
     	}
     }
@@ -134,8 +139,8 @@ public class Player extends Entity {
     }
 	
 	/**
-     * Returns highscore of this player.
-     * @return The highscore of this player.
+     * Returns high-score of this player.
+     * @return The high-score of this player.
      */
 	public int getHighScore() {
     	return highScore;

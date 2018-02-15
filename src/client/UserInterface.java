@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,7 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import server.GameEngine;
+import server.Item;
+import server.Player;
+import server.Room;
 
 /**
  * This class implements a simple graphical user interface with a text entry
@@ -32,31 +35,26 @@ public class UserInterface implements ActionListener, Observer
 {
 	private static final int WIDTH = 640, HEIGHT = 480;
 	
-    //private GameEngine engine;
-	Client client;
+	private Client client;
     private JFrame myFrame;
     private JTextField entryField;
     private JTextArea log;
-    private JLabel image;
+    private JLabel image, playerSprite;
     
-    private JLabel playerSprite; // ny
-
     /**
-     * Construct a UserInterface. As a parameter, a Game Engine
-     * (an object processing and executing the game commands) is
-     * needed.
-     * 
-     * @param gameEngine  The GameEngine object implementing the game logic.
+     * Construct a UserInterface. As a parameter, a Client object, with will handle
+     * all the communication with the server (sending commands and receiving responses). 
+     * @param client  The Client to handle all communication with server.
      */
-    public UserInterface(Client client/*GameEngine gameEngine*/)
+    public UserInterface(Client client)
     {
-        //engine = gameEngine;
     	this.client = client;
         createGUI();
     }
 
     /**
      * Print out some text into the text area.
+     * @param text The text to print to the text area.
      */
     public void print(String text)
     {
@@ -66,6 +64,7 @@ public class UserInterface implements ActionListener, Observer
 
     /**
      * Print out some text into the text area, followed by a line break.
+     * @param text The text to print to the text area.
      */
     public void println(String text)
     {
@@ -75,6 +74,7 @@ public class UserInterface implements ActionListener, Observer
 
     /**
      * Show an image file in the interface.
+     * @param imageName The filePath of the image to display.
      */
     public void showImage(String imageName)
     {
@@ -94,15 +94,15 @@ public class UserInterface implements ActionListener, Observer
     
     /**
      * Show an image file on the other imageFile.
+     * @param imageName The filePath of the image to display.
      */
-    public void showPlayer(String imageName) // ny 
+    public void showPlayer(String imageName)
     {
         URL imageURL = this.getClass().getClassLoader().getResource(imageName);
         if(imageURL == null)
             System.out.println("image not found");
         else {
             ImageIcon icon = new ImageIcon(imageURL);
-            playerSprite.setIcon(icon);
             playerSprite.setIcon(icon);
             myFrame.pack();
         }
@@ -133,15 +133,15 @@ public class UserInterface implements ActionListener, Observer
         listScroller.setMinimumSize(new Dimension(100,100));
 
         JPanel panel = new JPanel();
-        image = new JLabel(); // Ändrad
+        image = new JLabel();
         
-        playerSprite = new JLabel(); // ny
-        playerSprite.setBounds(365,400, 64, 64); // test
+        playerSprite = new JLabel();
+        playerSprite.setBounds(365,400, 64, 64);
 
         panel.setLayout(new BorderLayout());
         panel.add(image, BorderLayout.NORTH);
         
-        image.add(playerSprite, BorderLayout.SOUTH); // ny
+        image.add(playerSprite, BorderLayout.SOUTH);
         
         panel.add(listScroller, BorderLayout.CENTER);
         panel.add(entryField, BorderLayout.SOUTH);
@@ -160,17 +160,16 @@ public class UserInterface implements ActionListener, Observer
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         myFrame.setLocation((int)d.getWidth() / 2 - WIDTH / 2, (int)d.getHeight() / 2 - HEIGHT / 2);
         myFrame.pack();
-        myFrame.setVisible(true);
         entryField.requestFocus();
+        myFrame.setVisible(true);
     }
 
     /**
-     * Actionlistener interface for entry textfield.
+     * Listener method for the textField (the input field).
+     * @param e The Event that triggered this listener.
      */
     public void actionPerformed(ActionEvent e) 
     {
-        // no need to check the type of action at the moment.
-        // there is only one possible action: text entry
         processCommand();
     }
 
@@ -183,14 +182,56 @@ public class UserInterface implements ActionListener, Observer
         String input = entryField.getText();
         entryField.setText("");
 
-        //engine.interpretCommand(input);
-        client.sendCommand(input);
+        if (input.length() > 0) {
+        	System.out.println("Command entered: " + input);
+        	println(input);
+        	client.pollCommand(input);
+        }
     }
     
     /**
-     * Gets called by client object (observable) on response from server (if state changed).
+     * Show the images for all items in this
+     * client's player object's inventory
+     * @param p The player whose inventory to display.
      */
-    public void update(Observable o, Object ob) {
-    	//TODO:Display this client's current room, items, that room's items and that room's entities
+    private void showInventory(Player p)
+    {
+    	List<Item> inventory = p.getItems();
+    	println("Items in inventory: ");
+    	for (Item i : inventory) {
+    		print(i.getName() + " ");
+    	}
+    	println(" ");
+    }
+    
+    /**
+     * Show the images for all objects contained
+     * in this client's player object's current room.
+     * @param currentRoom This client's player object's current room.
+     */
+    private void showRoom(Room currentRoom)
+    {
+    	showImage(currentRoom.getImage());
+    	println(currentRoom.getLongDescription());
+    }
+    
+    private void exitGame() {
+    	println("Goodbye...");
+    	System.exit(0);
+    }
+    
+    /**
+     * Gets called by the client object (observable) on response from server. Updates the view.
+     * Displays all changes to this client's player object's state (items, room, players in that room etc).
+     * @param o The Observable object triggering this method.
+     * @param player The updated Player object received from the server to the Client object.
+     */
+    public void update(Observable o, Object player) {
+    	System.out.println("UserInterface is getting updated with new game state");
+    	Player p = (Player)player;
+    	if (p.getIsDead())
+    		exitGame();
+		showRoom(p.getRoom());
+		showInventory(p);
     }
 }
