@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
@@ -133,7 +134,7 @@ public class UserInterface implements ActionListener, Observer
         listScroller.setMinimumSize(new Dimension(100,100));
 
         JPanel panel = new JPanel();
-        image = new JLabel(); // Ändrad
+        image = new JLabel(); // Ã„ndrad
         
         playerSprite = new JLabel(); // ny
         playerSprite.setBounds(365,400, 64, 64); // test
@@ -171,14 +172,19 @@ public class UserInterface implements ActionListener, Observer
     {
         // no need to check the type of action at the moment.
         // there is only one possible action: text entry
-        processCommand();
+        try {
+			processCommand();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
     }
 
     /**
      * A command has been entered. Read the command and do whatever is 
      * necessary to process it.
+     * @throws IOException 
      */
-    private void processCommand()
+    private void processCommand() throws IOException
     {
         String input = entryField.getText();
         entryField.setText("");
