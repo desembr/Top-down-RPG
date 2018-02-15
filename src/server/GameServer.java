@@ -26,6 +26,7 @@ public class GameServer extends Thread
 	private ObjectInputStream in;
 	
 	private static final int PORT = 8989;
+	private String command = "";
 
     /**
      * Create the game and initialize its internal map.
@@ -49,6 +50,7 @@ public class GameServer extends Thread
 					e.printStackTrace();
 				}finally{
 					//Close connection
+					if(command.equals("END"))
 					close();
 				}
 			}
@@ -63,7 +65,6 @@ public class GameServer extends Thread
      * 
      */
     private String receiveCommand() {
-    	String command = "";
     		try{
     			command = (String) in.readObject();
     		}catch(IOException e){
