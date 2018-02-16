@@ -73,6 +73,12 @@ public class Room implements Serializable
         	if (e.getIsDead())
         		returnString += " " + e.getName();
         }
+	returnString += "\nEnemy statistics:";
+        for (Entity e : enemiesInRoom) {
+        	if (e.getHealth() > 0)
+        		returnString += "\n" + e.getName() + " has " + e.getHealth() + " health left";
+        	
+        }
         return returnString;
     }
     
