@@ -35,7 +35,7 @@ public class Client extends Observable implements Runnable {
 	
 	private List<String> polledCommands;	
 	
-	private static int count = 0;
+	private static int counter = 0;
 	
 	/**
 	 * Constructor for Client.
@@ -87,7 +87,7 @@ public class Client extends Observable implements Runnable {
 		
 		while (!Thread.interrupted()) {
 				synchronized (polledCommands) {
-					if (count > 3) {
+					if (counter > 3) {
 						break;
 					}
 					if (polledCommands.isEmpty()) {
@@ -102,7 +102,6 @@ public class Client extends Observable implements Runnable {
 					String nextCmd = polledCommands.remove(0);
 					sendCommand(nextCmd);
 				}
-				//notify();
 				receiveResponse();
 		}
 		try {
@@ -123,7 +122,6 @@ public class Client extends Observable implements Runnable {
 	 */
 	public synchronized void pollCommand(String cmdLine) {
 		polledCommands.add(cmdLine);
-		//notify();
 	}
 	
 	/**
@@ -132,12 +130,11 @@ public class Client extends Observable implements Runnable {
 	 */
 	private void sendCommand(String cmdLine) {
 		try {
-			//System.out.println("Transmitting command to Server...");
 			sendStream.writeObject(cmdLine);
 			sendStream.flush();
 			System.out.println("Transmitted command to Server");
 		} catch (IOException e) {
-			count++;
+			counter++;
 			System.err.println(e.getMessage());
 		}
 	}
@@ -156,13 +153,13 @@ public class Client extends Observable implements Runnable {
 			setChanged();
 			notifyObservers(p);
 		} catch (EOFException e) {
-			count++;
+			counter++;
 			System.err.println(e.getMessage()); 
 		}catch (IOException e) {
-			count++;
+			counter++;
 			System.err.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
-			count++;
+			counter++;
 			System.err.println(e.getMessage());
 		}
 	}

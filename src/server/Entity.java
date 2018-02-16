@@ -108,32 +108,24 @@ public class Entity implements Serializable {
     }
     
     /**
-     * Sets name of this entity
-     * @param name The new name.
+     * Adds damageChange to current damage value.
+     * @param dmgChange The value to add to damage.
      */
-    public void setName(String name) {
-    	this.name = name;
+    public void changeDamage(int dmgChange) {
+    	damage += dmgChange;
     }
     
     /**
-     * Sets damage of this entity
-     * @param damage The new name.
+    * Adds defChange to current damage value.
+     * @param defChange The value to add to defence.
      */
-    public void setDamage(int damage) {
-    	this.damage = damage;
-    }
-    
-    /**
-     * Sets defence of this entity
-     * @param defence The new name.
-     */
-    public void setDefence(int defence) {
-    	this.defence = defence;
+    public void changeDefence(int defChange) {
+    	defence += defChange;
     }
     
     /**
      * Sets iconFilePath of this entity
-     * @param iconFilePath The new name.
+     * @param iconFilePath The new iconFilePath.
      */
     public void setIconFilePath(String iconFilePath) {
     	this.iconFilePath = iconFilePath;

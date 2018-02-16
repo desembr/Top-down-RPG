@@ -42,13 +42,6 @@ public class Player extends Entity {
     }
     
     /**
-     * Saves current score as high-score for this player, called by command Save.
-     */
-    public void saveHighScore() {
-    	//TODO: implement.
-    }
-    
-    /**
      * Attempts to consume a food in inventory.
      * @param itemName The name of the food to consume.
      * @return Whether the item could be consumed or not.

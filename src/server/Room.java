@@ -34,9 +34,8 @@ public class Room implements Serializable
     private static Random randomGen = new Random();
     
     /**
-     * * Create a room described "description". Initially, it has no exits.
-     * "description" is something like "in a kitchen" or "in an open court 
-     * yard".
+     * Create a room described "description". Initially, it has no exits.
+     * description" is something like "in a kitchen" or "in an open court yard".
      * @param description The description of this room.
      * @param imageName The imageFilePath of this room.
      */

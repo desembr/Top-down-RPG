@@ -7,11 +7,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -154,6 +157,15 @@ public class UserInterface implements ActionListener, Observer
         });
 
         entryField.addActionListener(this);
+        
+        // change the icon of the window
+        try {
+			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().
+					getResourceAsStream(("res/icon.png")));
+			myFrame.setIconImage(icon);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -215,6 +227,9 @@ public class UserInterface implements ActionListener, Observer
     	println(currentRoom.getLongDescription());
     }
     
+    /**
+     * Exits the Client program.
+     */
     private void exitGame() {
     	println("Goodbye...");
     	System.exit(0);
