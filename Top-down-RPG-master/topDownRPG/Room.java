@@ -23,6 +23,7 @@ public class Room
     private HashMap<String,Room> exits;        // stores exits of this room.
     private ArrayList<Enemy> enemiesInRoom; 
     
+    private boolean isMenu;
     private boolean hasImage; // boolean used in room-creation
     private String imageName; // set in room creation and passed to userInterface via GameEngine
 
@@ -45,9 +46,18 @@ public class Room
         this.description = description;
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
-        
         this.imageName = imageName; 
         hasImage = true; 
+    }
+    
+        public Room(String description, String imageName, boolean menu) // constructor for rooms with images
+    {
+        this.description = description;
+        exits = new HashMap<String,Room>();
+        enemiesInRoom = new ArrayList<Enemy>();
+        this.imageName = imageName; 
+        hasImage = true; 
+        this.isMenu = menu;
     }
     
     public String showEnemiesInRoom(){
@@ -115,5 +125,9 @@ public class Room
     {
         return imageName; 
     }
+    
+    public boolean isMenu(){
+    return this.isMenu;
+}
 }
 

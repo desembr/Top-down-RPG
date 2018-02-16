@@ -110,6 +110,37 @@ public class UserInterface implements ActionListener
         myFrame.setVisible(true);
         entryField.requestFocus();
     }
+    
+    
+    public void enableMenuItems(){
+     image.setLayout(new FlowLayout());
+     //Container test = myFrame.getContentPane();
+     JButton JeyBee = new JButton("Tryout");
+     JeyBee.addActionListener(new ActionListener(){
+         @Override
+            public void actionPerformed(ActionEvent e) {
+                engine.getRandomWord();
+            }
+        });
+     //JeyBee.setBounds(200, 100, 100, 60);
+     JButton JeyBee2 = new JButton("Start Game");
+     JeyBee2.addActionListener(new ActionListener(){
+         @Override
+            public void actionPerformed(ActionEvent e) {
+                engine.interpretCommand("go start");
+                JeyBee.setVisible(false);
+                JeyBee2.setVisible(false);
+            }
+        });
+     image.add(JeyBee2);
+     image.add(JeyBee);
+     myFrame.pack();
+    }
+    
+    
+    public void initInventory(){
+        
+    }
 
     /**
      * Actionlistener interface for entry textfield.

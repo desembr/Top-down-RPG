@@ -9,11 +9,20 @@
  * @author  (NN)
  * @version (date)
  */
+
+import java.net.*;
+import java.io.*;
+import java.util.Scanner;
+import java.util.Random;
 public class GameEngine
 {
     private Parser parser;
     private Room currentRoom;
     private UserInterface gui;
+    private Room outside;
+    private Random randomizer;
+    private Scanner s;
+    
 
     /**
      * Constructor for objects of class GameEngine
@@ -22,6 +31,7 @@ public class GameEngine
     {
         parser = new Parser();
         createRooms();
+        createMenu();
     }
 
     public void setGUI(UserInterface userInterface)
@@ -34,25 +44,29 @@ public class GameEngine
      * Print out the opening message for the player.
      */
     private void printWelcome()
-    {
-        gui.print("\n");
-        gui.println(currentRoom.getLongDescription());
-        gui.println(currentRoom.showEnemiesInRoom());
+{
+        //gui.print("\n");
+        //gui.println(currentRoom.getLongDescription());
+        //gui.println(currentRoom.showEnemiesInRoom());
         
         // för att startrummet ska få ett image, kan tas bort om första rummet är en meny 
         // och goto används internt för att komma från menyn till första rummet 
         if (currentRoom.hasImage() ) 
         {
             gui.showImage( currentRoom.getImage() ); 
+      
+                if (currentRoom.isMenu()){
+                    gui.enableMenuItems();
         }
     }
+}
 
     /**
      * Create all the rooms and link their exits together.
      */
     private void createRooms()
     {
-        Room outside, frozen, abandoned, furnished, occult, warped, imageTestRoom;
+        Room frozen, abandoned, furnished, occult, warped, imageTestRoom;
       
         // create the rooms
         outside = new Room("outside the Main Entrance", "outside800x600.png");
@@ -80,8 +94,20 @@ public class GameEngine
         warped.setExit("west", frozen);
         
         imageTestRoom.setExit("north", abandoned); // test
+        
 
-        currentRoom = outside;  // start game outside
+
+        //currentRoom = outside;  // start game outside
+        
+    }
+    
+    private void createMenu(){
+        RoomMenu menu;
+        menu = new RoomMenu("Menu", "800px-Snieg.png", true);
+        menu.setExit("start", outside);
+        currentRoom = menu;
+        randomizer = new Random();
+        menu.setExit("start", outside);
         
     }
 
@@ -161,6 +187,24 @@ public class GameEngine
         
         
     }
+    
+    public void getRandomWord()
+    {
+        try {
+            URL url = new URL("http://www.puzzlers.org/pub/wordlists/pocket.txt");
+                Scanner s = new Scanner(url.openStream());
+                    int n = randomizer.nextInt(300) + 1;
+        for (int i = 0; i < n; i++){
+            if(s.hasNextLine())s.nextLine();
+}
+gui.print("\n" + "Retrieving line(" + n + ") from http://www.puzzlers.org/pub/wordlists/pocket.txt" + " -----> " + s.nextLine());
+
+        }catch(IOException ex) {
+   // there was some connection problem, or the file did not exist on the server,
+            ex.printStackTrace(); 
+}
+
+}// for now, simply output it.
 
     private void endGame()
     {

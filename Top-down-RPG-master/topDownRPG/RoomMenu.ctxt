@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=RoomMenu
+comment1.params=desc\ pic\ menu
+comment1.target=RoomMenu(java.lang.String,\ java.lang.String,\ boolean)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ RoomMenu\r\n
+numComments=2
