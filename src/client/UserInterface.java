@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -23,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import server.Enemy;
 import server.Item;
 import server.Player;
 import server.Room;
@@ -36,13 +38,16 @@ import server.Room;
  */
 public class UserInterface implements ActionListener, Observer
 {
-	private static final int WIDTH = 640, HEIGHT = 480;
+	private static final int WIDTH = 1000, HEIGHT = 1000;
 	
 	private Client client;
     private JFrame myFrame;
     private JTextField entryField;
     private JTextArea log;
-    private JLabel image, playerSprite;
+    private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3, shadow4, shadow5, shadow6; 
+    
+    private ArrayList<JLabel> monsterSprites; 
+    private ArrayList<JLabel> shadows; 
     
     /**
      * Construct a UserInterface. As a parameter, a Client object, with will handle
@@ -51,6 +56,9 @@ public class UserInterface implements ActionListener, Observer
      */
     public UserInterface(Client client)
     {
+    	monsterSprites = new ArrayList<>(); 
+    	shadows = new ArrayList<>(); 
+    	
     	this.client = client;
         createGUI();
     }
@@ -83,8 +91,15 @@ public class UserInterface implements ActionListener, Observer
     {
     	try {
 	        URL imageURL = this.getClass().getClassLoader().getResource(imageName);
+	        
+	        System.out.println(imageURL); 
+	        
 	        if(imageURL == null)
-	            System.out.println("image not found");
+	        {
+	            System.out.println("image not found"); // debug
+	        
+	            System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
+	        }
 	        else {
 	            ImageIcon icon = new ImageIcon(imageURL);
 	            image.setIcon(icon);
@@ -112,6 +127,52 @@ public class UserInterface implements ActionListener, Observer
     }
     
     /**
+     * Shows the enemies present in the room
+     * @param enemies, a List of enemies
+     */
+    
+    public void showEnemies(List<Enemy> enemies)
+    {
+    	for (int i = 0; i < enemies.size(); i++)
+    	{
+    	
+    	URL imageURL = this.getClass().getClassLoader().getResource(enemies.get(i).getIconFilePath() );
+        if(imageURL == null)
+            System.out.println("image not found");
+        else {
+            ImageIcon icon = new ImageIcon(imageURL);
+            monsterSprites.get(i).setIcon(icon);
+            myFrame.pack();
+        }
+        
+    	}
+    }
+    
+    /**
+     * Just a method to draw the numbe4r of shadows that should be present in a room
+     * based on how many enemies there are
+     * @param enemies, a List of enemies
+     */
+    
+    public void showShadows(List<Enemy> enemies)
+    {
+    	for (int i = 0; i < enemies.size() + 1 ; i++) //TILLFÄLLIG, MÅSTE SNYGGAS UPP
+    	{
+    	
+    	URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+        if(imageURL == null)
+            System.out.println("image not found");
+        else {
+            ImageIcon icon = new ImageIcon(imageURL);
+            shadows.get(i).setIcon(icon);
+            myFrame.pack();
+        }
+        
+    	}
+    	
+    }
+    
+    /**
      * Enable or disable input in the input field.
      */
     public void enable(boolean on)
@@ -127,6 +188,7 @@ public class UserInterface implements ActionListener, Observer
     private void createGUI()
     {
         myFrame = new JFrame("TOPDOWNRPG");
+        
         entryField = new JTextField(34);
 
         log = new JTextArea();
@@ -139,12 +201,64 @@ public class UserInterface implements ActionListener, Observer
         image = new JLabel();
         
         playerSprite = new JLabel();
-        playerSprite.setBounds(365,400, 64, 64);
-
+        playerSprite.setBounds(365,400, 64, 64); // position, size
+        
+        monster1 = new JLabel(); 
+        monster2 = new JLabel();
+        monster3 = new JLabel();
+        monster4 = new JLabel();
+        monster5 = new JLabel();
+        
+        monster1.setBounds(165,  100,  64,  64);
+        monster2.setBounds(265,  100,  64,  64);
+        monster3.setBounds(365,  100,  64,  64);
+        monster4.setBounds(465,  100,  64,  64);
+        monster5.setBounds(565,  100,  64,  64);
+        
+        monsterSprites.add(monster1); 
+    	monsterSprites.add(monster2); 
+    	monsterSprites.add(monster3); 
+    	monsterSprites.add(monster4); 
+    	monsterSprites.add(monster5); 
+    	
+    	shadow1 = new JLabel(); 
+    	shadow2 = new JLabel(); 
+    	shadow3 = new JLabel(); 
+    	shadow4 = new JLabel(); 
+    	shadow5 = new JLabel(); 
+    	shadow6 = new JLabel(); 
+    	
+    	shadows.add(shadow1); 
+    	shadows.add(shadow2); 
+    	shadows.add(shadow3); 
+    	shadows.add(shadow4); 
+    	shadows.add(shadow5); 
+    	shadows.add(shadow6); 
+    	
+    	shadow1.setBounds(165,  100,  64,  64);
+    	shadow2.setBounds(265,  100,  64,  64);
+    	shadow3.setBounds(365,  100,  64,  64);
+    	shadow4.setBounds(465,  100,  64,  64);
+    	shadow5.setBounds(565,  100,  64,  64);
+    	shadow6.setBounds(365,  428,  64,  64);
+    	
         panel.setLayout(new BorderLayout());
         panel.add(image, BorderLayout.NORTH);
         
         image.add(playerSprite, BorderLayout.SOUTH);
+        
+        image.add(monster1, BorderLayout.SOUTH); 
+        image.add(monster2, BorderLayout.SOUTH); 
+        image.add(monster3, BorderLayout.SOUTH); 
+        image.add(monster4, BorderLayout.SOUTH); 
+        image.add(monster5, BorderLayout.SOUTH); 
+        
+        image.add(shadow1, BorderLayout.SOUTH); 
+        image.add(shadow2, BorderLayout.SOUTH); 
+        image.add(shadow3, BorderLayout.SOUTH); 
+        image.add(shadow4, BorderLayout.SOUTH); 
+        image.add(shadow5, BorderLayout.SOUTH); 
+        image.add(shadow6, BorderLayout.SOUTH); 
         
         panel.add(listScroller, BorderLayout.CENTER);
         panel.add(entryField, BorderLayout.SOUTH);
@@ -158,7 +272,7 @@ public class UserInterface implements ActionListener, Observer
 
         entryField.addActionListener(this);
         
-        // change the icon of the window
+        
         try {
 			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().
 					getResourceAsStream(("res/icon.png")));
@@ -166,7 +280,8 @@ public class UserInterface implements ActionListener, Observer
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+        
+        
         myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -227,6 +342,7 @@ public class UserInterface implements ActionListener, Observer
     	println(currentRoom.getLongDescription());
     }
     
+
     /**
      * Exits the Client program.
      */
@@ -247,6 +363,20 @@ public class UserInterface implements ActionListener, Observer
     	if (p.getIsDead())
     		exitGame();
 		showRoom(p.getRoom());
+		
+		showPlayer(p.getIconFilePath() ); 
+		
+		if(p.getRoom().getEnemies().size() > 0 )
+		{
+			showEnemies(p.getRoom().getEnemies() );
+			showShadows(p.getRoom().getEnemies() );
+		}
+		
 		showInventory(p);
+		
+		System.out.println( p.getRoom().getEnemies().size() ); 
+		System.out.println( p.getRoom().getEnemies().get(0).getIsDead() ); 
     }
+    
+    
 }

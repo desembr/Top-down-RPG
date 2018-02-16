@@ -14,6 +14,6 @@ public class Orc extends Enemy {
 	 * Constructor for Orc.
 	 */
     public Orc(){
-        super("Orc" + (++num), 10, 15, 40, "Orc.png");
+        super("Orc" + (++num), 10, 15, 40, "res/monsters/Orc.png");
     }
 }
