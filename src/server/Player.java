@@ -17,14 +17,14 @@ public class Player extends Entity {
 	private List<Room> previousRooms;
 	private Room currentRoom;
 	private int score, highScore, weight; 
-    
+	
 	/**
 	 * Constructor for Player
 	 * @param startRoom The starting room.
 	 */
     public Player(Room startRoom)
     {
-    	super("Player" + (++num), 15, 32, 100, "player_no_armor_64x64.png");
+    	super("Player" + (++num), 15, 32, 100, "res/player/player1_no_armor.png");
     	this.currentRoom = startRoom;
     	items = new ArrayList<>();
     	previousRooms = new ArrayList<>();
@@ -154,4 +154,5 @@ public class Player extends Entity {
 	public Room getRoom() {
     	return currentRoom;
     }
+	
 }
