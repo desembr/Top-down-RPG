@@ -50,7 +50,7 @@ public class Room implements Serializable
         itemsInRoom = new ArrayList<Item>();
         
         // Add some enemies to this room.
-        for (int i = 0; i < randomGen.nextInt(5) + 1; i++) {
+        for (int i = 0; i < 5; i++) {
         	enemiesInRoom.add(new Orc());
         }
     }

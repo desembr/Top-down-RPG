@@ -104,7 +104,23 @@ public class Entity implements Serializable {
      * @return The iconFilePath.
      */
     public String getIconFilePath() {
-    	return iconFilePath;
+    	if (!isDead)
+    	{
+    		return iconFilePath;
+    	}
+    	else // only used if a monster is dead
+    	{
+    		String[] parts = iconFilePath.split("/");
+    		String part1 = parts[0]; // res
+    		String part2 = parts[1]; // monsters
+    		String part3 = parts[2]; // filename
+    		
+    		String deadPath = part1 + "/dead/" + part3; 
+    		
+    		System.out.println(deadPath); 
+    		
+    		return deadPath;
+    	}
     }
     
     /**
