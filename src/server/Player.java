@@ -73,7 +73,7 @@ public class Player extends Entity {
     public boolean dropItem(String itemName) {
     	for (int i = 0; i < items.size(); i++) {
         	Item item = items.get(i);
-        	if (item.getName().equals(itemName)) {
+        	if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
         		weight -= item.getWeight();
         		items.remove(i);
         		return true;
