@@ -44,12 +44,12 @@ public class GameEngine
     private void createRooms()
     { 
         // create the rooms
-        outside = new Room("outside the Main Entrance", "res/rooms/outside.png");
-        frozen = new Room("in a Frozen Room", "res/rooms/dungeon.png");
-        abandoned = new Room("in an Abandoned Room", "res/rooms/dungeon.png");
-        furnished = new Room("in a Furnished Room", "res/rooms/dungeon.png");
-        occult = new Room("in an Occult Room", "res/rooms/dungeon.png");
-        warped = new Room("in a Warped Room", "res/rooms/dungeon.png");
+        outside = new Room("outside the Main Entrance", "res/rooms/outside_ESW.png");
+        frozen = new Room("in a Frozen Room", "res/rooms/dungeon_W.png");
+        abandoned = new Room("in an Abandoned Room", "res/rooms/dungeon_N.png");
+        furnished = new Room("in a Furnished Room", "res/rooms/dungeon_E.png");
+        occult = new Room("in an Occult Room", "res/rooms/dungeon_E.png");
+        warped = new Room("in a Warped Room", "res/rooms/dungeon_W.png");
         
         // initialize room exits
         outside.setExit("east", frozen);
