@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>144</y>
+      <w>248</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>UserInterface:Observer
+--
+-myFrame:JFrame
+-entryField:JTextField
+-log:JTextArea
+-image:JLabel
+--
++UserInterface():UserInterface
++print(text:String):void
++println(text:String):void
++enable(on:boolean):void
+-createGUI():void
+-printWelcome():void
+-printHelp():void
++update(o:Observable,arg:Object):void
+-showPlayers():void
+-showInventory():void
+-showRoom():void
+-exitGame():void
+--
+Responsibilities
+-- Manages and creates all the gui components, 
+handles user input and updates of gui.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>392</x>
+      <y>184</y>
+      <w>216</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>GameClient
+--
+-gui:UserInterface
+-client:Client
+--
++GameClient():GameClient
++main(arg:String[])
+--
+Responsibilities
+-- Main class on the client-side, which
+creates core objects and stores state.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>696</x>
+      <y>192</y>
+      <w>216</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Client:Observable
+--
+-clientSocket:Socket
+-thread:Thread
+-serverAddress:static String
+-serverPort:static int
+-polledCommands:List&lt;String&gt;
+-recvStream:ObjectInputStream
+-sendStream:ObjectOutputStream
+-counter:static int
+--
++Client():Client
++start():void
++run():void
++pollCommand(cmd:String):void
++sendCommand(cmd:String):void
+-receiveResponse():void
+--
+Responsibilities
+-- Interface between a client and the server.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>232</y>
+      <w>128</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>600</x>
+      <y>240</y>
+      <w>112</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>408</x>
+      <y>104</y>
+      <w>176</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ZuulClient - client-side program.</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
