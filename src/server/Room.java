@@ -200,7 +200,7 @@ public class Room implements Serializable
     {
         for (int i = 0; i < itemsInRoom.size(); i++) {
         	Item item = itemsInRoom.get(i);
-        	if (item.getName().equals(itemName)) {
+        	if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
         		return itemsInRoom.remove(i);
         	}
         }
