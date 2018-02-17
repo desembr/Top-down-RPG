@@ -53,10 +53,6 @@ public class Room implements Serializable
         for (int i = 0; i < 5; i++) {
         	enemiesInRoom.add(new Orc());
         }
-     // Add some items to this room.
-        for (int i = 0; i < randomGen.nextInt(3) + 1; i++) {
-        	itemsInRoom.add(new Pie());
-        }
     }
     
     /**
@@ -91,7 +87,7 @@ public class Room implements Serializable
      * @return Contained players description.
      */
     private String showPlayerInRoom(){
-        if(playersInRoom.size() == 1){
+        if(enemiesInRoom.size() == 1){
             return "There are currently no other players in here.";
         }
         String returnString = "Players:";
