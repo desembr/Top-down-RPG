@@ -156,7 +156,7 @@ public class UserInterface implements ActionListener, Observer
     
     public void showShadows(List<Enemy> enemies)
     {
-    	for (int i = 0; i < enemies.size() + 1 ; i++) //TILLFÄLLIG, MÅSTE SNYGGAS UPP
+    	for (int i = 0; i < enemies.size() + 1 ; i++) //TILLFÃ„LLIG, MÃ…STE SNYGGAS UPP
     	{
     	
     	URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
@@ -297,6 +297,7 @@ public class UserInterface implements ActionListener, Observer
      */
     public void actionPerformed(ActionEvent e) 
     {
+    	log.setText("");
         processCommand();
     }
 
