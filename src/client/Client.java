@@ -28,7 +28,7 @@ public class Client extends Observable implements Runnable {
 	private Thread thread;
 	
 	private static final int serverPort = 44120;
-	private static final String serverAddress = "localhost";
+	private static final String serverAddress = "213.238.234.12"; //"192.168.1.214";
 	
 	private ObjectInputStream recvStream;
 	private ObjectOutputStream sendStream;
