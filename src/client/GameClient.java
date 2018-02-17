@@ -1,4 +1,6 @@
-package client; 
+package client;
+
+import server.GameServer;
 
 /**
  * Main class on the client-side, which creates core objects and stores state.
@@ -9,10 +11,15 @@ public class GameClient {
 	private UserInterface gui;
 	Client client;
 	
+	//GameServer server; // för att underlätta arbetet om man jobbar lokalt
+	
 	/**
      * Constructor of this class.
      */
 	public GameClient() {
+		
+		//server = new GameServer(); // för att underlätta arbetet om man jobbar lokalt
+		
 		client = new Client();
 		gui = new UserInterface(client);
 		client.addObserver(gui);
