@@ -1,5 +1,6 @@
 package server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
-public class Player extends Entity {
+public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private static int num = 0, maxWeight = 40;
@@ -122,6 +123,20 @@ public class Player extends Entity {
     	}
     	return false;
     }
+
+    	public boolean loadPlayer(Player p){
+        this.health = p.health;
+        this.currentRoom = p.currentRoom;
+        this.highScore = p.highScore;
+        this.items = p.items;
+        this.previousRooms = p.previousRooms;
+        this.score = p.score;
+        this.items = p.items;
+        this.damage = p.damage;
+        this.defence = p.defence;
+        this.weight = p.weight;
+        return true;
+        }
     
     /**
      * Returns health of this player.
