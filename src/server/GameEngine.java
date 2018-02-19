@@ -68,19 +68,23 @@ public class GameEngine {
 	 *            The command to process.
 	 * @param p
 	 *            The Player object to execute the command for.
+	 * @return 
+	 * 			  True if the command changed some state of the game, false otherwise.        
 	 */
-	public synchronized void interpretCommand(String commandLine, Player p) {
+	public synchronized boolean interpretCommand(String commandLine, Player p) {
 		Command command = parser.getCommand(commandLine);
 		
 		if (command == null) {
-			return;
+			return false;
 		}
 
 		boolean ret = command.execute(p);
 
 		if (ret == false) {
 			p.setCmdReturnMsg("Command was not recognized, type 'help' for help.");
+			return false;
 		}
+		return true;
 	}
 
 	/**

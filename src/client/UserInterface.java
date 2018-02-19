@@ -203,6 +203,7 @@ public class UserInterface implements ActionListener, Observer
         JPanel panel = new JPanel();
         image = new JLabel();
         
+        // Create all entity labels
         playerSprite = new JLabel();
         playerSprite.setBounds(365,400, 64, 64); // position, size
         

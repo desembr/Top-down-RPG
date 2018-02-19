@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ public class GameServer extends Thread
     public GameServer() 
     {
 		engine = new GameEngine();
+		
+		clientHandlers = new ArrayList<>();
+		
 		try {
 			serverSocket = new ServerSocket(serverPort);
 		} catch (IOException e) {
@@ -33,6 +37,7 @@ public class GameServer extends Thread
 			System.exit(1);
 		}
 		System.out.println("Server started...listening on port " + serverPort);
+		
 		start();
     }
     
@@ -46,8 +51,7 @@ public class GameServer extends Thread
 				System.out.println("New client connected");
 				Player newPlayer = new Player(engine.getStartRoom());
 				engine.addPlayer(newPlayer);
-				new ClientHandler(clientSocket, engine, newPlayer);
-				//clients.add();
+				clientHandlers.add(new ClientHandler(clientSocket, engine, newPlayer));
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			}
@@ -61,12 +65,31 @@ public class GameServer extends Thread
 		}
     }
     
-    public static List<ClientHandler> getClientHandlers() {
-    	return clientHandlers;
+    /**
+     * Returns the ClientHandlers for those handlers whose player objects is currently in room r.
+     * @param r The room for whom all residing players should update on state change from some Client
+     * also residing in that room.
+     * @return The ClientHandlers meeting the conditions mentioned above.
+     */
+    public static List<ClientHandler> getClientHandlers(Room r) {
+    	if (r == null)
+    		return null;
+    	
+    	List<ClientHandler> res = new ArrayList<>();
+    	for (ClientHandler ch : clientHandlers) {
+    		if (ch.getPlayer().getRoom() == r)
+    			res.add(ch);
+    	}
+    	return res;
     }
     
+    /**
+     * Removes a ClientHandler on Client-disconnect.
+     * @param ch The ClientHandler to remove.
+     */
     public static void removeClientHandler(ClientHandler ch) {
-	   clientHandlers.remove(ch);
+    	if (ch != null)
+    		clientHandlers.remove(ch);
     }
     
     /**

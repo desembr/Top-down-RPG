@@ -146,7 +146,7 @@ public class Client extends Observable {
 			sendStream.writeObject(cmdLine);
 			sendStream.flush();
 			resetErrorCounter();
-			System.out.println("Transmitted command to Server");
+			//System.out.println("Transmitted command to Server");
 		} catch (IOException e) {
 			incErrorCounter();
 			System.err.println(e.getMessage());
@@ -160,10 +160,10 @@ public class Client extends Observable {
 	 */
 	private void receiveResponse() {
 		try {
-			System.out.println("Waiting for response from Server...");
+			//System.out.println("Waiting for response from Server...");
 			Object o = (Object) recvStream.readObject();
 			Player p = (Player) o;
-			System.out.println("Received response from Server: " + p.getName());
+			//System.out.println("Received response from Server: " + p.getName());
 			setChanged();
 			notifyObservers(p);
 			resetErrorCounter();

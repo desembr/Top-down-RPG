@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 /**
  * Handles client-server communication, one ClientHandler object for every
@@ -30,7 +31,7 @@ public class ClientHandler {
 
 	private int counter = 0; // Attempts to detect client disconnect.
 
-	private boolean stateUpdated = true, playerDisconnect;
+	private boolean stateUpdated = true, playerDisconnect, concurrentStateChange;
 
 	/**
 	 * Constructor for ClientHandler.
@@ -75,39 +76,6 @@ public class ClientHandler {
 	}
 
 	/**
-	 * Gets set to true when a command has been executed.
-	 * @param updated To indicate whether an update has taken place or not.
-	 */
-	public synchronized void setStateUpdated(boolean updated) {
-		stateUpdated = updated;
-	}
-	
-	/**
-	 * Indicates whether a response should be sent back to a client.
-	 * @return Whether a response should be sent back to client or not.
-	 */
-	public synchronized boolean getStateUpdated() {
-		return stateUpdated;
-	}
-
-	/**
-	 * Sets disconnected to true if client has  initiated a disconnect (exit command).
-	 * @param disconnected Whether to flag that Exit command has been received and processed.
-	 */
-	public synchronized void setPlayerDisconnect(boolean disconnected) {
-		playerDisconnect = disconnected;
-	}
-
-	/**
-	 * Indicates whether an Exit command has been received and processed and that this
-	 * ClientHandler therefore should dispose of itself.
-	 * @return Whether an Exit command has been received and processed.
-	 */
-	public synchronized boolean getPlayerDisconnect() {
-		return playerDisconnect;
-	}
-
-	/**
 	 * The sendThread method sending responses to the handled Client.
 	 */
 	public void send() {
@@ -115,7 +83,8 @@ public class ClientHandler {
 			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
-			while (!getStateUpdated()) {
+			
+			while (!getStateUpdated() && !getConcurrentStateChange()) {
 				if (getPlayerDisconnect())
 					break;
 				try {
@@ -124,11 +93,24 @@ public class ClientHandler {
 					System.err.println(e.getMessage());
 				}
 			}
+			// Regular state change initiated by the handled Client.
+			if (getStateUpdated()) {
+				List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p.getRoom());
+				
+				for (ClientHandler ch : clientHandlers)
+					if (ch != this)
+						ch.setConcurrentStateChange(true);
+			}
+			else { // Concurrent state change initiated by some other Client in the same room as this.
+				setConcurrentStateChange(false);
+			}
+			
 			setStateUpdated(false);
 			sendResponse();
 			resetErrorCounter();
 		}
 		engine.removePlayer(p);
+		GameServer.removeClientHandler(this);
 	}
 
 	/**
@@ -141,13 +123,14 @@ public class ClientHandler {
 			}
 
 			try {
-				System.out.println("Waiting for command from a client...");
+				//System.out.println("Waiting for command from a client...");
 				String cmdLine = (String) recvStream.readObject();
-				System.out.println("Received command from a Client");
+				//System.out.println("Received command from a Client");
 
-				engine.interpretCommand(cmdLine, p);
+				if (engine.interpretCommand(cmdLine, p) == true) { // Command was successful (state changed)
+					setStateUpdated(true);
+				}
 
-				setStateUpdated(true);
 				resetErrorCounter();
 
 				if (p.getIsDead()) {
@@ -171,31 +154,100 @@ public class ClientHandler {
 
 	/**
 	 * Sends response back to client.
-	 * 
-	 * @param respMsg
-	 *            A message to return to the client, in addition to the Player
-	 *            object.
 	 */
 	public void sendResponse() {
-		try {
-			sendStream.writeObject(p);
-			sendStream.flush();
-			sendStream.reset();
-			System.out.println("Transmitted response back to a Client");
-		} catch (IOException e) {
-			incErrorCounter();
-			System.err.println(e.getMessage());
+		synchronized (engine) {
+			try {
+				sendStream.writeObject(p);
+				sendStream.flush();
+				sendStream.reset();
+				//System.out.println("Transmitted response back to a Client");
+			} catch (IOException e) {
+				incErrorCounter();
+				System.err.println(e.getMessage());
+			}
 		}
 	}
+	
+	/**
+	 * Gets the player object of this ClientHandler.
+	 * @return The player object.
+	 */
+	public Player getPlayer() {
+		return p;
+	}
+	
+	/**
+	 * Gets set to true when a command has been executed.
+	 * @param updated To indicate whether an update has taken place or not.
+	 */
+	private synchronized void setStateUpdated(boolean updated) {
+		stateUpdated = updated;
+	}
+	
+	/**
+	 * Indicates whether a response should be sent back to a client.
+	 * @return Whether a response should be sent back to client or not.
+	 */
+	private synchronized boolean getStateUpdated() {
+		return stateUpdated;
+	}
 
+	/**
+	 * Sets disconnected to true if client has  initiated a disconnect (exit command).
+	 * @param disconnected Whether to flag that Exit command has been received and processed.
+	 */
+	private synchronized void setPlayerDisconnect(boolean disconnected) {
+		playerDisconnect = disconnected;
+	}
+
+	/**
+	 * Indicates whether an Exit command has been received and processed and that this
+	 * ClientHandler therefore should dispose of itself.
+	 * @return Whether an Exit command has been received and processed.
+	 */
+	private synchronized boolean getPlayerDisconnect() {
+		return playerDisconnect;
+	}
+	
+	/**
+	 * Sets concurrentStateChange to true if some other client whose player object resides in 
+	 * the same room as this one's has modified some state of that room.
+	 * @param stateChanged True to signal a concurrent state change.
+	 */
+	private synchronized void setConcurrentStateChange(boolean stateChanged) {
+		concurrentStateChange = stateChanged;
+	}
+	
+	/**
+	 * Returns the concurrentStateChange status, true if a concurrent state change has occurred.
+	 * @return True if a concurrent state change has occurred in this ClientHandler's player object's
+	 * room by some other Client also residing in that room.
+	 */
+	private synchronized boolean getConcurrentStateChange() {
+		return concurrentStateChange;
+	}
+
+	/**
+	 * Increments the current sequenced error count on exception on any operation.
+	 */
 	private synchronized void incErrorCounter() {
 		counter++;
 	}
 
+	/**
+	 * Resets the error count on successful operation.
+	 */
 	private synchronized void resetErrorCounter() {
 		counter = 0;
 	}
 
+	/**
+	 * Gets the number of errors (exceptions) in sequence currently.
+	 * 3 exceptions in sequence indicates that the handled Client has disconnected, 
+	 * meaning this ClientHandler should dispose itself.
+	 * @return The current amount of errors in sequence.
+	 */
 	private synchronized int getErrorCount() {
 		return counter;
 	}
