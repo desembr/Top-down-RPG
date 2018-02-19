@@ -196,13 +196,13 @@ public class Client extends Observable {
 	/**
 	 * Disposes of this Client object.
 	 */
-	public synchronized void exit() {
+	public void exit() {
 		try {
 			if (sendStream != null)
 				sendStream.close();
 			if (recvStream != null)
 				recvStream.close();
-			if (clientSocket != null)
+			if (clientSocket != null && !clientSocket.isClosed())
 				clientSocket.close();
 		} catch (IOException e) {
 			System.err.println(e.getMessage());

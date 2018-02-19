@@ -60,7 +60,10 @@ public class UserInterface implements ActionListener, Observer
     	shadows = new ArrayList<>(); 
     	
     	this.client = client;
+    	
         createGUI();
+        
+        printWelcome();
     }
 
     /**
@@ -92,7 +95,7 @@ public class UserInterface implements ActionListener, Observer
     	try {
 	        URL imageURL = this.getClass().getClassLoader().getResource(imageName);
 	        
-	        System.out.println(imageURL); 
+	        //System.out.println(imageURL); 
 	        
 	        if(imageURL == null)
 	        {
@@ -136,14 +139,14 @@ public class UserInterface implements ActionListener, Observer
     	for (int i = 0; i < enemies.size(); i++)
     	{
     	
-    	URL imageURL = this.getClass().getClassLoader().getResource(enemies.get(i).getIconFilePath() );
-        if(imageURL == null)
-            System.out.println("image not found");
-        else {
-            ImageIcon icon = new ImageIcon(imageURL);
-            monsterSprites.get(i).setIcon(icon);
-            myFrame.pack();
-        }
+	    	URL imageURL = this.getClass().getClassLoader().getResource(enemies.get(i).getIconFilePath() );
+	        if(imageURL == null)
+	            System.out.println("image not found");
+	        else {
+	            ImageIcon icon = new ImageIcon(imageURL);
+	            monsterSprites.get(i).setIcon(icon);
+	            myFrame.pack();
+	        }
         
     	}
     }
@@ -159,14 +162,14 @@ public class UserInterface implements ActionListener, Observer
     	for (int i = 0; i < enemies.size() + 1 ; i++) //TILLFÄLLIG, MÅSTE SNYGGAS UPP
     	{
     	
-    	URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
-        if(imageURL == null)
-            System.out.println("image not found");
-        else {
-            ImageIcon icon = new ImageIcon(imageURL);
-            shadows.get(i).setIcon(icon);
-            myFrame.pack();
-        }
+	    	URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+	        if(imageURL == null)
+	            System.out.println("image not found");
+	        else {
+	            ImageIcon icon = new ImageIcon(imageURL);
+	            shadows.get(i).setIcon(icon);
+	            myFrame.pack();
+	        }
         
     	}
     	
@@ -311,7 +314,6 @@ public class UserInterface implements ActionListener, Observer
         entryField.setText("");
 
         if (input.length() > 0) {
-        	System.out.println("Command entered: " + input);
         	println(input);
         	client.pollCommand(input);
         }
@@ -326,10 +328,18 @@ public class UserInterface implements ActionListener, Observer
     {
     	List<Item> inventory = p.getItems();
     	println("Items in inventory: ");
-    	for (Item i : inventory) {
-    		print(i.getName() + " ");
+    	if (inventory.size() > 0) {
+    		for (Item i : inventory) {
+        		print(i.getName() + " ");
+        	}
     	}
+    	else
+    		print("None");
     	println(" ");
+    	
+    	println("Score: " + p.getScore());
+    	if (p.getCmdReturnMsg() != null)
+    		println(p.getCmdReturnMsg());
     }
     
     /**
@@ -343,9 +353,18 @@ public class UserInterface implements ActionListener, Observer
     	println(currentRoom.getLongDescription());
     }
     
+    /**
+     * Prints a short welcome message, with short description of the purpose of the game.
+     */
+    private void printWelcome()
+    {
+    	println("Hello adventurer, your task is to \nkill all monsters in all rooms.\n"
+    			+ "Enter 'help' if you need some help.\nGoodluck!");
+    }
+    
 
     /**
-     * Exits the Client program.
+     * Exits the Client program after acknowledged exit command.
      */
     private void exitGame() {
     	println("Goodbye...");
@@ -360,10 +379,11 @@ public class UserInterface implements ActionListener, Observer
      * @param player The updated Player object received from the server to the Client object.
      */
     public void update(Observable o, Object player) {
-    	System.out.println("UserInterface is getting updated with new game state");
     	Player p = (Player)player;
+    	
     	if (p.getIsDead())
     		exitGame();
+    	
 		showRoom(p.getRoom());
 		
 		showPlayer(p.getIconFilePath() ); 
@@ -376,7 +396,7 @@ public class UserInterface implements ActionListener, Observer
 		
 		showInventory(p);
 		
-		System.out.println( p.getRoom().getEnemies().size() ); 
-		System.out.println( p.getRoom().getEnemies().get(0).getIsDead() ); 
+		//System.out.println( p.getRoom().getEnemies().size() ); 
+		//System.out.println( p.getRoom().getEnemies().get(0).getIsDead() ); 
     }
 }

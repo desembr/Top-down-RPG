@@ -19,6 +19,17 @@ public class Help extends Command {
 	 * should be sent back to the initiating client/user.
 	 */
 	public boolean execute(Player p) {
-		return false;
+		p.setCmdReturnMsg(printHelp());
+		return true;
+	}
+	
+	/**
+	 * Print out some help information. Here we print some stupid, cryptic
+	 * message and a list of the command words.
+	 * @return The help string.
+	 */
+	private String printHelp() {
+		return "You are lost. You are alone. You wander\naround the Maze.\n" + 
+				"Your command words are: " + Parser.getParser().showCommands();
 	}
 }

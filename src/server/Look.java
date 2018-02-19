@@ -18,7 +18,7 @@ public class Look extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		returnMessage = p.getRoom().getLongDescription();
+		p.setCmdReturnMsg(p.getRoom().getLongDescription());
 		return true;
 	}
 }

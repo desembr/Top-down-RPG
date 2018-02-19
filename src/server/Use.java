@@ -18,6 +18,7 @@ public class Use extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
+		p.setCmdReturnMsg(null);
 		if (secondWord != null) {
 			if (p.useItem(secondWord)) {
 				return true;

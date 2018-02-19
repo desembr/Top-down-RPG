@@ -17,7 +17,10 @@ public class Player extends Entity implements Serializable {
 	private List<Item> items;
 	private List<Room> previousRooms;
 	private Room currentRoom;
+	
 	private int score, weight; 
+	
+	private String cmdReturnMsg;
 	
 	/**
 	 * Constructor for Player
@@ -51,7 +54,7 @@ public class Player extends Entity implements Serializable {
     	for (int i = 0; i < items.size(); i++) {
         	Item item = items.get(i);
         	if (item instanceof Food) {
-	        	if (item.getName().equals(itemName)) {
+	        	if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
 	        		this.health = item.use(health);
 	        		weight -= item.getWeight();
 	        		items.remove(i);
@@ -70,7 +73,7 @@ public class Player extends Entity implements Serializable {
     public boolean dropItem(String itemName) {
     	for (int i = 0; i < items.size(); i++) {
         	Item item = items.get(i);
-        	if (item.getName().equals(itemName)) {
+        	if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
         		weight -= item.getWeight();
         		currentRoom.addItem(item);
         		items.remove(i);
@@ -123,6 +126,18 @@ public class Player extends Entity implements Serializable {
     	}
     	return false;
     }
+    
+    /**
+     * Logic for attacking an entity, grants score points if the enemy dies.
+     * @param e The entity to attack.
+     */
+    public void attack(Entity e) {
+    	if (e != null) {
+    		e.lowerHealth(damage);
+    		if (e.getIsDead())
+    			score += 5;
+    	}
+    }
 
     /**
      * Loads in a saved player state.
@@ -166,4 +181,20 @@ public class Player extends Entity implements Serializable {
     	return currentRoom;
     }
 	
+	/**
+     * Returns a message from the previous command, if there was none
+     * null is returned to signal this.
+     * @return The cmdReturnMsg
+     */
+	public String getCmdReturnMsg() {
+    	return cmdReturnMsg;
+    }
+	
+	/**
+     * Sets a message from the previous command, for corresponding Client to display.
+     * @param msg The message to set.
+     */
+	public void setCmdReturnMsg(String msg) {
+    	cmdReturnMsg = msg;
+    }
 }

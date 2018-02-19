@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * Main class on the server-side which manages the game-logic and listens/accepts
@@ -16,6 +17,8 @@ public class GameServer extends Thread
 	
 	private GameEngine engine;
 	private ServerSocket serverSocket;
+	
+	private static List<ClientHandler> clientHandlers;
 
     /**
      * Create the game and initialize its internal map.
@@ -44,6 +47,7 @@ public class GameServer extends Thread
 				Player newPlayer = new Player(engine.getStartRoom());
 				engine.addPlayer(newPlayer);
 				new ClientHandler(clientSocket, engine, newPlayer);
+				//clients.add();
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			}
@@ -55,6 +59,14 @@ public class GameServer extends Thread
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
+    }
+    
+    public static List<ClientHandler> getClientHandlers() {
+    	return clientHandlers;
+    }
+    
+    public static void removeClientHandler(ClientHandler ch) {
+	   clientHandlers.remove(ch);
     }
     
     /**

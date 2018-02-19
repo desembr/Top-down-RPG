@@ -22,6 +22,7 @@ public class Save extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
+		p.setCmdReturnMsg(null);
 		if (secondWord != null){
             try {
                 FileOutputStream fS = new FileOutputStream(new File(secondWord));

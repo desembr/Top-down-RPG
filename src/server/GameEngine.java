@@ -68,21 +68,19 @@ public class GameEngine {
 	 *            The command to process.
 	 * @param p
 	 *            The Player object to execute the command for.
-	 * @return An optional status/response message for requesting client.
 	 */
-	public synchronized String interpretCommand(String commandLine, Player p) {
+	public synchronized void interpretCommand(String commandLine, Player p) {
 		Command command = parser.getCommand(commandLine);
+		
 		if (command == null) {
-			return printHelp();
+			return;
 		}
 
 		boolean ret = command.execute(p);
 
 		if (ret == false) {
-			return printHelp();
+			p.setCmdReturnMsg("Command was not recognized, type 'help' for help.");
 		}
-
-		return command.getReturnMessage();
 	}
 
 	/**
@@ -116,15 +114,5 @@ public class GameEngine {
 			disconnectedPlayer.getRoom().removePlayer(disconnectedPlayer);
 			players.remove(disconnectedPlayer);
 		}
-	}
-
-	/**
-	 * Print out some help information. Here we print some stupid, cryptic
-	 * message and a list of the command words.
-	 * 
-	 * @return The help string.
-	 */
-	private String printHelp() {
-		return "You are lost. You are alone. You wander\naround the Maze.\n" + "Your command words are: " + parser.showCommands();
 	}
 }

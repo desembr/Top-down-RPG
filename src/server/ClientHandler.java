@@ -72,28 +72,44 @@ public class ClientHandler {
 			System.err.println(e.getMessage());
 			return;
 		}
-
-		// Sends initial game state for the newly connected client to display in
-		// Client program GUI.
-		// sendResponse();
 	}
 
+	/**
+	 * Gets set to true when a command has been executed.
+	 * @param updated To indicate whether an update has taken place or not.
+	 */
 	public synchronized void setStateUpdated(boolean updated) {
 		stateUpdated = updated;
 	}
-
+	
+	/**
+	 * Indicates whether a response should be sent back to a client.
+	 * @return Whether a response should be sent back to client or not.
+	 */
 	public synchronized boolean getStateUpdated() {
 		return stateUpdated;
 	}
 
+	/**
+	 * Sets disconnected to true if client has  initiated a disconnect (exit command).
+	 * @param disconnected Whether to flag that Exit command has been received and processed.
+	 */
 	public synchronized void setPlayerDisconnect(boolean disconnected) {
 		playerDisconnect = disconnected;
 	}
 
+	/**
+	 * Indicates whether an Exit command has been received and processed and that this
+	 * ClientHandler therefore should dispose of itself.
+	 * @return Whether an Exit command has been received and processed.
+	 */
 	public synchronized boolean getPlayerDisconnect() {
 		return playerDisconnect;
 	}
 
+	/**
+	 * The sendThread method sending responses to the handled Client.
+	 */
 	public void send() {
 		while (!Thread.interrupted()) {
 			if (getErrorCount() > 3 || getPlayerDisconnect()) {
@@ -115,6 +131,9 @@ public class ClientHandler {
 		engine.removePlayer(p);
 	}
 
+	/**
+	 * The receiveThread method listening for commands from the handled Client.
+	 */
 	public void receive() {
 		while (!Thread.interrupted()) {
 			if (getErrorCount() > 3) {
