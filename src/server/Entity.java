@@ -55,7 +55,7 @@ public class Entity implements Serializable {
      * Kills off this entity by setting isDead to true, 
      * will be removed in ClientHandler.
      */
-    public void kill() {
+    public synchronized void kill() {
     	isDead = true;
     }
     
@@ -63,7 +63,7 @@ public class Entity implements Serializable {
      * Returns if this entity is dead or alive.
      * @return Whether this entity is dead or not (and hence should be removed).
      */
-	public boolean getIsDead() {
+	public synchronized boolean getIsDead() {
     	return isDead;
     }
 	

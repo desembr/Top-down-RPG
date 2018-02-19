@@ -17,7 +17,7 @@ public class Player extends Entity implements Serializable {
 	private List<Item> items;
 	private List<Room> previousRooms;
 	private Room currentRoom;
-	private int score, highScore, weight; 
+	private int score, weight; 
 	
 	/**
 	 * Constructor for Player
@@ -29,7 +29,7 @@ public class Player extends Entity implements Serializable {
     	this.currentRoom = startRoom;
     	items = new ArrayList<>();
     	previousRooms = new ArrayList<>();
-    	score = highScore = weight = 0;
+    	score = weight = 0;
     	
     	currentRoom.addPlayer(this);
     }
@@ -124,10 +124,14 @@ public class Player extends Entity implements Serializable {
     	return false;
     }
 
-    	public boolean loadPlayer(Player p){
+    /**
+     * Loads in a saved player state.
+     * @param p The player to load.
+     * @return Whether load succeeded or not.
+     */
+	public boolean loadPlayer(Player p){
         this.health = p.health;
         this.currentRoom = p.currentRoom;
-        this.highScore = p.highScore;
         this.items = p.items;
         this.previousRooms = p.previousRooms;
         this.score = p.score;
@@ -136,7 +140,7 @@ public class Player extends Entity implements Serializable {
         this.defence = p.defence;
         this.weight = p.weight;
         return true;
-        }
+    }
     
     /**
      * Returns health of this player.
@@ -144,14 +148,6 @@ public class Player extends Entity implements Serializable {
      */
 	public int getScore() {
     	return score;
-    }
-	
-	/**
-     * Returns high-score of this player.
-     * @return The high-score of this player.
-     */
-	public int getHighScore() {
-    	return highScore;
     }
 	
 	/**

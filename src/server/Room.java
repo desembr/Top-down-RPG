@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 /*
@@ -31,7 +30,7 @@ public class Room implements Serializable
     private ArrayList<Player> playersInRoom;
     private List<Item> itemsInRoom;
     
-    private static Random randomGen = new Random();
+    //private static Random randomGen = new Random();
     
     /**
      * Create a room described "description". Initially, it has no exits.
@@ -52,6 +51,7 @@ public class Room implements Serializable
         // Add some enemies to this room.
         for (int i = 0; i < 5; i++) {
         	enemiesInRoom.add(new Orc());
+        	itemsInRoom.add(new Apple());
         }
     }
     

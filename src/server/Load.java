@@ -1,30 +1,39 @@
 package server;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-public class Gameloader extends Command{
+/**
+ * Load-player-high-score command.
+ * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @version 1.0
+ */
+public class Load extends Command{
 
-    public Gameloader(){}
+	/**
+	 * Constructor for this class.
+	 */
+    public Load(){}
 
+    /**
+	 * Executes this command, sets a return message if something to write back to client.
+	 * @param p The player object which this function affects.
+	 * @return Whether execution of this command changed some player state.
+	 */
     public boolean execute(Player p){
         if (secondWord != null){
             try {
-                FileInputStream fIS = new FileInputStream("" + secondWord);
+                FileInputStream fIS = new FileInputStream(secondWord);
                 ObjectInputStream oIS = new ObjectInputStream(fIS);
-                Player playur = (Player)oIS.readObject();
-                boolean playerLoaded = p.loadPlayer(playur);
-                if (playerLoaded){ return true; }
-
-                //oIS.close();
-               //fIS.close();
-
+                Player player = (Player)oIS.readObject();
+                boolean playerLoaded = p.loadPlayer(player);
+                oIS.close();
+                fIS.close();
+                if (playerLoaded){ return true; }  
             } catch (Exception e) {
-                //System.out.println(e.getStackTrace());
+                System.out.println(e.getStackTrace());
             }
         } return false;
-
     }
 }
 

@@ -16,34 +16,36 @@ import java.util.Observable;
 import server.Player;
 
 /**
- * Interface between players and the server, passes updated information returned from
- * the server back to the calling gui through setChanged() and notifyObservers() methods
- * of the Observable base class.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * Interface between players and the server, passes updated information returned
+ * from the server back to the calling gui through setChanged() and
+ * notifyObservers() methods of the Observable base class.
+ * 
+ * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
-public class Client extends Observable implements Runnable {
+public class Client extends Observable {
 	private Socket clientSocket;
-	
-	private Thread thread;
-	
+
+	private Thread sendThread, recvThread;
+
 	private static final int serverPort = 44120;
 	private static final String serverAddress = "localhost";
-	
+
 	private ObjectInputStream recvStream;
 	private ObjectOutputStream sendStream;
-	
-	private List<String> polledCommands;	
-	
-	private static int counter = 0;
-	
+
+	private List<String> polledCommands; // UserInterface places user input commands in here, for sending.
+
+	private int counter = 0; // Attempts to detect client disconnect.
+
 	/**
 	 * Constructor for Client.
 	 */
 	public Client() {
-		thread = new Thread(this);
+		sendThread = new Thread(this::send);
+		recvThread = new Thread(this::receive);
 		polledCommands = new ArrayList<>();
-		
+
 		try {
 			clientSocket = new Socket(serverAddress, serverPort);
 			OutputStream os = clientSocket.getOutputStream();
@@ -61,53 +63,60 @@ public class Client extends Observable implements Runnable {
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 			System.exit(1);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
-		//System.out.println("You are connected to server " + serverAddress + ":" + serverPort);
 	}
-	
+
 	/**
-	 * Starts this client's thread to start communicate with server.
+	 * Starts this client's threads to start communication with the server.
 	 */
 	public void start() {
-		thread.start();
+		sendThread.start();
+		recvThread.start();
 	}
-	
+
 	/**
-	 * The continuous loop handling sending of input commands as well as listening
-	 * for response from server program. 
+	 * The sendThread method sending commands to Server.
 	 */
-	public void run() {
-		// Receive initial game state from server (the player object on the server,
-		// associated with this Client).
-		receiveResponse();
-		
+	private void send() {
 		while (!Thread.interrupted()) {
-				synchronized (polledCommands) {
-					if (counter > 3) {
-						break;
-					}
-					if (polledCommands.isEmpty()) {
-						while (polledCommands.isEmpty()) {
-						try {
-							Thread.sleep(500);
-							} catch (InterruptedException e) {
-								System.err.println(e.getMessage());
-							}
-						} 
-					}
-					String nextCmd = polledCommands.remove(0);
-					sendCommand(nextCmd);
+			synchronized (polledCommands) {
+				if (counter > 3) {
+					break;
 				}
-				receiveResponse();
+				while (polledCommands.isEmpty()) {
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						System.err.println(e.getMessage());
+					}
+				}
+				String nextCmd = polledCommands.remove(0);
+				sendCommand(nextCmd);
+			}
+		}
+		try {
+			if (sendStream != null)
+				sendStream.close();
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * The receiveThread method listening for response from Server.
+	 */
+	private void receive() {
+		while (!Thread.interrupted()) {
+			if (counter > 3) {
+				break;
+			}
+			receiveResponse();
 		}
 		try {
 			if (recvStream != null)
-				recvStream.close();
-			if (sendStream != null)
 				sendStream.close();
 			if (clientSocket != null)
 				clientSocket.close();
@@ -115,51 +124,87 @@ public class Client extends Observable implements Runnable {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	/**
-	 * Called by UserInterface on user-entered commands to queue for transmission to server.
+	 * Called by UserInterface on user-entered commands to queue for
+	 * transmission to server.
+	 * 
 	 * @param cmdLine
 	 */
 	public synchronized void pollCommand(String cmdLine) {
 		polledCommands.add(cmdLine);
 	}
-	
+
 	/**
 	 * Sends user-input command to server for processing.
-	 * @param cmdLine The full command, including option/parameter, input by user.
+	 * 
+	 * @param cmdLine
+	 *            The full command, including option/parameter, input by user.
 	 */
 	private void sendCommand(String cmdLine) {
 		try {
 			sendStream.writeObject(cmdLine);
 			sendStream.flush();
+			resetErrorCounter();
 			System.out.println("Transmitted command to Server");
 		} catch (IOException e) {
-			counter++;
+			incErrorCounter();
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	/**
-	 * Blocks until response is received from server, then calls the gui's update method
-	 * if state changed for this user's player object as a consequence of input command.
+	 * Blocks until response is received from server, then calls the gui's
+	 * update method if state changed for this user's player object as a
+	 * consequence of input command.
 	 */
 	private void receiveResponse() {
 		try {
-			//String msg = (String)recvStream.readObject();
 			System.out.println("Waiting for response from Server...");
-			Object o = (Object)recvStream.readObject();
-			Player p = (Player)o;
+			Object o = (Object) recvStream.readObject();
+			Player p = (Player) o;
 			System.out.println("Received response from Server: " + p.getName());
 			setChanged();
 			notifyObservers(p);
+			resetErrorCounter();
 		} catch (EOFException e) {
-			counter++;
-			System.err.println(e.getMessage()); 
-		}catch (IOException e) {
-			counter++;
+			incErrorCounter();
+			System.err.println(e.getMessage());
+		} catch (IOException e) {
+			incErrorCounter();
 			System.err.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
-			counter++;
+			incErrorCounter();
+			System.err.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Increments error-counter.
+	 */
+	private synchronized void incErrorCounter() {
+		counter++;
+	}
+
+	/**
+	 * Resets error-counter.
+	 */
+	private synchronized void resetErrorCounter() {
+		counter = 0;
+	}
+
+	/**
+	 * Disposes of this Client object.
+	 */
+	public synchronized void exit() {
+		try {
+			if (sendStream != null)
+				sendStream.close();
+			if (recvStream != null)
+				recvStream.close();
+			if (clientSocket != null)
+				clientSocket.close();
+		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
 	}

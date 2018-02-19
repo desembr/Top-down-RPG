@@ -38,7 +38,7 @@ import server.Room;
  */
 public class UserInterface implements ActionListener, Observer
 {
-	private static final int WIDTH = 1000, HEIGHT = 1000;
+	private static final int WIDTH = 800, HEIGHT = 660;
 	
 	private Client client;
     private JFrame myFrame;
@@ -349,6 +349,7 @@ public class UserInterface implements ActionListener, Observer
      */
     private void exitGame() {
     	println("Goodbye...");
+    	client.exit();
     	System.exit(0);
     }
     
@@ -378,6 +379,4 @@ public class UserInterface implements ActionListener, Observer
 		System.out.println( p.getRoom().getEnemies().size() ); 
 		System.out.println( p.getRoom().getEnemies().get(0).getIsDead() ); 
     }
-    
-    
 }
