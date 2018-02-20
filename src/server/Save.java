@@ -25,7 +25,7 @@ public class Save extends Command {
 		p.setCmdReturnMsg(null);
 		if (secondWord != null){
             try {
-                FileOutputStream fS = new FileOutputStream(new File(secondWord));
+            	FileOutputStream fS = new FileOutputStream(new File("saves/" + secondWord));
                 ObjectOutputStream oS = new ObjectOutputStream(fS);
 
                 oS.writeObject(p);

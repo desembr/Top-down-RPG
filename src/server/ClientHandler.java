@@ -156,7 +156,7 @@ public class ClientHandler {
 	 * Sends response back to client.
 	 */
 	public void sendResponse() {
-		synchronized (engine) {
+		synchronized (engine) { // To avoid concurrentModificationException
 			try {
 				sendStream.writeObject(p);
 				sendStream.flush();
