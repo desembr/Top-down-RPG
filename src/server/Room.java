@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /*
@@ -38,20 +39,41 @@ public class Room implements Serializable
      * @param description The description of this room.
      * @param imageName The imageFilePath of this room.
      */
-    public Room(String description, String imageName)
+    public Room(String description, String imageName, int roomLevel)
     {
         this.description = description;
         this.imageName = imageName; 
-        
+       
         exits = new HashMap<String,Room>();
         enemiesInRoom = new ArrayList<Enemy>();
         playersInRoom = new ArrayList<Player>();
         itemsInRoom = new ArrayList<Item>();
+       
         
         // Add some enemies to this room.
-        for (int i = 0; i < 5; i++) {
-        	enemiesInRoom.add(new Orc());
-        	itemsInRoom.add(new Apple());
+        try {
+			Thread.sleep(33); // för att random seeden från millis ska bli bättre
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Random randomiser = new Random( System.currentTimeMillis() ); // time used to get a semi-random seed
+        int zero_to_five = randomiser.nextInt(6); // random number betweeb 0-5
+        for (int i = 0; i < zero_to_five; i++) {
+        	if(roomLevel == 1)
+        	{
+        		int random = randomiser.nextInt(2);  
+        		if (random == 0)
+        		{
+        			enemiesInRoom.add(new Goblin());
+        		}
+        		else
+        		{
+        			enemiesInRoom.add(new Gremlin());
+        		}
+        	}
+        	//enemiesInRoom.add(new Orc());
+        	//itemsInRoom.add(new Apple());
         }
     }
     
@@ -238,6 +260,17 @@ public class Room implements Serializable
      */
 	public void removePlayer(Player player) {
 		playersInRoom.remove(player);
+	}
+	
+	/**
+	 * Removes previously drawn monsters and redraws them according to the current
+	 * monsterlist
+	 * TODO: The same for items
+	 */
+	
+	public void flushGraphics()
+	{
+		
 	}
 }
 

@@ -48,7 +48,7 @@ public class GameServer extends Thread
     	while (!interrupted()) {
     		try {
 				Socket clientSocket = serverSocket.accept();
-				//System.out.println("New client connected");
+				System.out.println("New client connected");
 				Player newPlayer = new Player(engine.getStartRoom());
 				engine.addPlayer(newPlayer);
 				clientHandlers.add(new ClientHandler(clientSocket, engine, newPlayer));

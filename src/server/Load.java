@@ -23,7 +23,7 @@ public class Load extends Command{
     public boolean execute(Player p){
         if (secondWord != null){
             try {
-                FileInputStream fIS = new FileInputStream("saves/" + secondWord);
+                FileInputStream fIS = new FileInputStream(secondWord);
                 ObjectInputStream oIS = new ObjectInputStream(fIS);
                 Player player = (Player)oIS.readObject();
                 boolean playerLoaded = p.loadPlayer(player);

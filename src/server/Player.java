@@ -106,9 +106,10 @@ public class Player extends Entity implements Serializable {
     		return false;
     	}
     	else {
+    		currentRoom.flushGraphics(); 
     		previousRooms.add(currentRoom);
     		currentRoom.removePlayer(this);
-    		currentRoom = r;
+    		currentRoom = r; 
     		currentRoom.addPlayer(this);
     		return true;
     	}
@@ -120,6 +121,7 @@ public class Player extends Entity implements Serializable {
      */
     public boolean goBackARoom() {
     	if (previousRooms.size() > 0) {
+    		currentRoom.flushGraphics();
     		Room r = previousRooms.remove(previousRooms.size() - 1);
     		currentRoom = r;
     		return true;
