@@ -3,6 +3,7 @@ package client;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -16,6 +17,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +30,7 @@ import server.Enemy;
 import server.Item;
 import server.Player;
 import server.Room;
+import server.GameServer;
 
 /**
  * This class implements a simple graphical user interface with a text entry
@@ -38,13 +41,14 @@ import server.Room;
  */
 public class UserInterface implements ActionListener, Observer
 {
-	private static final int WIDTH = 800, HEIGHT = 660;
+	private static final int WIDTH = 800, HEIGHT = 680;
 	
 	private Client client;
-    private JFrame myFrame;
+    private JFrame myFrame, frame;
     private JTextField entryField;
     private JTextArea log;
-    private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3, shadow4, shadow5, shadow6; 
+    private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, 
+                   shadow1, shadow2, shadow3, shadow4, shadow5, shadow6; 
     
     private ArrayList<JLabel> monsterSprites; 
     private ArrayList<JLabel> shadows; 
@@ -54,6 +58,17 @@ public class UserInterface implements ActionListener, Observer
      * all the communication with the server (sending commands and receiving responses). 
      * @param client  The Client to handle all communication with server.
      */
+    
+    public static void main(String[] args)
+    {
+    	new UserInterface();
+    }
+    	
+    public UserInterface()
+    {
+    	initMenu();
+    }
+    
     public UserInterface(Client client)
     {
     	monsterSprites = new ArrayList<>(); 
@@ -65,6 +80,69 @@ public class UserInterface implements ActionListener, Observer
         
         printWelcome();
     }
+    
+    public void initMenu()
+    {
+    	JPanel myPanel = new JPanel();
+    	myPanel.setLayout(new BorderLayout(5, 5));
+    
+    	JPanel panelUno = new JPanel();
+    	JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
+    	JButton buttonN = new JButton("New Game");
+    
+        panel.add(buttonN);
+    
+    	JButton button = new JButton("Load Game");
+    	panel.add(button);
+    
+    	JButton button2 = new JButton("Highscore");
+    	panel.add(button2);
+    
+    	JTextField textField = new JTextField();
+    	panel.add(textField);
+    	panelUno.add(panel);
+    	
+    	JPanel buttonPanel = new JPanel();
+    	JButton button3 = new JButton("Exit");
+    	buttonPanel.add(button3);
+    
+    	myPanel.add(panelUno, BorderLayout.CENTER);
+    	myPanel.add(buttonPanel, BorderLayout.PAGE_END);
+    
+    	myFrame = new JFrame("MyLittleRPG");
+    	myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    	//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    	myFrame.setBounds(0,0,WIDTH, HEIGHT);
+    
+    	JPanel centerPanel = new JPanel();
+    	myFrame.getContentPane().setLayout(new BorderLayout(5, 5));
+    	centerPanel.setBackground(Color.DARK_GRAY);
+    	myFrame.add(centerPanel, BorderLayout.CENTER);
+    
+    	myFrame.add(myPanel, BorderLayout.LINE_END);
+    	buttonN.addActionListener(new ActionListener(){
+    	public void actionPerformed(ActionEvent e){
+    	myFrame.getContentPane().removeAll();
+    	GameServer gs = new GameServer();
+        client = new Client();
+    	setClient(client);
+    	client.addObserver(getThis());
+    	client.start();
+    	createGUI();
+    	           }
+            });
+    	//frame.pack();
+    	myFrame.setVisible(true);
+    	   }
+    	
+    
+    	   private void setClient(Client c){
+    	      this.client = c;
+    	   }
+    
+    	   private UserInterface getThis(){
+    	        return this;
+    	    }
 
     /**
      * Print out some text into the text area.
@@ -99,9 +177,9 @@ public class UserInterface implements ActionListener, Observer
 	        
 	        if(imageURL == null)
 	        {
-	            System.out.println("image not found"); // debug
+	            //System.out.println("image not found"); // debug
 	        
-	            System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
+	            //System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
 	        }
 	        else {
 	            ImageIcon icon = new ImageIcon(imageURL);
@@ -297,7 +375,7 @@ public class UserInterface implements ActionListener, Observer
 
         // add some event listeners to some components
         myFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {System.exit(0);}
+            public void windowClosing(WindowEvent e) {exitGame();}
         });
 
         entryField.addActionListener(this);
@@ -311,6 +389,9 @@ public class UserInterface implements ActionListener, Observer
 			e.printStackTrace();
 		}
         
+        // Create the MenuBar.
+        makeMenuBar();
+        
         
         myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT + 325)); // +325 för att man ska se mer av text-arean
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -320,6 +401,50 @@ public class UserInterface implements ActionListener, Observer
         entryField.requestFocus();
         myFrame.setVisible(true);
     }
+    
+    /**
+      * Creates the menu-bar.
+      */
+       private void makeMenuBar() {
+           JMenuBar menuBar = new JMenuBar();
+           myFrame.setJMenuBar(menuBar);
+   
+           JMenu fileMenu = new JMenu("File");
+           menuBar.add(fileMenu);
+   
+           JMenuItem save = new JMenuItem("Save");
+           fileMenu.add(save);
+           save.addActionListener(e -> {
+           String user = JOptionPane.showInputDialog(null, "Enter user name",
+                                                    "Save game", JOptionPane.PLAIN_MESSAGE);
+           if (user == null)
+                  return;
+           entryField.setText("Save " + user);
+           processCommand();
+           });
+   
+           JMenuItem load = new JMenuItem("Load");
+           fileMenu.add(load);
+           load.addActionListener(e -> {
+               String user = JOptionPane.showInputDialog(null, "Enter user name",
+                       "Load game", JOptionPane.PLAIN_MESSAGE);
+               if (user == null)
+                   return;
+               entryField.setText("Load " + user);
+               processCommand();
+          });
+   
+          JMenuItem help = new JMenuItem("Help");
+          fileMenu.add(help);
+           help.addActionListener(e -> {
+               entryField.setText("Help");
+               processCommand();
+           });
+    
+           JMenuItem exit = new JMenuItem("Exit");
+           fileMenu.add(exit);
+           exit.addActionListener(e -> { exitGame(); });
+        }
 
     /**
      * Listener method for the textField (the input field).
@@ -385,7 +510,7 @@ public class UserInterface implements ActionListener, Observer
      */
     private void printWelcome()
     {
-    	println("Hello adventurer, your task is to \nkill all monsters in all rooms.\n"
+    	println("Hello adventurer, your task is to \n explore, fight and gather treasure.\n"
     			+ "Enter 'help' if you need some help.\nGoodluck!");
     }
     
