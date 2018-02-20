@@ -19,6 +19,10 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -38,13 +42,14 @@ import server.Room;
  */
 public class UserInterface implements ActionListener, Observer
 {
-	private static final int WIDTH = 800, HEIGHT = 660;
+	private static final int WIDTH = 800, HEIGHT = 680;
 	
 	private Client client;
     private JFrame myFrame;
     private JTextField entryField;
     private JTextArea log;
-    private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3, shadow4, shadow5, shadow6; 
+    private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5,
+    	shadow1, shadow2, shadow3, shadow4, shadow5, shadow6; 
     
     private ArrayList<JLabel> monsterSprites; 
     private ArrayList<JLabel> shadows; 
@@ -99,9 +104,9 @@ public class UserInterface implements ActionListener, Observer
 	        
 	        if(imageURL == null)
 	        {
-	            System.out.println("image not found"); // debug
+	            //System.out.println("image not found"); // debug
 	        
-	            System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
+	            //System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
 	        }
 	        else {
 	            ImageIcon icon = new ImageIcon(imageURL);
@@ -121,7 +126,7 @@ public class UserInterface implements ActionListener, Observer
     {
         URL imageURL = this.getClass().getClassLoader().getResource(imageName);
         if(imageURL == null)
-            System.out.println("image not found");
+            ;//System.out.println("image not found");
         else {
             ImageIcon icon = new ImageIcon(imageURL);
             playerSprite.setIcon(icon);
@@ -141,7 +146,7 @@ public class UserInterface implements ActionListener, Observer
     	
 	    	URL imageURL = this.getClass().getClassLoader().getResource(enemies.get(i).getIconFilePath() );
 	        if(imageURL == null)
-	            System.out.println("image not found");
+	            ;//System.out.println("image not found");
 	        else {
 	            ImageIcon icon = new ImageIcon(imageURL);
 	            monsterSprites.get(i).setIcon(icon);
@@ -164,7 +169,7 @@ public class UserInterface implements ActionListener, Observer
     	
 	    	URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
 	        if(imageURL == null)
-	            System.out.println("image not found");
+	            ;//System.out.println("image not found");
 	        else {
 	            ImageIcon icon = new ImageIcon(imageURL);
 	            shadows.get(i).setIcon(icon);
@@ -271,11 +276,10 @@ public class UserInterface implements ActionListener, Observer
 
         // add some event listeners to some components
         myFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {System.exit(0);}
+            public void windowClosing(WindowEvent e) { exitGame(); }
         });
 
-        entryField.addActionListener(this);
-        
+        entryField.addActionListener(this);     
         
         try {
 			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().
@@ -285,6 +289,8 @@ public class UserInterface implements ActionListener, Observer
 			e.printStackTrace();
 		}
         
+        // Create the MenuBar.
+        makeMenuBar();
         
         myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -293,6 +299,50 @@ public class UserInterface implements ActionListener, Observer
         myFrame.pack();
         entryField.requestFocus();
         myFrame.setVisible(true);
+    }
+    
+    /**
+     * Creates the menu-bar.
+     */
+    private void makeMenuBar() {
+    	JMenuBar menuBar = new JMenuBar();
+    	myFrame.setJMenuBar(menuBar);
+    	
+    	JMenu fileMenu = new JMenu("File");
+    	menuBar.add(fileMenu);
+    	
+    	JMenuItem save = new JMenuItem("Save");
+    	fileMenu.add(save);
+    	save.addActionListener(e -> { 
+    		String user = JOptionPane.showInputDialog(null, "Enter user name", 
+    			"Save game", JOptionPane.PLAIN_MESSAGE);
+    		if (user == null)
+    			return;
+    		entryField.setText("Save " + user);
+    		processCommand();
+    	});
+    	
+    	JMenuItem load = new JMenuItem("Load");
+    	fileMenu.add(load);
+    	load.addActionListener(e -> { 
+    		String user = JOptionPane.showInputDialog(null, "Enter user name", 
+    			"Load game", JOptionPane.PLAIN_MESSAGE);
+    		if (user == null)
+    			return;
+    		entryField.setText("Load " + user);
+    		processCommand();
+    	});
+    	
+    	JMenuItem help = new JMenuItem("Help");
+    	fileMenu.add(help);
+    	help.addActionListener(e -> { 
+    		entryField.setText("Help");
+    		processCommand();
+    	});
+    	
+    	JMenuItem exit = new JMenuItem("Exit");
+    	fileMenu.add(exit);
+    	exit.addActionListener(e -> { exitGame(); });
     }
 
     /**
@@ -365,7 +415,7 @@ public class UserInterface implements ActionListener, Observer
     
 
     /**
-     * Exits the Client program after acknowledged exit command.
+     * Exits the Client program.
      */
     private void exitGame() {
     	println("Goodbye...");
