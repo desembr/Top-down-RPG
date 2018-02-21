@@ -36,7 +36,7 @@ public class Client extends Observable {
 
 	private List<String> polledCommands; // UserInterface places user input commands in here, for sending.
 
-	private int counter = 0; // Attempts to detect client disconnect.
+	private int counter = 0; // Attempts to detect that the server has gone down. 
 
 	/**
 	 * Constructor for Client.
@@ -194,9 +194,9 @@ public class Client extends Observable {
 	}
 
 	/**
-	 * Disposes of this Client object.
+	 * Disposes of this Client object, closes all streams and sockets.
 	 */
-	public void exit() {
+	public synchronized void exit() {
 		try {
 			if (sendStream != null)
 				sendStream.close();

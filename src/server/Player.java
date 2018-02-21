@@ -74,7 +74,14 @@ public class Player extends Entity implements Serializable {
     	for (int i = 0; i < items.size(); i++) {
         	Item item = items.get(i);
         	if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
-        		weight -= item.getWeight();
+        		// Remove equipment gains.
+            	if (item instanceof Equipment) {
+            		Equipment eq = (Equipment)item;
+            		damage -= eq.damageGain;
+            		defence -= eq.defenceGain;
+            	}
+            	
+            	weight -= item.weight;
         		currentRoom.addItem(item);
         		items.remove(i);
         		return true;
@@ -89,9 +96,17 @@ public class Player extends Entity implements Serializable {
      * @return Whether the player had enough room left in his inventory (depends on weight).
      */
     public boolean pickItem(Item item) {
-    	if (weight + item.getWeight() > maxWeight) {
+    	if (weight + item.weight > maxWeight) {
     		return false;
     	}
+    	// Add equipment gains.
+    	if (item instanceof Equipment) {
+    		Equipment eq = (Equipment)item;
+    		damage += eq.damageGain;
+    		defence += eq.defenceGain;
+    	}
+    	
+    	weight += item.weight;
     	items.add(item);
     	return true;
     }
@@ -106,7 +121,6 @@ public class Player extends Entity implements Serializable {
     		return false;
     	}
     	else {
-    		currentRoom.flushGraphics(); 
     		previousRooms.add(currentRoom);
     		currentRoom.removePlayer(this);
     		currentRoom = r; 
@@ -121,9 +135,10 @@ public class Player extends Entity implements Serializable {
      */
     public boolean goBackARoom() {
     	if (previousRooms.size() > 0) {
-    		currentRoom.flushGraphics();
     		Room r = previousRooms.remove(previousRooms.size() - 1);
+    		currentRoom.removePlayer(this);
     		currentRoom = r;
+    		currentRoom.addPlayer(this);
     		return true;
     	}
     	return false;
@@ -131,6 +146,7 @@ public class Player extends Entity implements Serializable {
     
     /**
      * Logic for attacking an entity, grants score points if the enemy dies.
+     * Entity e will attempt to strike back, defence affects hit-chance.
      * @param e The entity to attack.
      */
     public void attack(Entity e) {
@@ -138,6 +154,10 @@ public class Player extends Entity implements Serializable {
     		e.lowerHealth(damage);
     		if (e.getIsDead())
     			score += 5;
+    		
+    		// Enemy e attempts to strike back at the attacking player.
+    		if (rand.nextInt(defence) <= 8)
+    			lowerHealth(e.getDamage());
     	}
     }
     
@@ -155,9 +175,9 @@ public class Player extends Entity implements Serializable {
         	}
     	}
     	else
-    		ret += "None\n";
+    		ret += "None";
 
-    	ret += "Score: " + score;
+    	ret += "\nScore: " + score;
     	
     	return ret;
     }
@@ -205,6 +225,17 @@ public class Player extends Entity implements Serializable {
     }
 	
 	/**
+     * Returns the previous room.
+     * @return The previous room of this player.
+     */
+	public Room getPreviousRoom() {
+    	if (previousRooms.size() > 0)
+    		return previousRooms.get(previousRooms.size() - 1);
+    	
+    	return null;
+    }
+	
+	/**
      * Returns a message from the previous command, if there was none
      * null is returned to signal this.
      * @return The cmdReturnMsg
@@ -219,5 +250,13 @@ public class Player extends Entity implements Serializable {
      */
 	public void setCmdReturnMsg(String msg) {
     	cmdReturnMsg = msg;
+    }
+	
+	/**
+     * Returns the max weight carried for a player.
+     * @return The max weight.
+     */
+	public int getMaxWeight() {
+    	return maxWeight;
     }
 }

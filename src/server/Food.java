@@ -25,11 +25,14 @@ public abstract class Food extends Item implements Serializable{
 	}
 	
 	/**
-	 * Returns an increased health.
+	 * Returns an increased health, where 100 is maximum.
 	 * @param currentHealth The current health of the consuming/using player.
 	 * @return The new increased health for the consuming player to use.
 	 */
 	public int use(int currentHealth) {
+		if (currentHealth + healthGain > 100)
+			return 100;
+		
 		return currentHealth + healthGain;
 	}
 	

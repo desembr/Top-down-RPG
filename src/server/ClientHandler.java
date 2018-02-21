@@ -31,7 +31,10 @@ public class ClientHandler {
 
 	private int counter = 0; // Attempts to detect client disconnect.
 
-	private boolean stateUpdated = true, playerDisconnect, concurrentStateChange;
+	// For checking when to update other clients in same room,
+	// and when to update the handled client.
+	private boolean stateUpdated = true, playerDisconnect,
+			concurrentStateChange, updateOthers;
 
 	/**
 	 * Constructor for ClientHandler.
@@ -47,6 +50,8 @@ public class ClientHandler {
 		this.clientSocket = clientSocket;
 		this.engine = engine;
 		this.p = p;
+		
+		updateOthers = true; // Update other clients when new client connects.
 
 		sendThread = new Thread(this::send);
 		recvThread = new Thread(this::receive);
@@ -60,6 +65,8 @@ public class ClientHandler {
 			recvStream = new ObjectInputStream(is);
 			sendThread.start();
 			recvThread.start();
+			
+			setStateUpdated(true); // Signal to update all clients in same room.
 		} catch (SocketException e) {
 			e.printStackTrace();
 			System.err.println(e.getMessage());
@@ -85,7 +92,7 @@ public class ClientHandler {
 			}
 
 			while (!getStateUpdated() && !getConcurrentStateChange()) {
-				if (getPlayerDisconnect())
+				if (getErrorCount() > 3 || getPlayerDisconnect())
 					break;
 				try {
 					Thread.sleep(200);
@@ -93,19 +100,23 @@ public class ClientHandler {
 					System.err.println(e.getMessage());
 				}
 			}
-			// Regular state change initiated by the handled Client.
+			// Regular state change initiated by the handled Client. Update
+			// other clients in same room as this handled client's.
 			if (getStateUpdated()) {
-				synchronized (engine) {
-					List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p.getRoom());
+				if (updateOthers) {
+					synchronized (engine) {
+						List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p);
 
-					for (ClientHandler ch : clientHandlers)
-						synchronized (ch) {
-							if (ch != this)
-								ch.setConcurrentStateChange(true);
-						}
+						for (ClientHandler ch : clientHandlers)
+							synchronized (ch) {
+								if (ch != this)
+									ch.setConcurrentStateChange(true);
+							}
+					}
 				}
 			} else { // Concurrent state change initiated by some other Client
-						// in the same room as this.
+						// in the same room as this handled client's. Don't
+						// update others.
 				setConcurrentStateChange(false);
 			}
 
@@ -127,17 +138,18 @@ public class ClientHandler {
 			}
 
 			try {
-				// System.out.println("Waiting for command from a client...");
 				String cmdLine = (String) recvStream.readObject();
-				// System.out.println("Received command from a Client");
 
-				if (engine.interpretCommand(cmdLine, p) == true) { // Command
-																	// was
-																	// successful
-																	// (state
-																	// changed)
-					setStateUpdated(true);
+				// Only update other clients in same room if room state changed
+				// in some way.
+				boolean roomStateChange = engine.interpretCommand(cmdLine, p);
+				if (roomStateChange) {
+					updateOthers = true;
+				} else {
+					updateOthers = true;
 				}
+
+				setStateUpdated(true);
 
 				resetErrorCounter();
 
@@ -169,7 +181,6 @@ public class ClientHandler {
 				sendStream.writeObject(p);
 				sendStream.flush();
 				sendStream.reset();
-				// System.out.println("Transmitted response back to a Client");
 			} catch (IOException e) {
 				incErrorCounter();
 				System.err.println(e.getMessage());

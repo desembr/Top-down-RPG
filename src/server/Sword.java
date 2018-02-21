@@ -11,8 +11,10 @@ public class Sword extends Equipment {
 	/**
 	 * Constructor for Sword.
 	 */
-	public Sword() {
+	public Sword(int damageGain, int defenceGain) {
 		super("Sword", 25, "sword.png");
+		this.damageGain = damageGain;
+		this.defenceGain = defenceGain;
 	}
 	
 	/**

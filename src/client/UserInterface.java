@@ -476,7 +476,9 @@ public class UserInterface implements ActionListener, Observer
 
         if (input.length() > 0) {
         	println(input);
-        	client.pollCommand(input);
+        	synchronized (client) {
+        		client.pollCommand(input);
+        	}
         }
     }
     
@@ -506,7 +508,9 @@ public class UserInterface implements ActionListener, Observer
      */
     private void exitGame() {
     	println("Goodbye...");
-    	client.exit();
+    	synchronized (client) {
+    		client.exit();
+    	}
     	System.exit(0);
     }
     
@@ -529,7 +533,9 @@ public class UserInterface implements ActionListener, Observer
 		showEnemies(p.getRoom().getEnemies() );
 		showShadows(p.getRoom().getEnemies() );
 		
-		println(p.showInventory());
+		println(p.showInventory() + ", Health: " + p.getHealth() +
+				", Damage: " + p.getDamage() + ", Defence: " + p.getDefence() + 
+				", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
 		if (p.getCmdReturnMsg() != null)
     		println(p.getCmdReturnMsg());
     }

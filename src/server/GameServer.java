@@ -66,19 +66,23 @@ public class GameServer extends Thread
     }
     
     /**
-     * Returns the ClientHandlers for those handlers whose player objects is currently in room r.
-     * @param r The room for whom all residing players should update on state change from some Client
-     * also residing in that room.
-     * @return The ClientHandlers meeting the conditions mentioned above.
+     * Returns the ClientHandlers for those handlers whose player objects is currently 
+     * the same room as Player p's current room or previous room.
+     * @param p The player whose current room's and previous room's players' clients 
+     * should get updated from room state change caused by Player p's client's issued command.
+     * @return The ClientHandlers meeting the conditions described above.
      */
-    public static List<ClientHandler> getClientHandlers(Room r) {
-    	if (r == null)
+    public static synchronized List<ClientHandler> getClientHandlers(Player p) {
+    	if (p == null)
     		return null;
     	
     	List<ClientHandler> res = new ArrayList<>();
     	for (ClientHandler ch : clientHandlers) {
-    		if (ch.getPlayer().getRoom() == r)
-    			res.add(ch);
+    		synchronized (ch) {
+	    		Room r = ch.getPlayer().getRoom();
+	    		if (r == p.getRoom() || r == p.getPreviousRoom())
+	    			res.add(ch);
+    		}
     	}
     	return res;
     }
@@ -87,7 +91,7 @@ public class GameServer extends Thread
      * Removes a ClientHandler on Client-disconnect.
      * @param ch The ClientHandler to remove.
      */
-    public static void removeClientHandler(ClientHandler ch) {
+    public static synchronized void removeClientHandler(ClientHandler ch) {
     	if (ch != null)
     		clientHandlers.remove(ch);
     }

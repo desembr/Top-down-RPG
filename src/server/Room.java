@@ -31,8 +31,6 @@ public class Room implements Serializable
     private ArrayList<Player> playersInRoom;
     private List<Item> itemsInRoom;
     
-    //private static Random randomGen = new Random();
-    
     /**
      * Create a room described "description". Initially, it has no exits.
      * description" is something like "in a kitchen" or "in an open court yard".
@@ -50,14 +48,14 @@ public class Room implements Serializable
         itemsInRoom = new ArrayList<Item>();
        
         
-        // Add some enemies to this room.
+        // Add some enemies and items to this room.
         try {
 			Thread.sleep(33); // för att random seeden från millis ska bli bättre
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
         Random randomiser = new Random( System.currentTimeMillis() ); // time used to get a semi-random seed
-        int zero_to_five = randomiser.nextInt(6); // random number betweeb 0-5
+        int zero_to_five = randomiser.nextInt(6); // random number between 0-5
         for (int i = 0; i < zero_to_five; i++) {
         	if(roomLevel == 1)
         	{
@@ -65,9 +63,21 @@ public class Room implements Serializable
         		if (random == 0)
         		{
         			enemiesInRoom.add(new Goblin());
+        			if (randomiser.nextInt(4) == 0)
+        				itemsInRoom.add(new Apple());
         		}
         		else
         		{
+        			int randomStats = randomiser.nextInt(5);
+        			if (randomiser.nextInt(3) == 0) {
+        				itemsInRoom.add(new Pie());
+        			}
+        			else if (randomiser.nextInt(3) == 0) {
+        				itemsInRoom.add(new Sword(5 + randomStats, 2 + randomStats));
+        			}
+        			else if (randomiser.nextInt(3) == 0) {
+        				itemsInRoom.add(new Shield(2 + randomStats, 12 + randomStats));
+        			}
         			enemiesInRoom.add(new Gremlin());
         		}
         	}
@@ -259,17 +269,6 @@ public class Room implements Serializable
      */
 	public void removePlayer(Player player) {
 		playersInRoom.remove(player);
-	}
-	
-	/**
-	 * Removes previously drawn monsters and redraws them according to the current
-	 * monsterlist
-	 * TODO: The same for items
-	 */
-	
-	public void flushGraphics()
-	{
-		
 	}
 }
 

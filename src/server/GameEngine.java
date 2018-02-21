@@ -31,15 +31,6 @@ public class GameEngine {
 	}
 
 	/**
-	 * Returns the players currently connected to this server.
-	 * 
-	 * @return The registered/connected players on this server.
-	 */
-	public List<Player> getPlayers() {
-		return players;
-	}
-
-	/**
 	 * Create all the rooms and link their exits together.
 	 */
 	private void createRooms() {
@@ -174,6 +165,7 @@ public class GameEngine {
 		Command command = parser.getCommand(commandLine);
 		
 		if (command == null) {
+			p.setCmdReturnMsg("Command was not recognized, type 'help' for help.");
 			return false;
 		}
 
@@ -185,13 +177,21 @@ public class GameEngine {
 		}
 		return true;
 	}
+	
+	/**
+	 * Returns the players currently connected to this server.
+	 * 
+	 * @return The registered/connected players on this server.
+	 */
+	public synchronized List<Player> getPlayers() {
+		return players;
+	}
 
 	/**
 	 * Returns initial room for all newly created players.
-	 * 
 	 * @return The starting room.
 	 */
-	public Room getStartRoom() {
+	public synchronized Room getStartRoom() {
 		return rooms.get(0);
 	}
 
@@ -201,7 +201,7 @@ public class GameEngine {
 	 * @param newPlayer
 	 *            The new player object to add for the newly connected Client.
 	 */
-	public void addPlayer(Player newPlayer) {
+	public synchronized void addPlayer(Player newPlayer) {
 		players.add(newPlayer);
 	}
 
@@ -217,19 +217,5 @@ public class GameEngine {
 			disconnectedPlayer.getRoom().removePlayer(disconnectedPlayer);
 			players.remove(disconnectedPlayer);
 		}
-	}
-	
-	/**
-	 * Loads a saved room in its current state (since it might have
-	 * been modified by other players since the save).
-	 * @param roomDescription The saved description of the saved room.
-	 * @return The saved room in its current state.
-	 */
-	public static Room loadRoom(String roomDescription) {
-		for (Room r : rooms) {
-			if (r.getShortDescription().equals(roomDescription))
-				return r;
-		}
-		return null;
 	}
 }

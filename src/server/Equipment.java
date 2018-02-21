@@ -7,6 +7,8 @@ package server;
  */
 public abstract class Equipment extends Item {
 	private static final long serialVersionUID = 1L;
+	
+	protected int defenceGain, damageGain;
 
 	/**
 	 * Constructor for Equipment.
