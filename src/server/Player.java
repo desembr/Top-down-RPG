@@ -140,22 +140,43 @@ public class Player extends Entity implements Serializable {
     			score += 5;
     	}
     }
+    
+    /**
+     * Gets string for this player's inventory.
+     * @return A descriptive string for display of this player's inventory.
+     */
+    public String showInventory()
+    {
+    	String ret = "";
+    	ret += "Items in inventory: ";
+    	if (items.size() > 0) {
+    		for (Item i : items) {
+        		ret += i.getName() + " ";
+        	}
+    	}
+    	else
+    		ret += "None\n";
+
+    	ret += "Score: " + score;
+    	
+    	return ret;
+    }
 
     /**
      * Loads in a saved player state.
      * @param p The player to load.
      * @return Whether load succeeded or not.
      */
-	public boolean loadPlayer(Player p){
+	public boolean loadPlayer(Player p) {
+		// Tog bort laddning av rum då det sparade rummets information är ouppdaterad
         this.health = p.health;
-        this.currentRoom = p.currentRoom;
         this.items = p.items;
-        this.previousRooms = p.previousRooms;
         this.score = p.score;
         this.items = p.items;
         this.damage = p.damage;
         this.defence = p.defence;
         this.weight = p.weight;
+        
         return true;
     }
     

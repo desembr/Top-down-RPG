@@ -54,7 +54,6 @@ public class Room implements Serializable
         try {
 			Thread.sleep(33); // för att random seeden från millis ska bli bättre
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         Random randomiser = new Random( System.currentTimeMillis() ); // time used to get a semi-random seed
@@ -109,7 +108,7 @@ public class Room implements Serializable
      * @return Contained players description.
      */
     private String showPlayerInRoom(){
-        if(enemiesInRoom.size() == 1){
+        if(playersInRoom.size() == 1){
             return "There are currently no other players in here.";
         }
         String returnString = "Players:";

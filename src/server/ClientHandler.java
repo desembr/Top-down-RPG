@@ -83,7 +83,7 @@ public class ClientHandler {
 			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
-			
+
 			while (!getStateUpdated() && !getConcurrentStateChange()) {
 				if (getPlayerDisconnect())
 					break;
@@ -95,16 +95,20 @@ public class ClientHandler {
 			}
 			// Regular state change initiated by the handled Client.
 			if (getStateUpdated()) {
-				List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p.getRoom());
-				
-				for (ClientHandler ch : clientHandlers)
-					if (ch != this)
-						ch.setConcurrentStateChange(true);
-			}
-			else { // Concurrent state change initiated by some other Client in the same room as this.
+				synchronized (engine) {
+					List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p.getRoom());
+
+					for (ClientHandler ch : clientHandlers)
+						synchronized (ch) {
+							if (ch != this)
+								ch.setConcurrentStateChange(true);
+						}
+				}
+			} else { // Concurrent state change initiated by some other Client
+						// in the same room as this.
 				setConcurrentStateChange(false);
 			}
-			
+
 			setStateUpdated(false);
 			sendResponse();
 			resetErrorCounter();
@@ -123,11 +127,15 @@ public class ClientHandler {
 			}
 
 			try {
-				//System.out.println("Waiting for command from a client...");
+				// System.out.println("Waiting for command from a client...");
 				String cmdLine = (String) recvStream.readObject();
-				//System.out.println("Received command from a Client");
+				// System.out.println("Received command from a Client");
 
-				if (engine.interpretCommand(cmdLine, p) == true) { // Command was successful (state changed)
+				if (engine.interpretCommand(cmdLine, p) == true) { // Command
+																	// was
+																	// successful
+																	// (state
+																	// changed)
 					setStateUpdated(true);
 				}
 
@@ -135,7 +143,7 @@ public class ClientHandler {
 
 				if (p.getIsDead()) {
 					setPlayerDisconnect(true);
-					break;	
+					break;
 				}
 
 			} catch (EOFException e) {
@@ -161,32 +169,36 @@ public class ClientHandler {
 				sendStream.writeObject(p);
 				sendStream.flush();
 				sendStream.reset();
-				//System.out.println("Transmitted response back to a Client");
+				// System.out.println("Transmitted response back to a Client");
 			} catch (IOException e) {
 				incErrorCounter();
 				System.err.println(e.getMessage());
 			}
 		}
 	}
-	
+
 	/**
 	 * Gets the player object of this ClientHandler.
+	 * 
 	 * @return The player object.
 	 */
 	public Player getPlayer() {
 		return p;
 	}
-	
+
 	/**
 	 * Gets set to true when a command has been executed.
-	 * @param updated To indicate whether an update has taken place or not.
+	 * 
+	 * @param updated
+	 *            To indicate whether an update has taken place or not.
 	 */
 	private synchronized void setStateUpdated(boolean updated) {
 		stateUpdated = updated;
 	}
-	
+
 	/**
 	 * Indicates whether a response should be sent back to a client.
+	 * 
 	 * @return Whether a response should be sent back to client or not.
 	 */
 	private synchronized boolean getStateUpdated() {
@@ -194,42 +206,54 @@ public class ClientHandler {
 	}
 
 	/**
-	 * Sets disconnected to true if client has  initiated a disconnect (exit command).
-	 * @param disconnected Whether to flag that Exit command has been received and processed.
+	 * Sets disconnected to true if client has initiated a disconnect (exit
+	 * command).
+	 * 
+	 * @param disconnected
+	 *            Whether to flag that Exit command has been received and
+	 *            processed.
 	 */
 	private synchronized void setPlayerDisconnect(boolean disconnected) {
 		playerDisconnect = disconnected;
 	}
 
 	/**
-	 * Indicates whether an Exit command has been received and processed and that this
-	 * ClientHandler therefore should dispose of itself.
+	 * Indicates whether an Exit command has been received and processed and
+	 * that this ClientHandler therefore should dispose of itself.
+	 * 
 	 * @return Whether an Exit command has been received and processed.
 	 */
 	private synchronized boolean getPlayerDisconnect() {
 		return playerDisconnect;
 	}
-	
+
 	/**
-	 * Sets concurrentStateChange to true if some other client whose player object resides in 
-	 * the same room as this one's has modified some state of that room.
-	 * @param stateChanged True to signal a concurrent state change.
+	 * Sets concurrentStateChange to true if some other client whose player
+	 * object resides in the same room as this one's has modified some state of
+	 * that room.
+	 * 
+	 * @param stateChanged
+	 *            True to signal a concurrent state change.
 	 */
 	private synchronized void setConcurrentStateChange(boolean stateChanged) {
 		concurrentStateChange = stateChanged;
 	}
-	
+
 	/**
-	 * Returns the concurrentStateChange status, true if a concurrent state change has occurred.
-	 * @return True if a concurrent state change has occurred in this ClientHandler's player object's
-	 * room by some other Client also residing in that room.
+	 * Returns the concurrentStateChange status, true if a concurrent state
+	 * change has occurred.
+	 * 
+	 * @return True if a concurrent state change has occurred in this
+	 *         ClientHandler's player object's room by some other Client also
+	 *         residing in that room.
 	 */
 	private synchronized boolean getConcurrentStateChange() {
 		return concurrentStateChange;
 	}
 
 	/**
-	 * Increments the current sequenced error count on exception on any operation.
+	 * Increments the current sequenced error count on exception on any
+	 * operation.
 	 */
 	private synchronized void incErrorCounter() {
 		counter++;
@@ -243,9 +267,10 @@ public class ClientHandler {
 	}
 
 	/**
-	 * Gets the number of errors (exceptions) in sequence currently.
-	 * 3 exceptions in sequence indicates that the handled Client has disconnected, 
-	 * meaning this ClientHandler should dispose itself.
+	 * Gets the number of errors (exceptions) in sequence currently. 3
+	 * exceptions in sequence indicates that the handled Client has
+	 * disconnected, meaning this ClientHandler should dispose itself.
+	 * 
 	 * @return The current amount of errors in sequence.
 	 */
 	private synchronized int getErrorCount() {

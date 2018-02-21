@@ -16,8 +16,8 @@ import java.util.List;
 public class GameEngine {
 	private Parser parser;
 	private List<Player> players;
-	private Room outside, outside1, outside2, outside3, outside4, outside5, outside6, outside7, outside8, outside9, outside10, outside11, outside12, outside13, outside14, outside15, outside16;
-	private Room entrance; 
+	
+	private static List<Room> rooms; 
 
 	/**
 	 * Constructor for objects of class GameEngine
@@ -25,6 +25,8 @@ public class GameEngine {
 	public GameEngine() {
 		parser = Parser.getParser();
 		players = new ArrayList<>();
+		rooms = new ArrayList<>();
+		
 		createRooms();
 	}
 
@@ -42,42 +44,42 @@ public class GameEngine {
 	 */
 	private void createRooms() {
 		// create the rooms
-		outside = new Room("In a forest, the path home lies behind you", "res/rooms/outside_NEW.png", 1);
-		
-		outside1 = new Room("In a forest, a patch of white flowers are growing on the ground", "res/rooms/outside_NE.png", 1);
-		
-		outside2 = new Room("In a forest, it is quiet and still", "res/rooms/outside_NW.png", 1);
-		
-		outside3 = new Room("In a forest, you hear the gentle sound of a stream to the east", "res/rooms/outside_NES.png", 1);
-		
-		outside4 = new Room("In a forest, you see a small stream snaking through the forest", "res/rooms/outside_ESW.png", 1);
-		
-		outside5 = new Room("In a forest, you hear the gentle sound of a stream to the west", "res/rooms/outside_NSW.png", 1);
-		
-		outside6 = new Room("In a forest, you hear birds singing distantly", "res/rooms/outside_NS.png", 1);
-		
-		outside7 = new Room("In a forest, the air is calm", "res/rooms/outside_NES.png", 1);
-		
-		outside8 = new Room("In a forest, there is a slight breeze", "res/rooms/outside_NW.png", 1);
-		
-		outside9 = new Room("In a forest, you hear the cawing of a crow", "res/rooms/outside_E.png", 1);
-		
-		outside10 = new Room("In a forest, you hear the faint sound of a crow", "res/rooms/outside_NSW.png", 1);
-		
-		outside11 = new Room("In a forest, there are a few clouds overhead", "res/rooms/outside_NES.png", 1);
-		
-		outside12 = new Room("In a forest, you think the wind is picking up", "res/rooms/outside_SW.png", 1);
-		
-		outside13 = new Room("In a forest, you think the wind is picking up", "res/rooms/outside_ES.png", 1);
-		
-		outside14 = new Room("In a forest, there's a worn path to the north", "res/rooms/outside_NEW.png", 1);
-		
-		outside15 = new Room("In a forest, you spot a path leading westwards", "res/rooms/outside_SW.png", 1);
-		
-		outside16 = new Room("In a forest, there's a structure to the north", "res/rooms/outside_NS.png", 1);
-		
-		entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_NS.png", 1);
-		//todo
+		Room outside = new Room("In a forest, the path home lies behind you", "res/rooms/outside_NEW.png", 1);
+		rooms.add(outside);
+		Room outside1 = new Room("In a forest, a patch of white flowers are growing on the ground", "res/rooms/outside_NE.png", 1);
+		rooms.add(outside1);
+		Room outside2 = new Room("In a forest, it is quiet and still", "res/rooms/outside_NW.png", 1);
+		rooms.add(outside2);
+		Room outside3 = new Room("In a forest, you hear the gentle sound of a stream to the east", "res/rooms/outside_NES.png", 1);
+		rooms.add(outside3);
+		Room outside4 = new Room("In a forest, you see a small stream snaking through the forest", "res/rooms/outside_ESW.png", 1);
+		rooms.add(outside4);
+		Room outside5 = new Room("In a forest, you hear the gentle sound of a stream to the west", "res/rooms/outside_NSW.png", 1);
+		rooms.add(outside5);
+		Room outside6 = new Room("In a forest, you hear birds singing distantly", "res/rooms/outside_NS.png", 1);
+		rooms.add(outside6);
+		Room outside7 = new Room("In a forest, the air is calm", "res/rooms/outside_NES.png", 1);
+		rooms.add(outside7);
+		Room outside8 = new Room("In a forest, there is a slight breeze", "res/rooms/outside_NW.png", 1);
+		rooms.add(outside8);
+		Room outside9 = new Room("In a forest, you hear the cawing of a crow", "res/rooms/outside_E.png", 1);
+		rooms.add(outside9);
+		Room outside10 = new Room("In a forest, you hear the faint sound of a crow", "res/rooms/outside_NSW.png", 1);
+		rooms.add(outside10);
+		Room outside11 = new Room("In a forest, there are a few clouds overhead", "res/rooms/outside_NES.png", 1);
+		rooms.add(outside11);
+		Room outside12 = new Room("In a forest, you think the wind is picking up", "res/rooms/outside_SW.png", 1);
+		rooms.add(outside12);
+		Room outside13 = new Room("In a forest, you think the wind is picking up", "res/rooms/outside_ES.png", 1);
+		rooms.add(outside13);
+		Room outside14 = new Room("In a forest, there's a worn path to the north", "res/rooms/outside_NEW.png", 1);
+		rooms.add(outside14);
+		Room outside15 = new Room("In a forest, you spot a path leading westwards", "res/rooms/outside_SW.png", 1);
+		rooms.add(outside15);
+		Room outside16 = new Room("In a forest, there's a structure to the north", "res/rooms/outside_NS.png", 1);
+		rooms.add(outside16);
+		Room entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_NS.png", 1);
+		rooms.add(entrance);
 		
 		//frozen = new Room("in a Frozen Room", "res/rooms/dungeon_W.png", 1);
 		//abandoned = new Room("in an Abandoned Room", "res/rooms/dungeon_N.png", 1);
@@ -190,7 +192,7 @@ public class GameEngine {
 	 * @return The starting room.
 	 */
 	public Room getStartRoom() {
-		return outside;
+		return rooms.get(0);
 	}
 
 	/**
@@ -215,5 +217,19 @@ public class GameEngine {
 			disconnectedPlayer.getRoom().removePlayer(disconnectedPlayer);
 			players.remove(disconnectedPlayer);
 		}
+	}
+	
+	/**
+	 * Loads a saved room in its current state (since it might have
+	 * been modified by other players since the save).
+	 * @param roomDescription The saved description of the saved room.
+	 * @return The saved room in its current state.
+	 */
+	public static Room loadRoom(String roomDescription) {
+		for (Room r : rooms) {
+			if (r.getShortDescription().equals(roomDescription))
+				return r;
+		}
+		return null;
 	}
 }

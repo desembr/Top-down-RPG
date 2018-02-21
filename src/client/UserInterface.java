@@ -41,7 +41,7 @@ import server.GameServer;
  */
 public class UserInterface implements ActionListener, Observer
 {
-	private static final int WIDTH = 800, HEIGHT = 680;
+	private static final int WIDTH = 800, HEIGHT = 730;
 	
 	private Client client;
     private JFrame myFrame, frame;
@@ -384,6 +384,10 @@ public class UserInterface implements ActionListener, Observer
         try {
 			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().
 					getResourceAsStream(("res/icon.png")));
+			BufferedImage cursor = ImageIO.read(UserInterface.class.getClassLoader().
+					getResourceAsStream("res/cursor.png"));
+			Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(cursor, new Point(0, 0), "custom");
+			myFrame.setCursor(c);
 			myFrame.setIconImage(icon);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -393,10 +397,10 @@ public class UserInterface implements ActionListener, Observer
         makeMenuBar();
         
         
-        myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT + 325)); // +325 för att man ska se mer av text-arean
+        myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // För stor för laptop
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-        myFrame.setLocation((int)d.getWidth() / 2 - WIDTH / 2, ((int)d.getHeight() / 2 - HEIGHT / 2) -200);
+        myFrame.setLocation((int)d.getWidth() / 2 - WIDTH / 2, 0);
         myFrame.pack();
         entryField.requestFocus();
         myFrame.setVisible(true);
@@ -434,16 +438,21 @@ public class UserInterface implements ActionListener, Observer
                processCommand();
           });
    
-          JMenuItem help = new JMenuItem("Help");
-          fileMenu.add(help);
-           help.addActionListener(e -> {
-               entryField.setText("Help");
-               processCommand();
-           });
+           JMenu helpMenu = new JMenu("Help");
+		   menuBar.add(helpMenu);
+		   JMenuItem help = new JMenuItem("Help");
+		   helpMenu.add(help);
+		   help.addActionListener(e -> {
+		       entryField.setText("Help");
+		       processCommand();
+		   });
     
            JMenuItem exit = new JMenuItem("Exit");
            fileMenu.add(exit);
-           exit.addActionListener(e -> { exitGame(); });
+           exit.addActionListener(e -> { 
+        	   entryField.setText("Exit");
+        	   processCommand();
+           });
         }
 
     /**
@@ -472,29 +481,6 @@ public class UserInterface implements ActionListener, Observer
     }
     
     /**
-     * Show the images for all items in this
-     * client's player object's inventory
-     * @param p The player whose inventory to display.
-     */
-    private void showInventory(Player p)
-    {
-    	List<Item> inventory = p.getItems();
-    	println("Items in inventory: ");
-    	if (inventory.size() > 0) {
-    		for (Item i : inventory) {
-        		print(i.getName() + " ");
-        	}
-    	}
-    	else
-    		print("None");
-    	println(" ");
-    	
-    	println("Score: " + p.getScore());
-    	if (p.getCmdReturnMsg() != null)
-    		println(p.getCmdReturnMsg());
-    }
-    
-    /**
      * Show the images for all objects contained
      * in this client's player object's current room.
      * @param currentRoom This client's player object's current room.
@@ -510,7 +496,7 @@ public class UserInterface implements ActionListener, Observer
      */
     private void printWelcome()
     {
-    	println("Hello adventurer, your task is to \n explore, fight and gather treasure.\n"
+    	println("Hello adventurer, your task is to \nexplore, fight and gather treasure.\n"
     			+ "Enter 'help' if you need some help.\nGoodluck!");
     }
     
@@ -540,15 +526,11 @@ public class UserInterface implements ActionListener, Observer
 		
 		showPlayer(p.getIconFilePath() ); 
 		
-		//if(p.getRoom().getEnemies().size() > 0 )
-		//{
-			showEnemies(p.getRoom().getEnemies() );
-			showShadows(p.getRoom().getEnemies() );
-		//}
+		showEnemies(p.getRoom().getEnemies() );
+		showShadows(p.getRoom().getEnemies() );
 		
-		showInventory(p);
-		
-		//System.out.println( p.getRoom().getEnemies().size() ); 
-		//System.out.println( p.getRoom().getEnemies().get(0).getIsDead() ); 
+		println(p.showInventory());
+		if (p.getCmdReturnMsg() != null)
+    		println(p.getCmdReturnMsg());
     }
 }
