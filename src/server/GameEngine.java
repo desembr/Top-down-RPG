@@ -172,7 +172,7 @@ public class GameEngine {
 		boolean ret = command.execute(p);
 
 		if (ret == false) {
-			p.setCmdReturnMsg("Command was not recognized, type 'help' for help.");
+			p.setCmdReturnMsg("Command failed, type 'help' for help.");
 			return false;
 		}
 		return true;

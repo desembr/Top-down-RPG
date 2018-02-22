@@ -12,7 +12,7 @@ import java.util.List;
 public class Player extends Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private static int num = 0, maxWeight = 40;
+	private static int num = 0, maxWeight = 100;
 	
 	private List<Item> items;
 	private List<Room> previousRooms;
@@ -97,6 +97,8 @@ public class Player extends Entity implements Serializable {
      */
     public boolean pickItem(Item item) {
     	if (weight + item.weight > maxWeight) {
+    		// Add the item back to the room if weight is too high.
+    		currentRoom.addItem(item);
     		return false;
     	}
     	// Add equipment gains.
@@ -188,7 +190,7 @@ public class Player extends Entity implements Serializable {
      * @return Whether load succeeded or not.
      */
 	public boolean loadPlayer(Player p) {
-		// Tog bort laddning av rum då det sparade rummets information är ouppdaterad
+		// Tog bort laddning av rum då det sparade rummets information är ouppdaterat
         this.health = p.health;
         this.items = p.items;
         this.score = p.score;
