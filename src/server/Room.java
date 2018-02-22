@@ -252,7 +252,8 @@ public class Room implements Serializable
      * @param player The player to add.
      */
 	public synchronized void addPlayer(Player player) {
-		playersInRoom.add(player);
+		if (player.getRoom() != this)
+			playersInRoom.add(player);
 	}
 
 	/**

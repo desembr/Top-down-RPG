@@ -190,7 +190,6 @@ public class Player extends Entity implements Serializable {
      * @return Whether load succeeded or not.
      */
 	public boolean loadPlayer(Player p) {
-		// Tog bort laddning av rum då det sparade rummets information är ouppdaterat
         this.health = p.health;
         this.items = p.items;
         this.score = p.score;
@@ -198,6 +197,12 @@ public class Player extends Entity implements Serializable {
         this.damage = p.damage;
         this.defence = p.defence;
         this.weight = p.weight;
+        
+        Room r = GameEngine.getRoom(p.getRoom().getShortDescription());
+        if (r != null) {
+        	this.currentRoom = r;
+        	r.addPlayer(this);
+        }
         
         return true;
     }

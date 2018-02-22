@@ -218,4 +218,20 @@ public class GameEngine {
 			players.remove(disconnectedPlayer);
 		}
 	}
+	
+	/**
+	 * Finds the current version of the room with roomDescription
+	 * as its short description. Used for loading saved rooms.
+	 * 
+	 * @param roomDescription
+	 *            The short room description of the searched room.
+	 */
+	public static synchronized Room getRoom(String roomDescription) {
+		for (Room r : rooms) {
+			if (r.getShortDescription().equals(roomDescription))
+				return r;
+		}
+		
+		return null;
+	}
 }
