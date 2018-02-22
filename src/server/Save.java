@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * Save-player-high-score command.
+ * Save-player-state command.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */

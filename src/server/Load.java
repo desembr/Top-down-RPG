@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 /**
- * Load-player-high-score command.
+ * Load-player-state command.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */

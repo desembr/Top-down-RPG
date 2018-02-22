@@ -5,20 +5,24 @@
     <id>UMLClass</id>
     <coordinates>
       <x>707</x>
-      <y>749</y>
-      <w>210</w>
-      <h>126</h>
+      <y>350</y>
+      <w>231</w>
+      <h>182</h>
     </coordinates>
     <panel_attributes>GameEngine
 --
 -players:List&lt;Player&gt;
--startRoom:Room
+-rooms:static List&lt;Room&gt;
+-parser:Parser
 --
 +GameEngine():GameEngine
 +getPlayers():List&lt;Player&gt;
 -createRooms():void
-+interpretCommand(commandLine:String):String
++interpretCommand(commandLine:String):boolean
 -endGame():void
++addPlayer(player:Player):void
++removePlayer(player:Player):void
++getStartRoom():Room
 --
 Responsibilities
 -- Manage the core game logic.</panel_attributes>
@@ -27,21 +31,23 @@ Responsibilities
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>679</x>
-      <y>917</y>
+      <x>686</x>
+      <y>616</y>
       <w>210</w>
-      <h>238</h>
+      <h>329</h>
     </coordinates>
     <panel_attributes>Room:Serializable
 --
 -description:String
 -exits:HashMap&lt;String,Room&gt;
--entities:List&lt;Entity&gt;
--items:List&lt;Item&gt;
+-enemiesInRoom:ArrayList&lt;Enemy&gt;
+-playersInRoom:ArrayList&lt;Player&gt;
+-itemsInRoom:ArrayList&lt;Item&gt;
 -imageName:String
--randomGen:static Random
+-serialVersionUID:static final long
 --
-+Room(description:String,imageFile:String):Room
++Room(description:String,imageFile:String,
+roomLevel:int):Room
 +setExit(dir:String,r:Room)
 +getShortDescription():String
 +getLongDescription():String
@@ -49,9 +55,14 @@ Responsibilities
 +getExit(direction:String):Room
 +getItems():List&lt;Item&gt;
 +getEntities():List&lt;Entity&gt;
++getPlayers():List&lt;Player&gt;
 +getImage():String
++addPlayer(p:Player):void
++removePlayer(p:Player):void
++addItem(i:Item):void
 -showEnemiesInRoom():String
 -showItemsInRoom():String
+-showPlayersInRoom():String
 --
 Responsibilities
 -- Store and provide info for a room.</panel_attributes>
@@ -61,13 +72,15 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>441</x>
-      <y>812</y>
+      <y>511</y>
       <w>196</w>
-      <h>105</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>Parser
 --
 -commands:CommandWords
+-packageName:static final String
+-parser:Parser
 --
 -Parser():Parser
 +getInstance():Parser
@@ -82,9 +95,9 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>441</x>
-      <y>966</y>
+      <y>686</y>
       <w>189</w>
-      <h>112</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>CommandWords
 --
@@ -103,20 +116,22 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>707</x>
-      <y>560</y>
-      <w>245</w>
-      <h>140</h>
+      <y>56</y>
+      <w>252</w>
+      <h>210</h>
     </coordinates>
-    <panel_attributes>GameServer
+    <panel_attributes>GameServer:Thread
 --
 -serverPort:static int
 -engine:GameEngine
 -serverSocket:ServerSocket
+-clientHandlers:List&lt;ClientHandler&gt;
 --
 +GameServer():GameServer
-+receiveCommand():String
-+sendResponse(players:List&lt;Player&gt;):void
-+main(arg:String[])
++run():void
++main(arg:String[]):static void
++getClientHandlers(p:Player):static List&lt;ClientHandler&gt;
++removeClientHandler(ch:ClientHandler):static void
 --
 Responsibilities
 -- Main class on the server-side which
@@ -127,7 +142,7 @@ handles the game-logic and communicates with players.</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>448</x>
-      <y>637</y>
+      <y>336</y>
       <w>189</w>
       <h>126</h>
     </coordinates>
@@ -135,39 +150,37 @@ handles the game-logic and communicates with players.</panel_attributes>
 Command
 --
 #secondWord:String
-#returnMessage:String
 --
 +Command():Command
 +setSecondWord(sw:String):void
 +execute(p:Player):boolean
-+getReturnMessage():String
 --
 Responsibilities
--- Base class for commands.</panel_attributes>
+-- Base class for all commands.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>777</x>
-      <y>693</y>
+      <y>259</y>
       <w>21</w>
-      <h>70</h>
+      <h>105</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>518</x>
-      <y>910</y>
+      <y>630</y>
       <w>21</w>
       <h>70</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=1</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
@@ -176,7 +189,7 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>539</x>
-      <y>756</y>
+      <y>455</y>
       <w>21</w>
       <h>70</h>
     </coordinates>
@@ -189,9 +202,9 @@ m2=1</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>938</x>
-      <y>1036</y>
+      <y>735</y>
       <w>182</w>
-      <h>161</h>
+      <h>175</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Item:Serializable
@@ -199,6 +212,7 @@ Item:Serializable
 #name:String
 #weight:int
 #iconFilePath:String
+-serialVersionUID:static final long
 --
 #Item(name:String):Item
 +use(currHealth:int):int
@@ -215,12 +229,13 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>1225</x>
-      <y>1204</y>
+      <y>931</y>
       <w>182</w>
       <h>91</h>
     </coordinates>
     <panel_attributes>Apple:Serializable
 --
+-serialVersionUID:static final long
 --
 +Apple():Apple
 --
@@ -233,12 +248,13 @@ on use.</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1022</x>
-      <y>1204</y>
+      <y>931</y>
       <w>189</w>
       <h>91</h>
     </coordinates>
     <panel_attributes>Pie:Serializable
 --
+-serialVersionUID:static final long
 --
 +Pie():Pie
 --
@@ -251,14 +267,15 @@ on use.</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1162</x>
-      <y>1029</y>
+      <y>728</y>
       <w>210</w>
-      <h>126</h>
+      <h>140</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Food:Serializable
 --
 #healthGain
+-serialVersionUID:static final long
 --
 +Food(name:String, weight:int,
 healthGain:int,iconFilePath:String):Food
@@ -274,41 +291,42 @@ used (consumed) for health.</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>1169</x>
-      <y>1148</y>
+      <y>861</y>
       <w>21</w>
-      <h>70</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1309</x>
-      <y>1148</y>
+      <y>861</y>
       <w>21</w>
-      <h>70</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>1057</x>
-      <y>721</y>
+      <y>357</y>
       <w>210</w>
-      <h>252</h>
+      <h>329</h>
     </coordinates>
     <panel_attributes>Player:Serializable
 --
 -score:int
--highscore:int
 -weight:int
--maxWeight:static int
+-maxWeight,num:static int
 -currentRoom:Room
 -items:List&lt;Item&gt;
 -previousRooms:List&lt;Room&gt;
+-cmdReturnMsg:String
+-serialVersionUID:static final long
 --
 +Player(startRoom:Room):Player
 +addItem(item:Item):boolean
@@ -317,10 +335,16 @@ used (consumed) for health.</panel_attributes>
 +goBackARoom():boolean
 +goRoom(room:Room):boolean
 +getRoom():Room
-+getHighscore():int
++getScore():int
 +attack(e:Entity):void
-+getRoom():Room
-+getWeight:int
++getItems):List&lt;Item&gt;
++getWeight():int
++getMaxWeight():int
++getCmdReturnString():String
++setCmdReturnString(s:String):void
++getPreviousRoom():Room
++loadPlayer(p:Player):boolean
++showInventory():String
 --
 Responsibilities
 -- Stores a player's state.</panel_attributes>
@@ -330,7 +354,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1113</x>
-      <y>1078</y>
+      <y>777</y>
       <w>63</w>
       <h>21</h>
     </coordinates>
@@ -340,34 +364,21 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>882</x>
-      <y>1036</y>
-      <w>70</w>
-      <h>28</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=*
-m2=1</panel_attributes>
-    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
       <x>1064</x>
-      <y>966</y>
+      <y>679</y>
       <w>21</w>
-      <h>84</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>714</y>
+      <y>413</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -385,7 +396,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>518</y>
+      <y>217</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -403,7 +414,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>812</y>
+      <y>511</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -421,7 +432,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>616</y>
+      <y>315</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -439,7 +450,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>210</x>
-      <y>427</y>
+      <y>126</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -457,7 +468,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>392</x>
-      <y>756</y>
+      <y>455</y>
       <w>70</w>
       <h>140</h>
     </coordinates>
@@ -468,7 +479,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>392</x>
-      <y>714</y>
+      <y>413</y>
       <w>70</w>
       <h>70</h>
     </coordinates>
@@ -479,7 +490,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>392</x>
-      <y>658</y>
+      <y>357</y>
       <w>70</w>
       <h>70</h>
     </coordinates>
@@ -490,7 +501,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>392</x>
-      <y>553</y>
+      <y>252</y>
       <w>70</w>
       <h>140</h>
     </coordinates>
@@ -501,7 +512,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>392</x>
-      <y>427</y>
+      <y>126</y>
       <w>70</w>
       <h>224</h>
     </coordinates>
@@ -509,23 +520,10 @@ Responsibilities
     <additional_attributes>80.0;300.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>630</x>
-      <y>826</y>
-      <w>91</w>
-      <h>28</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>658</y>
+      <y>357</y>
       <w>189</w>
       <h>91</h>
     </coordinates>
@@ -543,7 +541,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>182</x>
-      <y>686</y>
+      <y>385</y>
       <w>280</w>
       <h>35</h>
     </coordinates>
@@ -554,7 +552,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>553</y>
+      <y>252</y>
       <w>189</w>
       <h>91</h>
     </coordinates>
@@ -572,7 +570,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>182</x>
-      <y>616</y>
+      <y>315</y>
       <w>280</w>
       <h>49</h>
     </coordinates>
@@ -583,7 +581,7 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>441</x>
-      <y>504</y>
+      <y>203</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -594,14 +592,14 @@ Responsibilities
 +execute(p:Player):boolean
 --
 Responsibilities
--- Save-player-highscore command.</panel_attributes>
+-- Save-player-state command.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>532</x>
-      <y>581</y>
+      <y>280</y>
       <w>21</w>
       <h>70</h>
     </coordinates>
@@ -611,10 +609,10 @@ Responsibilities
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1526</x>
-      <y>721</y>
+      <x>1533</x>
+      <y>350</y>
       <w>210</w>
-      <h>287</h>
+      <h>315</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Entity:Serializable
@@ -625,6 +623,7 @@ Entity:Serializable
 #name:String
 #iconFilePath:String
 #isDead:boolean
+-serialVersionUID:static final long
 --
 #Entity(name:String,damage:int,defence:int,
 health:int,iconFilePath:String):Entity
@@ -647,12 +646,13 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>1379</x>
-      <y>1036</y>
+      <y>693</y>
       <w>189</w>
-      <h>98</h>
+      <h>133</h>
     </coordinates>
     <panel_attributes>Enemy:Serializable
 --
+-serialVersionUID:static final long
 --
 Enemy(name:String,damage:int,defence:int,
 health:int,iconFilePath:String):Enemy
@@ -666,18 +666,18 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1260</x>
-      <y>840</y>
-      <w>280</w>
+      <y>539</y>
+      <w>287</w>
       <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>380.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>390.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>1561</x>
-      <y>1001</y>
+      <y>658</y>
       <w>21</w>
       <h>49</h>
     </coordinates>
@@ -688,13 +688,15 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>686</x>
-      <y>1169</y>
+      <y>980</y>
       <w>210</w>
-      <h>105</h>
+      <h>119</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Equipment:Serializable
 --
+#defenceGain,damageGain:int
+-serialVersionUID:static final long
 --
 #Equipment(name:String,weight:int,
 iconFilePath:String):Equipment
@@ -709,26 +711,26 @@ some stats to a player.</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>889</x>
-      <y>1162</y>
+      <y>903</y>
       <w>63</w>
-      <h>21</h>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;70.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>567</x>
-      <y>1309</y>
+      <y>1141</y>
       <w>182</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>Shield:Serializable
 --
--defence:int
+-serialVersionUID:static final long
 --
-+Shield():Shield
++Shield(defence:int,damage:int):Shield
 --
 Responsibilities
 -- Grants a certain defence amount.</panel_attributes>
@@ -738,15 +740,15 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>798</x>
-      <y>1309</y>
+      <y>1141</y>
       <w>182</w>
       <h>91</h>
     </coordinates>
     <panel_attributes>Sword:Serializable
 --
--damage:int
+-serialVersionUID:static final long
 --
-+Sword():Sword
++Sword(defence:int,damage:int):Sword
 --
 Responsibilities
 -- Grants a certain damage amount.</panel_attributes>
@@ -756,66 +758,53 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>819</x>
-      <y>1267</y>
+      <y>1092</y>
       <w>21</w>
-      <h>56</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>721</x>
-      <y>1267</y>
+      <y>1092</y>
       <w>21</w>
-      <h>56</h>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>882</x>
-      <y>973</y>
-      <w>658</w>
-      <h>28</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;920.0;10.0</additional_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>798</x>
-      <y>868</y>
+      <y>525</y>
       <w>21</w>
-      <h>63</h>
+      <h>105</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
-m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>910</x>
-      <y>497</y>
-      <w>203</w>
+      <x>903</x>
+      <y>0</y>
+      <w>105</w>
       <h>49</h>
     </coordinates>
-    <panel_attributes>ZuulServer - server-side program</panel_attributes>
+    <panel_attributes>Server-side program</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>630</x>
-      <y>742</y>
+      <y>343</y>
       <w>91</w>
       <h>28</h>
     </coordinates>
@@ -827,34 +816,21 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>910</x>
-      <y>805</y>
-      <w>161</w>
+      <x>931</x>
+      <y>441</y>
+      <w>140</w>
       <h>28</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>882</x>
-      <y>917</y>
-      <w>189</w>
-      <h>28</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=1
-m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>630</x>
-      <y>721</y>
+      <y>378</y>
       <w>441</w>
       <h>28</h>
     </coordinates>
@@ -866,21 +842,21 @@ m2=*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>574</x>
-      <y>1071</y>
-      <w>119</w>
-      <h>105</h>
+      <x>609</x>
+      <y>798</y>
+      <w>91</w>
+      <h>119</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=*
 m2=*</panel_attributes>
-    <additional_attributes>150.0;10.0;90.0;30.0;40.0;60.0;10.0;100.0;60.0;130.0;110.0;110.0;150.0;120.0</additional_attributes>
+    <additional_attributes>110.0;30.0;50.0;10.0;10.0;90.0;50.0;130.0;110.0;140.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>763</y>
+      <y>462</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -898,7 +874,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>182</x>
-      <y>679</y>
+      <y>378</y>
       <w>280</w>
       <h>140</h>
     </coordinates>
@@ -909,12 +885,14 @@ Responsibilities
     <id>UMLClass</id>
     <coordinates>
       <x>1435</x>
-      <y>1204</y>
+      <y>903</y>
       <w>189</w>
-      <h>77</h>
+      <h>91</h>
     </coordinates>
     <panel_attributes>Orc:Serializable
 --
+-num:static int
+-serialVersionUID:static final long
 --
 Orc():Orc
 --
@@ -926,18 +904,18 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1456</x>
-      <y>1127</y>
+      <y>819</y>
       <w>21</w>
-      <h>91</h>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>0</x>
-      <y>448</y>
+      <y>147</y>
       <w>189</w>
       <h>91</h>
     </coordinates>
@@ -955,7 +933,7 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>182</x>
-      <y>497</y>
+      <y>196</y>
       <w>280</w>
       <h>161</h>
     </coordinates>
@@ -965,38 +943,48 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>882</x>
-      <y>1001</y>
-      <w>658</w>
+      <x>889</x>
+      <y>693</y>
+      <w>504</w>
       <h>28</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;920.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;700.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1288</x>
-      <y>539</y>
+      <x>1316</x>
+      <y>238</y>
       <w>189</w>
-      <h>175</h>
+      <h>294</h>
     </coordinates>
-    <panel_attributes>ClientHandler:Observable
+    <panel_attributes>ClientHandler
 --
 -clientSocket:Socket
 -p:Player
 -engine:GameEngine
--thread:Thread
+-sendThread,recvThread:Thread
 -recvStream:ObjectInputStream
 -sendStream:ObjectOutputStream
 -counter:static int
 --
 +ClientHandler():ClientHandler
-+run():void
-+sendResponse(respMsg:String):void
--receiveResponse():void
+-incErrorCounter():void
+-resetErrorCounter():void
+-getErrorCount():void
+-send():void
+-receive():void
+-sendResponse(respMsg:String):void
++getPlayer():Player
+-setPlayerDisconnect(d:boolean):void
+-getPlayerDisconnect():boolean
+-setStateUpdated(b:boolean):void
+-getstateUpdated():boolean
+-setConcurrentStateChange(b:boolean):void
+-getConcurrentStateChange():boolean
 --
 Responsibilities
 -- Interface between a client and the server.</panel_attributes>
@@ -1005,25 +993,168 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>945</x>
-      <y>637</y>
-      <w>357</w>
+      <x>952</x>
+      <y>245</y>
+      <w>378</w>
       <h>28</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;490.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>441</x>
+      <y>98</y>
+      <w>189</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Load
+--
+--
++Load():Load
++execute(p:Player):boolean
+--
+Responsibilities
+-- Load-player-state command.</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>196</x>
-      <y>0</y>
-      <w>413</w>
-      <h>231</h>
+      <x>483</x>
+      <y>175</y>
+      <w>21</w>
+      <h>175</h>
     </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>570.0;310.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;230.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1645</x>
+      <y>728</y>
+      <w>189</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Gremlin:Serializable
+--
+-num:static int
+-serialVersionUID:static final long
+--
+Gremlin():Gremlin
+--
+Responsibilities
+-- Attack players.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1645</x>
+      <y>819</y>
+      <w>189</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>Goblin:Serializable
+--
+-num:static int
+-serialVersionUID:static final long
+--
+Goblin():Goblin
+--
+Responsibilities
+-- Attack players.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1561</x>
+      <y>819</y>
+      <w>98</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1561</x>
+      <y>728</y>
+      <w>98</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>889</x>
+      <y>742</y>
+      <w>63</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>518</y>
+      <w>91</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1260</x>
+      <y>378</y>
+      <w>70</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>889</x>
+      <y>623</y>
+      <w>182</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=*
+m2=*</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>889</x>
+      <y>644</y>
+      <w>182</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m1=1
+m2=*</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0</additional_attributes>
   </element>
 </diagram>

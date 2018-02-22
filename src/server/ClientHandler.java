@@ -85,12 +85,13 @@ public class ClientHandler {
 	/**
 	 * The sendThread method sending responses to the handled Client.
 	 */
-	public void send() {
+	private void send() {
 		while (!Thread.interrupted()) {
 			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
-
+			// Wait for some game state to change by handled client or 
+			// some other client currently connected.
 			while (!getStateUpdated() && !getConcurrentStateChange()) {
 				if (getErrorCount() > 3 || getPlayerDisconnect())
 					break;
@@ -131,12 +132,12 @@ public class ClientHandler {
 	/**
 	 * The receiveThread method listening for commands from the handled Client.
 	 */
-	public void receive() {
+	private void receive() {
 		while (!Thread.interrupted()) {
-			if (getErrorCount() > 3) {
+			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
-
+			// Wait for request from the handled client.
 			try {
 				String cmdLine = (String) recvStream.readObject();
 
@@ -175,7 +176,7 @@ public class ClientHandler {
 	/**
 	 * Sends response back to client.
 	 */
-	public void sendResponse() {
+	private void sendResponse() {
 		synchronized (engine) { // To avoid concurrentModificationException
 			try {
 				sendStream.writeObject(p);

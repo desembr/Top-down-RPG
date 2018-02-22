@@ -83,9 +83,11 @@ public class Client extends Observable {
 	private void send() {
 		while (!Thread.interrupted()) {
 			synchronized (polledCommands) {
-				if (counter > 3) {
+				// Server most likely went down, exit.
+				if (getErrorCount() > 3) {
 					break;
 				}
+				// Wait for user input (some command request).
 				while (polledCommands.isEmpty()) {
 					try {
 						Thread.sleep(200);
@@ -93,16 +95,15 @@ public class Client extends Observable {
 						System.err.println(e.getMessage());
 					}
 				}
+				// Send request to execute a command to server.
 				String nextCmd = polledCommands.remove(0);
 				sendCommand(nextCmd);
 			}
 		}
-		try {
-			if (sendStream != null)
-				sendStream.close();
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
+		synchronized (this) {
+			exit();
 		}
+		System.exit(1);
 	}
 
 	/**
@@ -110,19 +111,17 @@ public class Client extends Observable {
 	 */
 	private void receive() {
 		while (!Thread.interrupted()) {
-			if (counter > 3) {
+			// Server most likely went down, exit.
+			if (getErrorCount() > 3) {
 				break;
 			}
+			// Wait for reply from server on a previous request.
 			receiveResponse();
 		}
-		try {
-			if (recvStream != null)
-				sendStream.close();
-			if (clientSocket != null)
-				clientSocket.close();
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
+		synchronized (this) {
+			exit();
 		}
+		System.exit(1);
 	}
 
 	/**
@@ -146,7 +145,6 @@ public class Client extends Observable {
 			sendStream.writeObject(cmdLine);
 			sendStream.flush();
 			resetErrorCounter();
-			//System.out.println("Transmitted command to Server");
 		} catch (IOException e) {
 			incErrorCounter();
 			System.err.println(e.getMessage());
@@ -160,12 +158,12 @@ public class Client extends Observable {
 	 */
 	private void receiveResponse() {
 		try {
-			//System.out.println("Waiting for response from Server...");
 			Object o = (Object) recvStream.readObject();
 			Player p = (Player) o;
-			//System.out.println("Received response from Server: " + p.getName());
+			// Update UserInterface with the updated game state.
 			setChanged();
 			notifyObservers(p);
+			
 			resetErrorCounter();
 		} catch (EOFException e) {
 			incErrorCounter();
@@ -182,15 +180,26 @@ public class Client extends Observable {
 	/**
 	 * Increments error-counter.
 	 */
-	private synchronized void incErrorCounter() {
+	private void incErrorCounter() {
 		counter++;
 	}
 
 	/**
 	 * Resets error-counter.
 	 */
-	private synchronized void resetErrorCounter() {
+	private void resetErrorCounter() {
 		counter = 0;
+	}
+	
+	/**
+	 * Gets the number of errors (exceptions) in sequence currently. 3
+	 * exceptions in sequence indicates that the server has
+	 * gone down, meaning this Client should dispose itself.
+	 * 
+	 * @return The current amount of errors in sequence.
+	 */
+	private synchronized int getErrorCount() {
+		return counter;
 	}
 
 	/**

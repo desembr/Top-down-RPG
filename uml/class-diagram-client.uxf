@@ -4,23 +4,31 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>144</y>
+      <x>104</x>
+      <y>40</y>
       <w>248</w>
-      <h>280</h>
+      <h>384</h>
     </coordinates>
     <panel_attributes>UserInterface:Observer
 --
+-WIDTH:static int
+-HEIGHT:static int
 -myFrame:JFrame
+-client:Client
 -entryField:JTextField
 -log:JTextArea
--image:JLabel
+-image,playerSprite,monster1,monster2,
+monster3,monster4,monster5,shadow1,
+shadow2,shadow3,shadow4,shadow6:JLabel
+-monsterSprites:ArrayList&lt;JLabel&gt;
+-shadows:ArrayList&lt;JLabel&gt;
 --
-+UserInterface():UserInterface
++UserInterface(client:Client):UserInterface
 +print(text:String):void
 +println(text:String):void
 +enable(on:boolean):void
 -createGUI():void
+-makeMenuBar():void
 -printWelcome():void
 -printHelp():void
 +update(o:Observable,arg:Object):void
@@ -37,8 +45,8 @@ handles user input and updates of gui.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>184</y>
+      <x>456</x>
+      <y>80</y>
       <w>216</w>
       <h>136</h>
     </coordinates>
@@ -48,7 +56,7 @@ handles user input and updates of gui.</panel_attributes>
 -client:Client
 --
 +GameClient():GameClient
-+main(arg:String[])
++main(arg:String[]):static void
 --
 Responsibilities
 -- Main class on the client-side, which
@@ -58,28 +66,33 @@ creates core objects and stores state.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>696</x>
-      <y>192</y>
+      <x>760</x>
+      <y>88</y>
       <w>216</w>
-      <h>240</h>
+      <h>304</h>
     </coordinates>
     <panel_attributes>Client:Observable
 --
 -clientSocket:Socket
--thread:Thread
--serverAddress:static String
--serverPort:static int
+-sendThread,recvThread:Thread
+-serverAddress:static final String
+-serverPort:static final int
 -polledCommands:List&lt;String&gt;
 -recvStream:ObjectInputStream
 -sendStream:ObjectOutputStream
--counter:static int
+-counter:int
 --
 +Client():Client
 +start():void
-+run():void
-+pollCommand(cmd:String):void
-+sendCommand(cmd:String):void
+-send():void
+-receive():void
++pollCommand(cmd:String):synchronized void
+-sendCommand(cmd:String):void
 -receiveResponse():void
+-incErrorCounter():void
+-resetErrorCounter():void
+-getErrorCount():void
++exit():synchronized void
 --
 Responsibilities
 -- Interface between a client and the server.</panel_attributes>
@@ -88,8 +101,8 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>280</x>
-      <y>232</y>
+      <x>344</x>
+      <y>128</y>
       <w>128</w>
       <h>32</h>
     </coordinates>
@@ -101,8 +114,8 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>240</y>
+      <x>664</x>
+      <y>136</y>
       <w>112</w>
       <h>32</h>
     </coordinates>
@@ -114,12 +127,25 @@ m2=1</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>408</x>
-      <y>104</y>
-      <w>176</w>
+      <x>504</x>
+      <y>0</y>
+      <w>120</w>
       <h>56</h>
     </coordinates>
-    <panel_attributes>ZuulClient - client-side program.</panel_attributes>
+    <panel_attributes>Client-side program.</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>344</x>
+      <y>264</y>
+      <w>432</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

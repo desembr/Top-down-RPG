@@ -29,7 +29,7 @@ public class Room implements Serializable
     private HashMap<String,Room> exits;        // stores exits of this room.
     private ArrayList<Enemy> enemiesInRoom;
     private ArrayList<Player> playersInRoom;
-    private List<Item> itemsInRoom;
+    private ArrayList<Item> itemsInRoom;
     
     /**
      * Create a room described "description". Initially, it has no exits.
