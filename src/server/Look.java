@@ -18,7 +18,17 @@ public class Look extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(p.getRoom().getLongDescription());
+		//p.look = true;
+		p.direction = secondWord;
+		
+		if(secondWord != null) {
+			p.setCmdReturnMsg(p.getRoom().getExit(p.direction).getPeekDescription());
+		}
+		else
+			p.setCmdReturnMsg(p.getRoom().getLongDescription());
+		
+		p.direction = "";
+		//p.setCmdReturnMsg(p.getRoom().getLongDescription());
 		return true;
 	}
 }
