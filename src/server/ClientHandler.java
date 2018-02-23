@@ -194,7 +194,7 @@ public class ClientHandler {
 	 * 
 	 * @return The player object.
 	 */
-	public Player getPlayer() {
+	public synchronized Player getPlayer() {
 		return p;
 	}
 

@@ -19,15 +19,19 @@ public class Look extends Command {
 	 */
 	public boolean execute(Player p) {
 		//p.look = true;
-		p.direction = secondWord;
+		//p.direction = secondWord;
 		
 		if(secondWord != null) {
-			p.setCmdReturnMsg(p.getRoom().getExit(p.direction).getPeekDescription());
+			Room r = p.getRoom().getExit(secondWord);
+			if (r != null)
+				p.setCmdReturnMsg(p.getRoom().getExit(secondWord).getPeekDescription());
+			else
+				p.setCmdReturnMsg(null);
 		}
 		else
 			p.setCmdReturnMsg(p.getRoom().getLongDescription());
 		
-		p.direction = "";
+		//p.direction = "";
 		//p.setCmdReturnMsg(p.getRoom().getLongDescription());
 		return true;
 	}

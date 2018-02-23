@@ -180,14 +180,14 @@ public class Client extends Observable {
 	/**
 	 * Increments error-counter.
 	 */
-	private void incErrorCounter() {
+	private synchronized void incErrorCounter() {
 		counter++;
 	}
 
 	/**
 	 * Resets error-counter.
 	 */
-	private void resetErrorCounter() {
+	private synchronized void resetErrorCounter() {
 		counter = 0;
 	}
 	

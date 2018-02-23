@@ -7,7 +7,7 @@ package client;
  */
 public class GameClient {
 	private UserInterface gui;
-	Client client;
+	private Client client;
 	
 	/**
      * Constructor of this class.

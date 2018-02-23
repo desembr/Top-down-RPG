@@ -134,7 +134,7 @@ public class Entity implements Serializable {
 
 			String deadPath = part1 + "/dead/" + part3;
 
-			System.out.println(deadPath);
+			//System.out.println(deadPath);
 
 			return deadPath;
 		}

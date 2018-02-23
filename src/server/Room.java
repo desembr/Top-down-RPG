@@ -115,7 +115,7 @@ public class Room implements Serializable
      * Returns info about players in this room.
      * @return Contained players description.
      */
-    private String showPlayersInRoom(){
+    public String showPlayersInRoom(){
         if(playersInRoom.size() == 1){
             return "There are currently no other players in here.";
         }
@@ -130,7 +130,7 @@ public class Room implements Serializable
      * Returns info about items in this room.
      * @return Contained items description.
      */
-    private String showItemsInRoom(){
+    public String showItemsInRoom(){
         if(itemsInRoom.isEmpty()){
             return "No items in here.";
         }

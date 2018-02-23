@@ -61,9 +61,9 @@ roomLevel:int):Room
 +addPlayer(p:Player):void
 +removePlayer(p:Player):void
 +addItem(i:Item):void
--showEnemiesInRoom():String
--showItemsInRoom():String
--showPlayersInRoom():String
++showEnemiesInRoom():String
++showItemsInRoom():String
++showPlayersInRoom():String
 --
 Responsibilities
 -- Store and provide info for a room.</panel_attributes>

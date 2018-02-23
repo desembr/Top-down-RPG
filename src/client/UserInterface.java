@@ -47,7 +47,7 @@ import server.Room;
  * @version 1.0
  */
 public class UserInterface implements ActionListener, Observer {
-	private static final int WIDTH = 800, HEIGHT = 1000;
+	private static final int WIDTH = 800, HEIGHT = 720;
 
 	private Client client;
 	private JFrame myFrame;
@@ -296,11 +296,11 @@ public class UserInterface implements ActionListener, Observer {
 	 */
 	private void createGUI() {
 		myFrame = new JFrame("TOPDOWNRPG");
-		
 
 		entryField = new JTextField(34);
 
 		log = new JTextArea();
+		log.setSize(new Dimension(800, 200));
 		log.setEditable(false);
 		JScrollPane listScroller = new JScrollPane(log);
 		listScroller.setPreferredSize(new Dimension(200, 200));
@@ -378,7 +378,9 @@ public class UserInterface implements ActionListener, Observer {
 		// add some event listeners to some components
 		myFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				exitGame();
+				// Remove player object from server before exiting.
+				entryField.setText("Exit");
+				processCommand();
 			}
 		});
 
@@ -397,8 +399,7 @@ public class UserInterface implements ActionListener, Observer {
 		// Create the MenuBar.
 		makeMenuBar();
 
-		myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // För stor för
-																// laptop
+		myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		myFrame.setLocation((int) d.getWidth() / 2 - WIDTH / 2, 0);
@@ -491,7 +492,11 @@ public class UserInterface implements ActionListener, Observer {
 	 */
 	private void showRoom(Room currentRoom) {
 		showImage(currentRoom.getImage());
-		
+		println("***************");
+		println(currentRoom.showPlayersInRoom());
+		println("***************");
+		println(currentRoom.showItemsInRoom());
+		println("***************");
 	}
 
 	/**
@@ -537,14 +542,14 @@ public class UserInterface implements ActionListener, Observer {
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
 		
-		
 		if (p.getCmdReturnMsg() != null && !(p.getCmdReturnMsg().equals("attack"))) {
 			println(p.getCmdReturnMsg());
 		}
 		else
 			println(p.getRoom().showEnemiesInRoom());
 		
-		println("\n\n" + p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
+		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() +
+				", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
 				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
 		
 	}
