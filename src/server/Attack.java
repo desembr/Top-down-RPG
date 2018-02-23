@@ -20,10 +20,19 @@ public class Attack extends Command {
 	public boolean execute(Player p) {
 		p.setCmdReturnMsg(null);
 		if (secondWord != null) {
+			// Attack enemies
 			for (int i = 0; i < p.getRoom().getEnemies().size(); i++) {
 				Enemy e = p.getRoom().getEnemies().get(i);
 				if (e.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					p.attack(e);
+					return true;
+				}
+			}
+			// Attack other players
+			for (int i = 0; i < p.getRoom().getPlayers().size(); i++) {
+				Player pOther = p.getRoom().getPlayers().get(i);
+				if (pOther.getName().toLowerCase().equals(secondWord.toLowerCase())) {
+					p.attack(pOther);
 					return true;
 				}
 			}

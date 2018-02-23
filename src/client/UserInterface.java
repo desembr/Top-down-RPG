@@ -47,7 +47,7 @@ import server.Room;
  * @version 1.0
  */
 public class UserInterface implements ActionListener, Observer {
-	private static final int WIDTH = 800, HEIGHT = 720;
+	private static final int WIDTH = 800, HEIGHT = 720/*1000*/;
 
 	private Client client;
 	private JFrame myFrame;
@@ -378,7 +378,7 @@ public class UserInterface implements ActionListener, Observer {
 		// add some event listeners to some components
 		myFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// Remove player object from server before exiting.
+				// Update other clients about this client's disconnection.
 				entryField.setText("Exit");
 				processCommand();
 			}
@@ -492,11 +492,6 @@ public class UserInterface implements ActionListener, Observer {
 	 */
 	private void showRoom(Room currentRoom) {
 		showImage(currentRoom.getImage());
-		println("***************");
-		println(currentRoom.showPlayersInRoom());
-		println("***************");
-		println(currentRoom.showItemsInRoom());
-		println("***************");
 	}
 
 	/**
@@ -551,6 +546,5 @@ public class UserInterface implements ActionListener, Observer {
 		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() +
 				", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
 				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
-		
 	}
 }

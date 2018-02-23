@@ -154,6 +154,7 @@ public class Room implements Serializable
     /**
      * Return the description of the room (the one that was defined in the
      * constructor).
+     * @return A short description of this room.
      */
     public String getShortDescription()
     {
@@ -164,6 +165,7 @@ public class Room implements Serializable
      * Return a long description of this room, in the form:
      *     You are in the kitchen.
      *     Exits: north west
+     * @return A long description of this room.
      */
     public String getLongDescription()
     {
@@ -176,6 +178,7 @@ public class Room implements Serializable
      * Return a long description of this room, in the form:
      *     You see in the kitchen.
      *     Exits: north west
+     * @return A long description of an adjacent room.
      */
     public String getPeekDescription()
     {
@@ -183,7 +186,6 @@ public class Room implements Serializable
         		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom() + 
         		".\n" + showPlayersInRoom();
     }
-    
 
     /**
      * Return a string describing the room's exits, for example

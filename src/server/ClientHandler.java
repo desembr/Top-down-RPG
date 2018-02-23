@@ -87,7 +87,8 @@ public class ClientHandler {
 	 */
 	private void send() {
 		while (!Thread.interrupted()) {
-			if (getErrorCount() > 3 || getPlayerDisconnect()) {
+			if (getErrorCount() > 3 || (getPlayerDisconnect() &&
+					!getStateUpdated() && !getConcurrentStateChange())) {
 				break;
 			}
 			// Wait for some game state to change by handled client or 
@@ -104,21 +105,24 @@ public class ClientHandler {
 			// Regular state change initiated by the handled Client. Update
 			// other clients in same room as this handled client's.
 			if (getStateUpdated()) {
-				if (updateOthers) {
-					synchronized (engine) {
-						List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p);
+				if (shouldUpdateOthers()) {
+					List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p);
 
-						for (ClientHandler ch : clientHandlers)
-							synchronized (ch) {
-								if (ch != this)
-									ch.setConcurrentStateChange(true);
-							}
-					}
+					for (ClientHandler ch : clientHandlers)
+						if (ch != this)
+							ch.setConcurrentStateChange(true);
 				}
 			} else { // Concurrent state change initiated by some other Client
 						// in the same room as this handled client's. Don't
 						// update others.
 				setConcurrentStateChange(false);
+				if (p.getIsDead()) {
+					List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p);
+
+					for (ClientHandler ch : clientHandlers)
+						if (ch != this)
+							ch.setConcurrentStateChange(true);
+				}
 			}
 
 			setStateUpdated(false);
@@ -145,9 +149,9 @@ public class ClientHandler {
 				// in some way.
 				boolean roomStateChange = engine.interpretCommand(cmdLine, p);
 				if (roomStateChange) {
-					updateOthers = true;
+					setShouldUpdateOthers(true);
 				} else {
-					updateOthers = true;
+					setShouldUpdateOthers(false);
 				}
 
 				setStateUpdated(true);
@@ -287,5 +291,23 @@ public class ClientHandler {
 	 */
 	private synchronized int getErrorCount() {
 		return counter;
+	}
+	
+	/**
+	 * Set whether this ClientHandler should update the others.
+	 * 
+	 * @param should Whether this ClientHandler should update the others.
+	 */
+	private synchronized void setShouldUpdateOthers(boolean should) {
+		updateOthers = should;
+	}
+
+	/**
+	 * Get whether this ClientHandler should update the others.
+	 * 
+	 * @return Whether this ClientHandler should update the others.
+	 */
+	private synchronized boolean shouldUpdateOthers() {
+		return updateOthers;
 	}
 }
