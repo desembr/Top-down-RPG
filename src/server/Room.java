@@ -50,7 +50,7 @@ public class Room implements Serializable
         
         // Add some enemies and items to this room.
         try {
-			Thread.sleep(33); // för att random seeden från millis ska bli bättre
+			Thread.sleep(33); // fÃ¶r att random seeden frÃ¥n millis ska bli bÃ¤ttre
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -88,7 +88,7 @@ public class Room implements Serializable
      * Returns info about enemies in this room.
      * @return Contained enemies description.
      */
-    private String showEnemiesInRoom(){
+    public String showEnemiesInRoom(){
         if(enemiesInRoom.isEmpty()){
             return "No enemies in here.";
         }
@@ -171,6 +171,19 @@ public class Room implements Serializable
         		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom() + 
         		".\n" + showPlayersInRoom();
     }
+    
+    /**
+     * Return a long description of this room, in the form:
+     *     You see in the kitchen.
+     *     Exits: north west
+     */
+    public String getPeekDescription()
+    {
+        return "You see " + description + ".\n" + getExitString() + 
+        		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom() + 
+        		".\n" + showPlayersInRoom();
+    }
+    
 
     /**
      * Return a string describing the room's exits, for example
