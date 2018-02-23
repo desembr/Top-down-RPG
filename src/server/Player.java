@@ -22,6 +22,10 @@ public class Player extends Entity implements Serializable {
 	
 	private String cmdReturnMsg;
 	
+	//For Look Command
+	public boolean look = false;
+	public String direction = "";
+	
 	/**
 	 * Constructor for Player
 	 * @param startRoom The starting room.
