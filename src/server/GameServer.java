@@ -42,9 +42,11 @@ public class GameServer extends Thread
     }
     
     /**
-     * The continuous listening/responding main loop of the server program.
+     * The continuous listening main loop of the server program.
+     * This loop listens and accepts new Client connections.
      */
     public void run() {
+    	// Continuously listen and accept new Client connections on serverSocket.
     	while (!interrupted()) {
     		try {
 				Socket clientSocket = serverSocket.accept();

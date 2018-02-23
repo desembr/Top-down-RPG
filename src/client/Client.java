@@ -17,7 +17,7 @@ import server.Player;
 
 /**
  * Interface between players and the server, passes updated information returned
- * from the server back to the calling gui through setChanged() and
+ * from the server back to the calling UserInterface through setChanged() and
  * notifyObservers() methods of the Observable base class.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic

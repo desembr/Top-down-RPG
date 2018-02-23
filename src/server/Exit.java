@@ -18,13 +18,8 @@ public class Exit extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		if (p != null) {
-			synchronized (p) {
-				p.setCmdReturnMsg("Thank you for playing. Goodbye.");
-				p.kill();
-				return true;
-			}
-		}
-		return false;
+		p.setCmdReturnMsg("Thank you for playing. Goodbye.");
+		p.kill();
+		return true;
 	}
 }

@@ -81,8 +81,6 @@ public class Room implements Serializable
         			enemiesInRoom.add(new Gremlin());
         		}
         	}
-        	//enemiesInRoom.add(new Orc());
-        	//itemsInRoom.add(new Apple());
         }
     }
     
@@ -117,13 +115,13 @@ public class Room implements Serializable
      * Returns info about players in this room.
      * @return Contained players description.
      */
-    private String showPlayerInRoom(){
+    private String showPlayersInRoom(){
         if(playersInRoom.size() == 1){
             return "There are currently no other players in here.";
         }
         String returnString = "Players:";
-        for (Entity e : playersInRoom) {
-        	returnString += " " + e.getName();
+        for (Player p : playersInRoom) {
+        	returnString += " " + p.getName();
         }
         return returnString;
     }
@@ -171,7 +169,7 @@ public class Room implements Serializable
     {
         return "You are " + description + ".\n" + getExitString() + 
         		".\n" + showEnemiesInRoom() + ".\n" + showItemsInRoom() + 
-        		".\n" + showPlayerInRoom();
+        		".\n" + showPlayersInRoom();
     }
 
     /**
@@ -252,7 +250,7 @@ public class Room implements Serializable
      * @param player The player to add.
      */
 	public synchronized void addPlayer(Player player) {
-		if (player.getRoom() != this)
+		if (!playersInRoom.contains(player))
 			playersInRoom.add(player);
 	}
 
