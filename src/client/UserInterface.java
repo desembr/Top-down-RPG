@@ -47,7 +47,7 @@ import server.Room;
  * @version 1.0
  */
 public class UserInterface implements ActionListener, Observer {
-	private static final int WIDTH = 800, HEIGHT = 730;
+	private static final int WIDTH = 800, HEIGHT = 1000;
 
 	private Client client;
 	private JFrame myFrame;
@@ -296,6 +296,7 @@ public class UserInterface implements ActionListener, Observer {
 	 */
 	private void createGUI() {
 		myFrame = new JFrame("TOPDOWNRPG");
+		
 
 		entryField = new JTextField(34);
 
@@ -396,11 +397,12 @@ public class UserInterface implements ActionListener, Observer {
 		// Create the MenuBar.
 		makeMenuBar();
 
-		myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // För stor för
+		myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // FÃ¶r stor fÃ¶r
 																// laptop
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		myFrame.setLocation((int) d.getWidth() / 2 - WIDTH / 2, 0);
+		myFrame.setResizable(false);
 		myFrame.pack();
 		entryField.requestFocus();
 		myFrame.setVisible(true);
@@ -489,7 +491,7 @@ public class UserInterface implements ActionListener, Observer {
 	 */
 	private void showRoom(Room currentRoom) {
 		showImage(currentRoom.getImage());
-		println(currentRoom.getLongDescription());
+		
 	}
 
 	/**
@@ -529,16 +531,21 @@ public class UserInterface implements ActionListener, Observer {
 		if (p.getIsDead())
 			exitGame();
 
+		//Mandatory 
 		showRoom(p.getRoom());
-
 		showPlayer(p.getIconFilePath());
-
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
-
-		println(p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
-				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
-		if (p.getCmdReturnMsg() != null)
+		
+		
+		if (p.getCmdReturnMsg() != null && !(p.getCmdReturnMsg().equals("attack"))) {
 			println(p.getCmdReturnMsg());
+		}
+		else
+			println(p.getRoom().showEnemiesInRoom());
+		
+		println("\n\n" + p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
+				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
+		
 	}
 }
