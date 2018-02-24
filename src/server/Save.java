@@ -22,7 +22,14 @@ public class Save extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(this.getClass().getName());
+		p.setCmdReturnMsg("Saving game...");
+		
+		// To make jars work.
+		File savesDir = new File("saves");
+		if (!savesDir.exists()) {
+			savesDir.mkdir();
+		}
+		
 		if (secondWord != null){
             try {
             	FileOutputStream fS = new FileOutputStream(new File("saves/" + secondWord));
@@ -31,7 +38,7 @@ public class Save extends Command {
                 oS.writeObject(p);
                 oS.close();
                 fS.close();
-                System.out.println("Saved game!");
+                //System.out.println("Saved game!");
                 return true;
             } catch (Exception e) {
                 System.out.println(e.getMessage());

@@ -21,7 +21,7 @@ public class Load extends Command{
 	 * @return Whether execution of this command changed some player state.
 	 */
     public boolean execute(Player p){
-    	p.setCmdReturnMsg(this.getClass().getName());
+    	p.setCmdReturnMsg("Loading game...");
         if (secondWord != null){
             try {
             	FileInputStream fIS = new FileInputStream("saves/" + secondWord);

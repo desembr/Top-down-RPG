@@ -86,7 +86,7 @@ public class UserInterface implements ActionListener, Observer {
 		printWelcome();
 		
 		// Background sounds playing repeatedly, don't play this
-		// if running multiple instances of clients locally (lag).
+		// if running multiple instances of GameClient locally (lags).
 		//SoundPlayer.background.playAudio();
 	}
 

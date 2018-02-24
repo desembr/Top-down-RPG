@@ -18,7 +18,7 @@ public class Exit extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(this.getClass().getName());
+		p.setCmdReturnMsg("Thanks for playing, exiting game...");
 		p.kill();
 		return true;
 	}
