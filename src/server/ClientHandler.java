@@ -186,6 +186,8 @@ public class ClientHandler {
 				sendStream.writeObject(p);
 				sendStream.flush();
 				sendStream.reset();
+				
+				p.setCmdReturnMsg((null));
 			} catch (IOException e) {
 				incErrorCounter();
 				System.err.println(e.getMessage());

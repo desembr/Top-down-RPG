@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>104</x>
-      <y>40</y>
+      <x>112</x>
+      <y>184</y>
       <w>248</w>
       <h>384</h>
     </coordinates>
@@ -45,8 +45,8 @@ handles user input and updates of gui.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>456</x>
-      <y>80</y>
+      <x>464</x>
+      <y>224</y>
       <w>216</w>
       <h>136</h>
     </coordinates>
@@ -66,8 +66,8 @@ creates core objects and stores state.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>760</x>
-      <y>88</y>
+      <x>768</x>
+      <y>232</y>
       <w>216</w>
       <h>304</h>
     </coordinates>
@@ -101,8 +101,8 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>344</x>
-      <y>128</y>
+      <x>352</x>
+      <y>272</y>
       <w>128</w>
       <h>32</h>
     </coordinates>
@@ -114,8 +114,8 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>664</x>
-      <y>136</y>
+      <x>672</x>
+      <y>280</y>
       <w>112</w>
       <h>32</h>
     </coordinates>
@@ -127,19 +127,19 @@ m2=1</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>504</x>
-      <y>0</y>
-      <w>120</w>
-      <h>56</h>
+      <x>24</x>
+      <y>144</y>
+      <w>1016</w>
+      <h>568</h>
     </coordinates>
-    <panel_attributes>Client-side program.</panel_attributes>
+    <panel_attributes>Package client</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>344</x>
-      <y>264</y>
+      <x>352</x>
+      <y>408</y>
       <w>432</w>
       <h>32</h>
     </coordinates>

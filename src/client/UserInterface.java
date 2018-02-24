@@ -59,9 +59,9 @@ public class UserInterface implements ActionListener, Observer {
 	private ArrayList<JLabel> monsterSprites;
 	private ArrayList<JLabel> shadows;
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		new UserInterface();
-	}
+	}*/
 
 	public UserInterface() {
 		initMenu();
@@ -84,6 +84,10 @@ public class UserInterface implements ActionListener, Observer {
 		createGUI();
 
 		printWelcome();
+		
+		// Background sounds playing repeatedly, don't play this
+		// if running multiple instances of clients locally (lag).
+		//SoundPlayer.background.playAudio();
 	}
 
 	public void initMenu() {
@@ -531,20 +535,43 @@ public class UserInterface implements ActionListener, Observer {
 		if (p.getIsDead())
 			exitGame();
 
-		//Mandatory 
 		showRoom(p.getRoom());
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
 		
-		if (p.getCmdReturnMsg() != null && !(p.getCmdReturnMsg().equals("attack"))) {
-			println(p.getCmdReturnMsg());
-		}
-		else
-			println(p.getRoom().showEnemiesInRoom());
-		
 		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() +
 				", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
 				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
+		
+		// Decide what to print/play depending on return message of command,
+		// which is optionally set by a command on the server on execution.
+		if (p.getCmdReturnMsg() != null) {
+			switch (p.getCmdReturnMsg()) {
+			case "server.Go":
+			case "server.Back":
+				SoundPlayer.goRoom.playAudio();
+			break;
+			case "server.Attack":
+				println(p.getRoom().showEnemiesInRoom());
+				SoundPlayer.attackEnemy.playAudio();
+			break;
+			case "server.Use":
+				SoundPlayer.useItem.playAudio();
+			break;
+			case "server.Drop":
+				SoundPlayer.dropItem.playAudio();
+			break;
+			case "server.Pick":
+				SoundPlayer.pickItem.playAudio();
+			break;
+			default:
+				println(p.getCmdReturnMsg());
+			break;
+			}
+		}
+		else {
+			println(p.getRoom().showEnemiesInRoom());
+		}
 	}
 }

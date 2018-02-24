@@ -18,7 +18,7 @@ public class Attack extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(null);
+		p.setCmdReturnMsg(this.getClass().getName());
 		if (secondWord != null) {
 			// Attack enemies
 			for (int i = 0; i < p.getRoom().getEnemies().size(); i++) {

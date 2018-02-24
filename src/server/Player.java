@@ -120,6 +120,7 @@ public class Player extends Entity implements Serializable {
     /**
      * Attempts to go to a neighboring room of this player's current room.
      * @param direction The direction to attempt to exit through.
+     * @return Whether player successfully switched room.
      */
     public boolean goRoom(String direction) {
     	Room r = currentRoom.getExit(direction);

@@ -119,6 +119,9 @@ public class Room implements Serializable
         if(playersInRoom.size() == 1){
             return "There are currently no other players in here.";
         }
+        else if (playersInRoom.isEmpty()) {
+        	return "There are currently no players in here.";
+        }
         String returnString = "Players:";
         for (Player p : playersInRoom) {
         	returnString += " " + p.getName();
