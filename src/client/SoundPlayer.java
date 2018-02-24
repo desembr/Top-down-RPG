@@ -22,7 +22,7 @@ public class SoundPlayer {
 	public static SoundPlayer useItem = new SoundPlayer("res/sounds/eat.wav", false);
 	public static SoundPlayer pickItem = new SoundPlayer("res/sounds/pick.wav", false);
 	public static SoundPlayer dropItem = new SoundPlayer("res/sounds/drop.wav", false);
-	//public static SoundPlayer background = new SoundPlayer("res/sounds/background.wav", true);
+	public static SoundPlayer background = new SoundPlayer("res/sounds/background.wav", true);
 
 	// Stores and provides functionality to play the stored audio stream.
 	private Clip audioClip;
@@ -32,17 +32,18 @@ public class SoundPlayer {
 	/**
 	 * Constructor for new SoundPlayer object.
 	 * 
-	 * @param fileName
+	 * @param filePath
 	 *            The relative path to the audio file.
 	 * @return A new SoundPlayer instance for playing the new audio.
 	 */
-	public SoundPlayer(String fileName, boolean playContinuously) {
+	private SoundPlayer(String filePath, boolean playContinuously) {
 		this.playContinuously = playContinuously;
 
 		try {
 			// Load audio.
-			AudioInputStream audio = AudioSystem.getAudioInputStream(SoundPlayer.class.getClassLoader().getResource(fileName));
-			// Store audio in clip field.
+			AudioInputStream audio = AudioSystem.getAudioInputStream(SoundPlayer.
+					class.getClassLoader().getResource(filePath));
+			// Store audio in clip field of this SoundPlayer object.
 			this.audioClip = AudioSystem.getClip();
 			this.audioClip.open(audio);
 		} catch (UnsupportedAudioFileException | IOException e) {

@@ -131,7 +131,7 @@ halign=center</panel_attributes>
       <w>120</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>Load highscore</panel_attributes>
+    <panel_attributes>Load game state</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -322,7 +322,7 @@ halign=center</panel_attributes>
       <w>120</w>
       <h>40</h>
     </coordinates>
-    <panel_attributes>Save highscore</panel_attributes>
+    <panel_attributes>Save game state</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
