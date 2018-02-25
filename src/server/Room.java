@@ -8,6 +8,18 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import server.entities.Enemy;
+import server.entities.Entity;
+import server.entities.Goblin;
+import server.entities.Gremlin;
+import server.entities.Orc;
+import server.entities.Player;
+import server.items.Apple;
+import server.items.Item;
+import server.items.Pie;
+import server.items.Shield;
+import server.items.Sword;
+
 /*
  * Class Room - a room in an adventure game.
  *
@@ -19,7 +31,7 @@ import java.util.Set;
  * stores a reference to the neighboring room.
  * 
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class Room implements Serializable
 {
@@ -50,7 +62,7 @@ public class Room implements Serializable
         
         // Add some enemies and items to this room.
         try {
-			Thread.sleep(33); // f√∂r att random seeden fr√•n millis ska bli b√§ttre
+			Thread.sleep(33); // Fˆr att seeden ska bli b‰ttre
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -59,17 +71,23 @@ public class Room implements Serializable
         for (int i = 0; i < zero_to_five; i++) {
         	if(roomLevel == 1)
         	{
-        		int random = randomiser.nextInt(2);  
+        		int random = randomiser.nextInt(3);  
         		if (random == 0)
         		{
         			enemiesInRoom.add(new Goblin());
         			if (randomiser.nextInt(4) == 0)
         				itemsInRoom.add(new Apple());
         		}
+        		else if (random == 1)
+        		{
+        			enemiesInRoom.add(new Orc());
+        			if (randomiser.nextInt(5) == 0)
+        				itemsInRoom.add(new Pie());
+        		}
         		else
         		{
         			int randomStats = randomiser.nextInt(5);
-        			if (randomiser.nextInt(3) == 0) {
+        			if (randomiser.nextInt(5) == 0) {
         				itemsInRoom.add(new Pie());
         			}
         			else if (randomiser.nextInt(3) == 0) {

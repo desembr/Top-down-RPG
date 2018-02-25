@@ -11,12 +11,14 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import server.entities.Player;
+
 /**
  * Handles client-server communication, one ClientHandler object for every
  * connected Client.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class ClientHandler {
 	private Socket clientSocket;

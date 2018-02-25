@@ -12,7 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * Class for creating, storing and playing all sounds in the game.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class SoundPlayer {
 	// Create static instances of this class, each providing functionality to

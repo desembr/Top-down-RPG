@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import server.Player;
+import server.entities.Player;
 
 /**
  * Interface between players and the server, passes updated information returned
@@ -21,7 +21,7 @@ import server.Player;
  * notifyObservers() methods of the Observable base class.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class Client extends Observable {
 	private Socket clientSocket;

@@ -3,6 +3,9 @@ package server;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.commands.Command;
+import server.entities.Player;
+
 /**
  * This class is part of the "World of Zuul" application. "World of Zuul" is a
  * very simple, text based adventure game.
@@ -11,7 +14,7 @@ import java.util.List;
  * evaluates and executes the commands that the parser returns.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class GameEngine {
 	private Parser parser;

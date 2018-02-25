@@ -6,11 +6,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.entities.Player;
+
 /**
  * Main class on the server-side which manages the game-logic and listens/accepts
  * client connections. Inserts a new, managed Player object for every new Client.
  * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class GameServer extends Thread
 {

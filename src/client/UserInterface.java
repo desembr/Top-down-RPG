@@ -1,14 +1,10 @@
 package client;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -23,7 +19,6 @@ import java.util.Observer;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -34,19 +29,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 
-import server.Enemy;
-import server.GameServer;
-import server.Player;
 import server.Room;
+import server.entities.Enemy;
+import server.entities.Player;
 
 /**
  * This class implements a simple graphical user interface with a text entry
  * area, a text output area and an optional image.
  * 
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
- * @version 1.0
+ * @version 2018-02-28
  */
 public class UserInterface implements Observer {
 	private static final int WIDTH = 800, HEIGHT = 720/*1000*/;
@@ -64,14 +57,6 @@ public class UserInterface implements Observer {
 	
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
-
-	/*public static void main(String[] args) {
-		new UserInterface();
-	}*/
-
-	public UserInterface() {
-		initMenu();
-	}
 
 	/**
 	 * Construct a UserInterface. As a parameter, a Client object, with will
@@ -97,6 +82,11 @@ public class UserInterface implements Observer {
 		//SoundPlayer.background.playAudio();
 	}
 
+	/*
+	public UserInterface() {
+		initMenu();
+	}
+	
 	private void initMenu() {
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BorderLayout(5, 5));
@@ -155,7 +145,7 @@ public class UserInterface implements Observer {
 
 	private UserInterface getThis() {
 		return this;
-	}
+	}*/
 
 	/**
 	 * Print out some text into the text area.
@@ -577,21 +567,21 @@ public class UserInterface implements Observer {
 		// which is optionally set by a command on the server on execution.
 		if (p.getCmdReturnMsg() != null) {
 			switch (p.getCmdReturnMsg()) {
-			case "server.Go":
-			case "server.Back":
+			case "server.commands.Go":
+			case "server.commands.Back":
 				SoundPlayer.goRoom.playAudio();
 			break;
-			case "server.Attack":
+			case "server.commands.Attack":
 				println(p.getRoom().showEnemiesInRoom());
 				SoundPlayer.attackEnemy.playAudio();
 			break;
-			case "server.Use":
+			case "server.commands.Use":
 				SoundPlayer.useItem.playAudio();
 			break;
-			case "server.Drop":
+			case "server.commands.Drop":
 				SoundPlayer.dropItem.playAudio();
 			break;
-			case "server.Pick":
+			case "server.commands.Pick":
 				SoundPlayer.pickItem.playAudio();
 			break;
 			default:
