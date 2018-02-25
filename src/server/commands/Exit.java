@@ -4,7 +4,8 @@ import server.entities.Player;
 
 /**
  * Exit-game command.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * 
+ * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 2018-02-28
  */
 public class Exit extends Command {
@@ -13,10 +14,13 @@ public class Exit extends Command {
 	 */
 	public Exit() {
 	}
-	
+
 	/**
-	 * Executes this command, sets a return message if something to write back to client.
-	 * @param p The player object which this function affects.
+	 * Executes this command, sets a return message if something to write back
+	 * to client.
+	 * 
+	 * @param p
+	 *            The player object which this function affects.
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {

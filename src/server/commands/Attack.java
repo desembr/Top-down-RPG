@@ -1,11 +1,12 @@
- package server.commands;
+package server.commands;
 
 import server.entities.Enemy;
 import server.entities.Player;
 
 /**
  * Attack-a-monster command.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * 
+ * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 2018-02-28
  */
 public class Attack extends Command {
@@ -14,10 +15,13 @@ public class Attack extends Command {
 	 */
 	public Attack() {
 	}
-	
+
 	/**
-	 * Executes this command, sets a return message if something to write back to client.
-	 * @param p The player object which this function affects.
+	 * Executes this command, sets a return message if something to write back
+	 * to client.
+	 * 
+	 * @param p
+	 *            The player object which this function affects.
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {

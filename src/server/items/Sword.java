@@ -7,7 +7,7 @@ package server.items;
  */
 public class Sword extends Equipment {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor for Sword.
 	 */
@@ -16,10 +16,12 @@ public class Sword extends Equipment {
 		this.damageGain = damageGain;
 		this.defenceGain = defenceGain;
 	}
-	
+
 	/**
 	 * Returns the same health.
-	 * @param currentHealth The current health of the consuming/using player.
+	 * 
+	 * @param currentHealth
+	 *            The current health of the consuming/using player.
 	 * @return The same health for the consuming player to use (not usable).
 	 */
 	public int use(int currentHealth) {

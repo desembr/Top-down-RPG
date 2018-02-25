@@ -41,6 +41,7 @@ public class Entity implements Serializable {
 
 	/**
 	 * Logic for attacking an entity.
+	 * 
 	 * @param e
 	 *            The entity to attack.
 	 * @return Whether attack landed, false if entity is already dead.
@@ -48,8 +49,8 @@ public class Entity implements Serializable {
 	public boolean attack(Entity e) {
 		if (e != null) {
 			if (e.getIsDead()) {
-    			return false;
-    		}
+				return false;
+			}
 			if (rand.nextInt(e.getDefence()) <= 8)
 				e.lowerHealth(damage);
 		}
@@ -139,7 +140,7 @@ public class Entity implements Serializable {
 
 			String deadPath = part1 + "/dead/" + part3;
 
-			//System.out.println(deadPath);
+			// System.out.println(deadPath);
 
 			return deadPath;
 		}

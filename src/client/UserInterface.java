@@ -42,7 +42,7 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private static final int WIDTH = 800, HEIGHT = 720/*1000*/;
+	private static final int WIDTH = 800, HEIGHT = 720/* 1000 */;
 
 	private Client client;
 	private JFrame myFrame;
@@ -54,7 +54,7 @@ public class UserInterface implements Observer {
 	private ArrayList<JLabel> monsterSprites;
 	private ArrayList<JLabel> shadows;
 	private ArrayList<String> cmdCache;
-	
+
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
 
@@ -68,7 +68,7 @@ public class UserInterface implements Observer {
 	 */
 	public UserInterface(Client client) {
 		this.client = client;
-		
+
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
@@ -76,76 +76,56 @@ public class UserInterface implements Observer {
 		createGUI();
 
 		printWelcome();
-		
+
 		// Background sounds playing repeatedly, don't play this
 		// if running multiple instances of GameClient locally (lags).
-		//SoundPlayer.background.playAudio();
+		// SoundPlayer.background.playAudio();
 	}
 
 	/*
-	public UserInterface() {
-		initMenu();
-	}
-	
-	private void initMenu() {
-		JPanel myPanel = new JPanel();
-		myPanel.setLayout(new BorderLayout(5, 5));
-
-		JPanel panelUno = new JPanel();
-		JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
-		JButton buttonN = new JButton("New Game");
-
-		panel.add(buttonN);
-
-		JButton button = new JButton("Load Game");
-		panel.add(button);
-
-		JButton button2 = new JButton("Highscore");
-		panel.add(button2);
-
-		JTextField textField = new JTextField();
-		panel.add(textField);
-		panelUno.add(panel);
-
-		JPanel buttonPanel = new JPanel();
-		JButton button3 = new JButton("Exit");
-		buttonPanel.add(button3);
-
-		myPanel.add(panelUno, BorderLayout.CENTER);
-		myPanel.add(buttonPanel, BorderLayout.PAGE_END);
-
-		myFrame = new JFrame("MyLittleRPG");
-		myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		myFrame.setBounds(0, 0, WIDTH, HEIGHT);
-
-		JPanel centerPanel = new JPanel();
-		myFrame.getContentPane().setLayout(new BorderLayout(5, 5));
-		centerPanel.setBackground(Color.DARK_GRAY);
-		myFrame.add(centerPanel, BorderLayout.CENTER);
-
-		myFrame.add(myPanel, BorderLayout.LINE_END);
-		buttonN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				myFrame.getContentPane().removeAll();
-				new GameServer();
-				client = new Client();
-				setClient(client);
-				client.addObserver(getThis());
-				client.start();
-				createGUI();
-			}
-		});
-		myFrame.setVisible(true);
-	}
-
-	private void setClient(Client c) {
-		this.client = c;
-	}
-
-	private UserInterface getThis() {
-		return this;
-	}*/
+	 * public UserInterface() { initMenu(); }
+	 * 
+	 * private void initMenu() { JPanel myPanel = new JPanel();
+	 * myPanel.setLayout(new BorderLayout(5, 5));
+	 * 
+	 * JPanel panelUno = new JPanel(); JPanel panel = new JPanel(new
+	 * GridLayout(6, 1, 5, 5)); JButton buttonN = new JButton("New Game");
+	 * 
+	 * panel.add(buttonN);
+	 * 
+	 * JButton button = new JButton("Load Game"); panel.add(button);
+	 * 
+	 * JButton button2 = new JButton("Highscore"); panel.add(button2);
+	 * 
+	 * JTextField textField = new JTextField(); panel.add(textField);
+	 * panelUno.add(panel);
+	 * 
+	 * JPanel buttonPanel = new JPanel(); JButton button3 = new JButton("Exit");
+	 * buttonPanel.add(button3);
+	 * 
+	 * myPanel.add(panelUno, BorderLayout.CENTER); myPanel.add(buttonPanel,
+	 * BorderLayout.PAGE_END);
+	 * 
+	 * myFrame = new JFrame("MyLittleRPG");
+	 * myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //
+	 * Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	 * myFrame.setBounds(0, 0, WIDTH, HEIGHT);
+	 * 
+	 * JPanel centerPanel = new JPanel(); myFrame.getContentPane().setLayout(new
+	 * BorderLayout(5, 5)); centerPanel.setBackground(Color.DARK_GRAY);
+	 * myFrame.add(centerPanel, BorderLayout.CENTER);
+	 * 
+	 * myFrame.add(myPanel, BorderLayout.LINE_END);
+	 * buttonN.addActionListener(new ActionListener() { public void
+	 * actionPerformed(ActionEvent e) { myFrame.getContentPane().removeAll();
+	 * new GameServer(); client = new Client(); setClient(client);
+	 * client.addObserver(getThis()); client.start(); createGUI(); } });
+	 * myFrame.setVisible(true); }
+	 * 
+	 * private void setClient(Client c) { this.client = c; }
+	 * 
+	 * private UserInterface getThis() { return this; }
+	 */
 
 	/**
 	 * Print out some text into the text area.
@@ -387,30 +367,30 @@ public class UserInterface implements Observer {
 			}
 		});
 
-		entryField.addActionListener(e -> { 
+		entryField.addActionListener(e -> {
 			log.setText("");
 			processCommand();
 		});
-		
+
 		entryField.addKeyListener(new KeyAdapter() {
 			/**
-			 * Listens for UP_ARROW and DOWN_ARROW for scrolling previously 
+			 * Listens for UP_ARROW and DOWN_ARROW for scrolling previously
 			 * entered commands.
-			 * @param e The KeyEvent triggering this method.
+			 * 
+			 * @param e
+			 *            The KeyEvent triggering this method.
 			 */
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_UP) {
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
 					if (selectedCmd > 0) {
 						selectedCmd--;
 						entryField.setText(cmdCache.get(selectedCmd));
 					}
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 					if (selectedCmd < cmdCache.size() - 1) {
 						selectedCmd++;
 						entryField.setText(cmdCache.get(selectedCmd));
-					}
-					else {
+					} else {
 						entryField.setText("");
 						selectedCmd = cmdCache.size();
 					}
@@ -558,11 +538,10 @@ public class UserInterface implements Observer {
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
-		
-		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() +
-				", Damage: " + p.getDamage() + ", Defence: " + p.getDefence()
-				+ ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
-		
+
+		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: "
+				+ p.getDefence() + ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
+
 		// Decide what to print/play depending on return message of command,
 		// which is optionally set by a command on the server on execution.
 		if (p.getCmdReturnMsg() != null) {
@@ -570,23 +549,23 @@ public class UserInterface implements Observer {
 			case "server.commands.Go":
 			case "server.commands.Back":
 				SoundPlayer.goRoom.playAudio();
-			break;
+				break;
 			case "server.commands.Attack":
 				println(p.getRoom().showEnemiesInRoom());
 				SoundPlayer.attackEnemy.playAudio();
-			break;
+				break;
 			case "server.commands.Use":
 				SoundPlayer.useItem.playAudio();
-			break;
+				break;
 			case "server.commands.Drop":
 				SoundPlayer.dropItem.playAudio();
-			break;
+				break;
 			case "server.commands.Pick":
 				SoundPlayer.pickItem.playAudio();
-			break;
+				break;
 			default:
 				println(p.getCmdReturnMsg());
-			break;
+				break;
 			}
 		}
 	}

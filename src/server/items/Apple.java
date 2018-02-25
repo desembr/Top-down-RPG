@@ -7,7 +7,7 @@ package server.items;
  */
 public class Apple extends Food {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Constructor for Apple.
 	 */
