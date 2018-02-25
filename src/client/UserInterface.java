@@ -9,6 +9,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -46,7 +48,7 @@ import server.Room;
  * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
  * @version 1.0
  */
-public class UserInterface implements ActionListener, Observer {
+public class UserInterface implements Observer {
 	private static final int WIDTH = 800, HEIGHT = 720/*1000*/;
 
 	private Client client;
@@ -58,6 +60,10 @@ public class UserInterface implements ActionListener, Observer {
 
 	private ArrayList<JLabel> monsterSprites;
 	private ArrayList<JLabel> shadows;
+	private ArrayList<String> cmdCache;
+	
+	// Used for scrolling through previous entered commands.
+	private int selectedCmd = 0;
 
 	/*public static void main(String[] args) {
 		new UserInterface();
@@ -76,10 +82,11 @@ public class UserInterface implements ActionListener, Observer {
 	 *            The Client to handle all communication with server.
 	 */
 	public UserInterface(Client client) {
+		this.client = client;
+		
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
-
-		this.client = client;
+		cmdCache = new ArrayList<>();
 
 		createGUI();
 
@@ -90,7 +97,7 @@ public class UserInterface implements ActionListener, Observer {
 		//SoundPlayer.background.playAudio();
 	}
 
-	public void initMenu() {
+	private void initMenu() {
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BorderLayout(5, 5));
 
@@ -156,7 +163,8 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param text
 	 *            The text to print to the text area.
 	 */
-	public void print(String text) {
+	@SuppressWarnings("unused")
+	private void print(String text) {
 		log.append(text);
 		log.setCaretPosition(log.getDocument().getLength());
 	}
@@ -167,7 +175,7 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param text
 	 *            The text to print to the text area.
 	 */
-	public void println(String text) {
+	private void println(String text) {
 		log.append(text + "\n");
 		log.setCaretPosition(log.getDocument().getLength());
 	}
@@ -178,7 +186,7 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param imageName
 	 *            The filePath of the image to display.
 	 */
-	public void showImage(String imageName) {
+	private void showImage(String imageName) {
 		try {
 			URL imageURL = this.getClass().getClassLoader().getResource(imageName);
 
@@ -205,7 +213,7 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param imageName
 	 *            The filePath of the image to display.
 	 */
-	public void showPlayer(String imageName) {
+	private void showPlayer(String imageName) {
 		URL imageURL = this.getClass().getClassLoader().getResource(imageName);
 		if (imageURL == null)
 			System.out.println("image not found");
@@ -222,7 +230,7 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param enemies,
 	 *            a List of enemies
 	 */
-	public void showEnemies(List<Enemy> enemies) {
+	private void showEnemies(List<Enemy> enemies) {
 		for (int i = 0; i < 5; i++) {
 			if (i < enemies.size()) {
 				URL imageURL = this.getClass().getClassLoader().getResource(enemies.get(i).getIconFilePath());
@@ -249,7 +257,7 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param enemies,
 	 *            a List of enemies
 	 */
-	public void showShadows(List<Enemy> enemies) {
+	private void showShadows(List<Enemy> enemies) {
 		for (int i = 0; i < 5; i++) {
 			if (i < enemies.size()) {
 				URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
@@ -289,7 +297,8 @@ public class UserInterface implements ActionListener, Observer {
 	 * @param on
 	 *            Whether to enable or disable the entryField.
 	 */
-	public void enable(boolean on) {
+	@SuppressWarnings("unused")
+	private void enable(boolean on) {
 		entryField.setEditable(on);
 		if (!on)
 			entryField.getCaret().setBlinkRate(0);
@@ -388,7 +397,36 @@ public class UserInterface implements ActionListener, Observer {
 			}
 		});
 
-		entryField.addActionListener(this);
+		entryField.addActionListener(e -> { 
+			log.setText("");
+			processCommand();
+		});
+		
+		entryField.addKeyListener(new KeyAdapter() {
+			/**
+			 * Listens for UP_ARROW and DOWN_ARROW for scrolling previously 
+			 * entered commands.
+			 * @param e The KeyEvent triggering this method.
+			 */
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_UP) {
+					if (selectedCmd > 0) {
+						selectedCmd--;
+						entryField.setText(cmdCache.get(selectedCmd));
+					}
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					if (selectedCmd < cmdCache.size() - 1) {
+						selectedCmd++;
+						entryField.setText(cmdCache.get(selectedCmd));
+					}
+					else {
+						entryField.setText("");
+						selectedCmd = cmdCache.size();
+					}
+				}
+			}
+		});
 
 		try {
 			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
@@ -461,17 +499,6 @@ public class UserInterface implements ActionListener, Observer {
 	}
 
 	/**
-	 * Listener method for the textField (the input field).
-	 * 
-	 * @param e
-	 *            The Event that triggered this listener.
-	 */
-	public void actionPerformed(ActionEvent e) {
-		log.setText("");
-		processCommand();
-	}
-
-	/**
 	 * A command has been entered. Read the command and do whatever is necessary
 	 * to process it.
 	 */
@@ -484,6 +511,8 @@ public class UserInterface implements ActionListener, Observer {
 			synchronized (client) {
 				client.pollCommand(input);
 			}
+			cmdCache.add(input);
+			selectedCmd = cmdCache.size();
 		}
 	}
 
@@ -569,9 +598,6 @@ public class UserInterface implements ActionListener, Observer {
 				println(p.getCmdReturnMsg());
 			break;
 			}
-		}
-		else {
-			println(p.getRoom().showEnemiesInRoom());
 		}
 	}
 }

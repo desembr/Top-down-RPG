@@ -65,8 +65,8 @@ public class SoundPlayer {
 		if (playContinuously)
 			setShouldPlayContinuously(true);
 
-		new Thread() { // Run on separate thread than the calling class's thread
-						// (GUI).
+		new Thread() { // Run on separate thread than the calling object's thread
+						// (the GUI).
 			public void run() {
 				do {
 					// Stops the audio-clip and restarts it, or simply
