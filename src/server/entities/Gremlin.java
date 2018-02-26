@@ -2,7 +2,7 @@ package server.entities;
 
 /*
  * Class Goblin - represents a particular enemy in the game.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author  Christer Sonesson
  * @version 2018-02-28
  */
 public class Gremlin extends Enemy {

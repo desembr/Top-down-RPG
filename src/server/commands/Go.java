@@ -5,7 +5,7 @@ import server.entities.Player;
 /**
  * Go-to-another-room command.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Emir Zivcic
  * @version 2018-02-28
  */
 public class Go extends Command {

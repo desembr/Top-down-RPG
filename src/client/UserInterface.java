@@ -38,11 +38,11 @@ import server.entities.Player;
  * This class implements a simple graphical user interface with a text entry
  * area, a text output area and an optional image.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Christer Sonesson
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private static final int WIDTH = 800, HEIGHT = 720/* 1000 */;
+	private static final int WIDTH = 800, HEIGHT = 720;
 
 	private Client client;
 	private JFrame myFrame;
@@ -82,51 +82,6 @@ public class UserInterface implements Observer {
 		// SoundPlayer.background.playAudio();
 	}
 
-	/*
-	 * public UserInterface() { initMenu(); }
-	 * 
-	 * private void initMenu() { JPanel myPanel = new JPanel();
-	 * myPanel.setLayout(new BorderLayout(5, 5));
-	 * 
-	 * JPanel panelUno = new JPanel(); JPanel panel = new JPanel(new
-	 * GridLayout(6, 1, 5, 5)); JButton buttonN = new JButton("New Game");
-	 * 
-	 * panel.add(buttonN);
-	 * 
-	 * JButton button = new JButton("Load Game"); panel.add(button);
-	 * 
-	 * JButton button2 = new JButton("Highscore"); panel.add(button2);
-	 * 
-	 * JTextField textField = new JTextField(); panel.add(textField);
-	 * panelUno.add(panel);
-	 * 
-	 * JPanel buttonPanel = new JPanel(); JButton button3 = new JButton("Exit");
-	 * buttonPanel.add(button3);
-	 * 
-	 * myPanel.add(panelUno, BorderLayout.CENTER); myPanel.add(buttonPanel,
-	 * BorderLayout.PAGE_END);
-	 * 
-	 * myFrame = new JFrame("MyLittleRPG");
-	 * myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); //
-	 * Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	 * myFrame.setBounds(0, 0, WIDTH, HEIGHT);
-	 * 
-	 * JPanel centerPanel = new JPanel(); myFrame.getContentPane().setLayout(new
-	 * BorderLayout(5, 5)); centerPanel.setBackground(Color.DARK_GRAY);
-	 * myFrame.add(centerPanel, BorderLayout.CENTER);
-	 * 
-	 * myFrame.add(myPanel, BorderLayout.LINE_END);
-	 * buttonN.addActionListener(new ActionListener() { public void
-	 * actionPerformed(ActionEvent e) { myFrame.getContentPane().removeAll();
-	 * new GameServer(); client = new Client(); setClient(client);
-	 * client.addObserver(getThis()); client.start(); createGUI(); } });
-	 * myFrame.setVisible(true); }
-	 * 
-	 * private void setClient(Client c) { this.client = c; }
-	 * 
-	 * private UserInterface getThis() { return this; }
-	 */
-
 	/**
 	 * Print out some text into the text area.
 	 * 
@@ -159,8 +114,6 @@ public class UserInterface implements Observer {
 	private void showImage(String imageName) {
 		try {
 			URL imageURL = this.getClass().getClassLoader().getResource(imageName);
-
-			// System.out.println(imageURL);
 
 			if (imageURL == null) {
 				// System.out.println("image not found"); // debug

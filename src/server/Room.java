@@ -30,7 +30,7 @@ import server.items.Sword;
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
  * 
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Christer Sonesson
  * @version 2018-02-28
  */
 public class Room implements Serializable {

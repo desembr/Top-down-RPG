@@ -13,7 +13,7 @@ import server.entities.Player;
  * This class creates all rooms, creates the parser and starts the game. It also
  * evaluates and executes the commands that the parser returns.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Christer Sonesson
  * @version 2018-02-28
  */
 public class GameEngine {
@@ -75,24 +75,6 @@ public class GameEngine {
 		Room entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_NS.png",
 				1);
 		rooms.add(entrance);
-
-		// frozen = new Room("in a Frozen Room", "res/rooms/dungeon_W.png", 1);
-		// abandoned = new Room("in an Abandoned Room",
-		// "res/rooms/dungeon_N.png", 1);
-		// furnished = new Room("in a Furnished Room",
-		// "res/rooms/dungeon_E.png", 1);
-		// occult = new Room("in an Occult Room", "res/rooms/dungeon_E.png", 1);
-		// warped = new Room("in a Warped Room", "res/rooms/dungeon_W.png", 1);
-
-		// initialize room exits
-		// outside.setExit("east", frozen);
-		// outside.setExit("south", abandoned);
-		// outside.setExit("west", furnished);
-		// frozen.setExit("west", outside);
-		// abandoned.setExit("north", outside);
-		// furnished.setExit("east", outside);
-		// occult.setExit("east", warped);
-		// warped.setExit("west", occult);
 
 		outside.setExit("north", outside4);
 		outside.setExit("east", outside2);
@@ -156,9 +138,7 @@ public class GameEngine {
 	}
 
 	/**
-	 * Given a command, process (that is: execute) the command. If this command
-	 * should exit the client from this game, true is returned, otherwise false
-	 * is returned.
+	 * Given a command, process (that is: execute) the command. 
 	 * 
 	 * @param commandLine
 	 *            The command to process.

@@ -17,7 +17,7 @@ import server.entities.Player;
  * Handles client-server communication, one ClientHandler object for every
  * connected Client.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Tom Bjurenlind
  * @version 2018-02-28
  */
 public class ClientHandler {

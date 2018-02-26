@@ -9,7 +9,7 @@ import server.entities.Player;
 /**
  * Save-player-state command.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 2018-02-28
  */
 public class Save extends Command {

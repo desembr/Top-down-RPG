@@ -8,7 +8,7 @@ import server.entities.Player;
 /**
  * Load-player-state command.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 2018-02-28
  */
 public class Load extends Command {

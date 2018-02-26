@@ -6,7 +6,7 @@ import server.entities.Player;
 /**
  * Print-help-to-a-user command.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 2018-02-28
  */
 public class Help extends Command {

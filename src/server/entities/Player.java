@@ -12,7 +12,7 @@ import server.items.Item;
 
 /*
  * Class Player - contains state for the player (current room, items etc).
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Emir Zivcic
  * @version 2018-02-28
  */
 public class Player extends Entity implements Serializable {
@@ -27,10 +27,6 @@ public class Player extends Entity implements Serializable {
 	private int score, weight;
 
 	private String cmdReturnMsg;
-
-	// For Look Command
-	// public boolean look = false;
-	// public String direction = "";
 
 	/**
 	 * Constructor for Player

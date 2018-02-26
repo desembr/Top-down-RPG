@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /*
  * Class Food - template for food items in the game.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 1.0
  */
 public abstract class Food extends Item implements Serializable {

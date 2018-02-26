@@ -2,7 +2,7 @@ package server.entities;
 
 /*
  * Class Enemy - base class for all enemies.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author  Jan Rasmussen
  * @version 2018-02-28
  */
 public abstract class Enemy extends Entity {

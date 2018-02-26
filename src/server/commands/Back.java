@@ -5,7 +5,7 @@ import server.entities.Player;
 /**
  * Go-back-to-previous-room command.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Tom Bjurenlind
  * @version 2018-02-28
  */
 public class Back extends Command {

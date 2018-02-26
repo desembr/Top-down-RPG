@@ -13,7 +13,7 @@ import server.entities.Player;
  * listens/accepts client connections. Inserts a new, managed Player object for
  * every new Client.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Tom Bjurenlind
  * @version 2018-02-28
  */
 public class GameServer extends Thread {

@@ -20,7 +20,7 @@ import server.entities.Player;
  * from the server back to the calling UserInterface through setChanged() and
  * notifyObservers() methods of the Observable base class.
  * 
- * @author Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Tom Bjurenlind
  * @version 2018-02-28
  */
 public class Client extends Observable {

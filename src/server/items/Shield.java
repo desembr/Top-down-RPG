@@ -2,7 +2,7 @@ package server.items;
 
 /*
  * Class Shield - grants defence to a player.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 1.0
  */
 public class Shield extends Equipment {

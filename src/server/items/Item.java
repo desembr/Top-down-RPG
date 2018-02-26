@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /*
  * Class Item - template for items in the game.
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author Jan Rasmussen
  * @version 1.0
  */
 public abstract class Item implements Serializable {

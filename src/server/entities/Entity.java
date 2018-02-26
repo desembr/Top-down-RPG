@@ -5,7 +5,7 @@ import java.util.Random;
 
 /*
  * Class Entity - base class for all entities (player, monsters etc).
- * @author  Tom Bjurenlind, Jan Rasmussen, Christer Sonesson, Emir Zivcic
+ * @author  Christer Sonesson
  * @version 2018-02-28
  */
 public class Entity implements Serializable {
@@ -139,8 +139,6 @@ public class Entity implements Serializable {
 			String part3 = parts[2]; // filename
 
 			String deadPath = part1 + "/dead/" + part3;
-
-			// System.out.println(deadPath);
 
 			return deadPath;
 		}
