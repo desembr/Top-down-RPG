@@ -6,7 +6,7 @@ import server.entities.Player;
  * Use-item command.
  * 
  * @author Emir Zivcic
- * @version 2018-02-28
+ * @version 2018-02-25
  */
 public class Use extends Command {
 	/**

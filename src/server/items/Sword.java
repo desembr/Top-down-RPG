@@ -3,7 +3,7 @@ package server.items;
 /*
  * Class Sword - grants damage to a player.
  * @author Emir Zivcic
- * @version 1.0
+ * @version 2018-02-22
  */
 public class Sword extends Equipment {
 	private static final long serialVersionUID = 1L;

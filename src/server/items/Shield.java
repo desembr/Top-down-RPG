@@ -3,7 +3,7 @@ package server.items;
 /*
  * Class Shield - grants defence to a player.
  * @author Jan Rasmussen
- * @version 1.0
+ * @version 2018-02-24
  */
 public class Shield extends Equipment {
 	private static final long serialVersionUID = 1L;

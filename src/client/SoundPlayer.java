@@ -12,7 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * Class for creating, storing and playing all sounds in the game.
  * 
  * @author Tom Bjurenlind
- * @version 2018-02-28
+ * @version 2018-02-26
  */
 public class SoundPlayer {
 	// Create static instances of this class, each providing functionality to
@@ -34,6 +34,8 @@ public class SoundPlayer {
 	 * 
 	 * @param filePath
 	 *            The relative path to the audio file.
+	 * @param playContinuously
+	 *            Whether to play the audio repeatedly or not.
 	 * @return A new SoundPlayer instance for playing the new audio.
 	 */
 	private SoundPlayer(String filePath, boolean playContinuously) {
@@ -41,8 +43,7 @@ public class SoundPlayer {
 
 		try {
 			// Load audio.
-			AudioInputStream audio = AudioSystem.getAudioInputStream(SoundPlayer.
-					class.getClassLoader().getResource(filePath));
+			AudioInputStream audio = AudioSystem.getAudioInputStream(SoundPlayer.class.getClassLoader().getResource(filePath));
 			// Store audio in clip field of this SoundPlayer object.
 			this.audioClip = AudioSystem.getClip();
 			this.audioClip.open(audio);
@@ -65,7 +66,8 @@ public class SoundPlayer {
 		if (playContinuously)
 			setShouldPlayContinuously(true);
 
-		new Thread() { // Run on separate thread than the calling object's thread
+		new Thread() { // Run on separate thread than the calling object's
+						// thread
 						// (the GUI).
 			public void run() {
 				do {
@@ -76,7 +78,7 @@ public class SoundPlayer {
 						audioClip.setFramePosition(0);
 						audioClip.start();
 					}
-				} while (getShouldPlayContinuously()); // Play again?
+				} while (getShouldPlayContinuously()); // Play continuously?
 			}
 		}.start(); // Start playing audio.
 	}

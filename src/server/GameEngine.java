@@ -14,7 +14,7 @@ import server.entities.Player;
  * evaluates and executes the commands that the parser returns.
  * 
  * @author Christer Sonesson
- * @version 2018-02-28
+ * @version 2018-02-27
  */
 public class GameEngine {
 	private Parser parser;

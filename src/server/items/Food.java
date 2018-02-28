@@ -5,7 +5,7 @@ import java.io.Serializable;
 /*
  * Class Food - template for food items in the game.
  * @author Jan Rasmussen
- * @version 1.0
+ * @version 2018-02-20
  */
 public abstract class Food extends Item implements Serializable {
 	private static final long serialVersionUID = 1L;

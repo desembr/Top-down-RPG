@@ -2,8 +2,8 @@ package server.items;
 
 /*
  * Class Apple - can be consumed (used) for health gain.
- * @author Jan Rasmussen
- * @version 1.0
+ * @author Christer Sonesson
+ * @version 2018-02-20
  */
 public class Apple extends Food {
 	private static final long serialVersionUID = 1L;

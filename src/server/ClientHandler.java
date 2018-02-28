@@ -18,7 +18,7 @@ import server.entities.Player;
  * connected Client.
  * 
  * @author Tom Bjurenlind
- * @version 2018-02-28
+ * @version 2018-02-26
  */
 public class ClientHandler {
 	private Socket clientSocket;

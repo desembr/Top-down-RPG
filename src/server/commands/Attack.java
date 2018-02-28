@@ -7,7 +7,7 @@ import server.entities.Player;
  * Attack-a-monster command.
  * 
  * @author Emir Zivcic
- * @version 2018-02-28
+ * @version 2018-02-26
  */
 public class Attack extends Command {
 	/**

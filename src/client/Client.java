@@ -21,7 +21,7 @@ import server.entities.Player;
  * notifyObservers() methods of the Observable base class.
  * 
  * @author Tom Bjurenlind
- * @version 2018-02-28
+ * @version 2018-02-24
  */
 public class Client extends Observable {
 	private Socket clientSocket;

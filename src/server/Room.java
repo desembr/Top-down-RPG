@@ -31,7 +31,7 @@ import server.items.Sword;
  * stores a reference to the neighboring room.
  * 
  * @author Christer Sonesson
- * @version 2018-02-28
+ * @version 2018-02-25
  */
 public class Room implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -133,9 +133,7 @@ public class Room implements Serializable {
 	 * @return Contained players description.
 	 */
 	public String showPlayersInRoom() {
-		if (playersInRoom.size() == 1) {
-			return "There are currently no other players in here.";
-		} else if (playersInRoom.isEmpty()) {
+		if (playersInRoom.isEmpty()) {
 			return "There are currently no players in here.";
 		}
 		String returnString = "Players:";

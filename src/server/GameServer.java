@@ -9,12 +9,12 @@ import java.util.List;
 import server.entities.Player;
 
 /**
- * Main class on the server-side which manages the game-logic and
+ * Main class on the server-side program which manages the game-logic and
  * listens/accepts client connections. Inserts a new, managed Player object for
- * every new Client.
+ * every new Client that connects to this server.
  * 
  * @author Tom Bjurenlind
- * @version 2018-02-28
+ * @version 2018-02-24
  */
 public class GameServer extends Thread {
 	private static final int serverPort = 44120;

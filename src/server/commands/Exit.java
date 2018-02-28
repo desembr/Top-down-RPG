@@ -6,7 +6,7 @@ import server.entities.Player;
  * Exit-game command.
  * 
  * @author Jan Rasmussen
- * @version 2018-02-28
+ * @version 2018-02-26
  */
 public class Exit extends Command {
 	/**

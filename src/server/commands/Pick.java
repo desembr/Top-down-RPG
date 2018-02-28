@@ -7,7 +7,7 @@ import server.items.Item;
  * Pick-item command.
  * 
  * @author Emir Zivcic
- * @version 2018-02-28
+ * @version 2018-02-25
  */
 public class Pick extends Command {
 	/**

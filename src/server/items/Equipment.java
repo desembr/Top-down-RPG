@@ -3,7 +3,7 @@ package server.items;
 /*
  * Class Equipment - template for equipment items (swords, shields, armor) in the game.
  * @author Jan Rasmussen
- * @version 1.0
+ * @version 2018-02-20
  */
 public abstract class Equipment extends Item {
 	private static final long serialVersionUID = 1L;

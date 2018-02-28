@@ -1,9 +1,9 @@
 package client;
 
 /**
- * Main class on the client-side, which creates core objects and stores state.
+ * Main class on the client-side program, which creates and kicks off core objects.
  * @author  Tom Bjurenlind
- * @version 2018-02-28
+ * @version 2018-02-26
  */
 public class GameClient {
 	private UserInterface gui;
