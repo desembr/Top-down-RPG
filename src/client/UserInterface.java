@@ -42,7 +42,7 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private static final int WIDTH = 800, HEIGHT = 720;
+	private static final int WIDTH = 800, HEIGHT = 1000;
 
 	private Client client;
 	private JFrame myFrame;
@@ -456,7 +456,8 @@ public class UserInterface implements Observer {
 	 */
 	private void printWelcome() {
 		println("Hello adventurer, your task is to \nexplore, fight and gather treasure.\n"
-				+ "Enter 'help' if you need some help.\nGoodluck!");
+				+ "Enter 'help' for commands.\nGoodluck!\n\nThere are two apples on the ground, try picking them up.\n");
+		
 	}
 
 	/**
@@ -491,9 +492,14 @@ public class UserInterface implements Observer {
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
-
+		
+		// kommenterade ut detta, bättre om vi bara tar vanlig long-description från rummet efter varje update
+		// det var irriterande när jag spelade det att man inte kunde se vad det fanns för saker i rummet utan 
+		//att behöva skriva look hela tiden
+        /*
 		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: "
 				+ p.getDefence() + ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
+	    */
 
 		// Decide what to print/play depending on return message of command,
 		// which is optionally set by a command on the server on execution.
@@ -504,7 +510,7 @@ public class UserInterface implements Observer {
 				SoundPlayer.goRoom.playAudio();
 				break;
 			case "server.commands.Attack":
-				println(p.getRoom().showEnemiesInRoom());
+				//println(p.getRoom().showEnemiesInRoom());
 				SoundPlayer.attackEnemy.playAudio();
 				break;
 			case "server.commands.Use":
@@ -521,5 +527,11 @@ public class UserInterface implements Observer {
 				break;
 			}
 		}
+		
+		println("\n" +  p.getRoom().getLongDescription() + "\n") ; // gives long description of room after each update
+		
+		// lade till detta eftersom jag saknade det medans jag spelade
+		println("Your health: " + p.getHealth() +", your defence: " + p.getDefence() +" ,your attack-rating: " + p.getDamage() +"\n" );
+		
 	}
 }

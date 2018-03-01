@@ -12,6 +12,7 @@ import server.entities.Enemy;
 import server.entities.Entity;
 import server.entities.Goblin;
 import server.entities.Gremlin;
+import server.entities.Ogre;
 import server.entities.Orc;
 import server.entities.Player;
 import server.items.Apple;
@@ -72,30 +73,168 @@ public class Room implements Serializable {
 																	// to get a
 																	// semi-random
 																	// seed
+		
+		if (roomLevel == 0) // this is the starting room, give the player two apples to start him on his journey 
+		{
+			itemsInRoom.add(new Apple());
+			itemsInRoom.add(new Apple());
+		}
+		
 		int zero_to_five = randomiser.nextInt(6); // random number between 0-5
-		for (int i = 0; i < zero_to_five; i++) {
-			if (roomLevel == 1) {
-				int random = randomiser.nextInt(3);
-				if (random == 0) {
-					enemiesInRoom.add(new Goblin());
-					if (randomiser.nextInt(4) == 0)
-						itemsInRoom.add(new Apple());
-				} else if (random == 1) {
-					enemiesInRoom.add(new Orc());
-					if (randomiser.nextInt(5) == 0)
-						itemsInRoom.add(new Pie());
-				} else {
-					int randomStats = randomiser.nextInt(5);
-					if (randomiser.nextInt(5) == 0) {
-						itemsInRoom.add(new Pie());
-					} else if (randomiser.nextInt(3) == 0) {
-						itemsInRoom.add(new Sword(5 + randomStats, 2 + randomStats));
-					} else if (randomiser.nextInt(3) == 0) {
-						itemsInRoom.add(new Shield(2 + randomStats, 12 + randomStats));
-					}
+		for (int i = 0; i < zero_to_five; i++) // loop for adding monsters and items
+		{
+				
+			if (roomLevel == 1) // set when creating a room
+			{
+				int random = randomiser.nextInt(4); // random number between 0-3
+				if (random == 0) // 25% chance, add monster
+				{
 					enemiesInRoom.add(new Gremlin());
+					
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+					{
+						itemsInRoom.add(new Apple());
+					}
+				} 
+				else if (random == 1) // 25% chance, add monster
+				{
+					enemiesInRoom.add(new Goblin());
+					
+					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
+					{
+						itemsInRoom.add(new Pie());
+					}
+				} 
+				
+					// if random == 2 then do nothing, no risk or monster nor chance of bonus items, 25% chance
+				
+				else // // 25% chance, no monster + roll for items, possibility of weapons and armor
+				{
+					int randomStats = randomiser.nextInt(5); // 0-4
+					if (randomiser.nextInt(5) == 0) { // 20% chance
+						itemsInRoom.add(new Pie());
+					} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						itemsInRoom.add(new Sword(5 + randomStats, 0));
+					} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						itemsInRoom.add(new Shield(0, 12 + randomStats));
+					}
+					
 				}
 			}
+				
+			else if (roomLevel == 2) // set when creating a room
+				{
+					int random = randomiser.nextInt(5); // random number between 0-4
+					if (random == 0) // 20% chance, add monster
+					{
+						enemiesInRoom.add(new Gremlin());
+						
+						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+						{
+							itemsInRoom.add(new Apple());
+						}
+					} 
+					else if (random == 1) // 20% chance, add monster
+					{
+						enemiesInRoom.add(new Goblin());
+						
+						if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
+						{
+							itemsInRoom.add(new Pie());
+						}
+					} 
+					else if (random == 2) // 20% chance, add monster
+					{
+						enemiesInRoom.add(new Orc());
+						
+						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+						{
+							itemsInRoom.add(new Apple());
+						}
+					} 
+					
+					// if random == 3 then do nothing, no risk or monster nor chance of bonus items, 20% chance
+					
+					else // // 20% chance, no monster +  roll for items, possibility of weapons and armor
+					{
+						int randomStats = randomiser.nextInt(9); // 0-8, possibility of finding better items than last level
+						if (randomiser.nextInt(5) == 0) { // 20% chance
+							itemsInRoom.add(new Pie());
+						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+							itemsInRoom.add(new Sword(5 + randomStats, 0));
+						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+							itemsInRoom.add(new Shield(0, 12 + randomStats));
+						}
+						
+					}
+			    }
+				
+			else if (roomLevel == 3) // set when creating a room
+				{
+					int random = randomiser.nextInt(6); // random number between 0-5
+					if (random == 0) // 17% chance, add monster
+					{
+						enemiesInRoom.add(new Gremlin());
+						
+						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+						{
+							itemsInRoom.add(new Apple());
+						}
+					} 
+					else if (random == 1) // 17% chance, add monster
+					{
+						enemiesInRoom.add(new Goblin());
+						
+						if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
+						{
+							itemsInRoom.add(new Pie());
+						}
+					} 
+					else if (random == 2) // 17% chance, add monster
+					{
+						enemiesInRoom.add(new Orc());
+						
+						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+						{
+							itemsInRoom.add(new Apple());
+						}
+					} 
+					else if (random == 3) // 17% chance, add monster
+					{
+						enemiesInRoom.add(new Ogre());
+						
+						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+						{
+							itemsInRoom.add(new Pie());
+						}
+					} 
+					
+					// if random == 4 then do nothing, no risk or monster nor chance of bonus items, 17% chance
+					
+					else // // 17% chance, no monster +  roll for items, possibility of weapons and armor
+					{
+						int randomStats = randomiser.nextInt(13); // 0-8, possibility of finding even better items than last level 
+						if (randomiser.nextInt(5) == 0) { // 20% chance
+							itemsInRoom.add(new Pie());
+						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+							itemsInRoom.add(new Sword(5 + randomStats, 0));
+						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+							itemsInRoom.add(new Shield(0, 12 + randomStats));
+						}
+						
+					}
+			    }
+				
+			else if (roomLevel == 4) // set when creating a room
+			{
+				// this is the final room, boss should be added here as a monster, and a pie
+			}
+				
+			
+			
+			
+			
+			
 		}
 	}
 

@@ -27,4 +27,6 @@ public class Shield extends Equipment {
 	public int use(int currentHealth) {
 		return currentHealth;
 	}
+	
+	
 }

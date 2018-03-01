@@ -32,6 +32,7 @@ public class Attack extends Command {
 				Enemy e = p.getRoom().getEnemies().get(i);
 				if (e.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					if (p.attack(e)) {
+						
 						return true;
 					}
 				}
@@ -41,6 +42,7 @@ public class Attack extends Command {
 				Player pOther = p.getRoom().getPlayers().get(i);
 				if (pOther.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					if (p.attack(pOther)) {
+						
 						return true;
 					}
 				}

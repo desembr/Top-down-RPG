@@ -5,7 +5,7 @@ import java.util.Random;
 
 /*
  * Class Entity - base class for all entities (player, monsters etc).
- * @author Christer Sonesson
+ * @author  Christer Sonesson
  * @version 2018-02-28
  */
 public class Entity implements Serializable {
