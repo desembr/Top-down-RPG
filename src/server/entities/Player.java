@@ -2,6 +2,7 @@ package server.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import server.GameEngine;
@@ -117,13 +118,62 @@ public class Player extends Entity implements Serializable {
 			currentRoom.addItem(item);
 			return false;
 		}
+		
+		// Make so that you can only carry one sword and shield
+		// Use the new weapon if it is better, otherwise discard it
+		
+		for (int i = 0; i < items.size(); i++ )
+		{
+			Item checkItem = items.get(i); 
+			if (checkItem.getName().equals("Sword") && item.getName().equals("Sword") )
+			{
+				Equipment eqOld = (Equipment) checkItem;
+				Equipment eqNew = (Equipment) item;
+				if (eqNew.getDamageGain() > eqOld.getDamageGain() ) // if the new sword is better
+				{
+					dropItem(checkItem.getName() ); // drop the sword you are holding
+					
+					int damageDifference = eqNew.getDamageGain()-eqOld.getDamageGain(); 
+					setCmdReturnMsg("\nThis new sword does " + damageDifference + " points of damage more than the old!\n Attack-rating increased\n"); 
+					
+					break; // stop looping
+				}
+				else if (eqNew.getDamageGain() <= eqOld.getDamageGain() ) // if the new sword is worse or equal
+				{
+					setCmdReturnMsg("\nThis new sword is worse than your current one, no use in taking it\n"); 
+					return true; // do not pick up
+				}
+			}
+			else if (checkItem.getName().equals("Shield") && item.getName().equals("Shield") )
+			{
+				Equipment eqOld = (Equipment) checkItem;
+				Equipment eqNew = (Equipment) item;
+				if (eqNew.getDefenceGain() > eqOld.getDefenceGain() ) // if the new shield is better
+				{
+					dropItem(checkItem.getName() ); //drop the shield you are holding
+					
+					int defenceDifference = eqNew.getDefenceGain()-eqOld.getDefenceGain(); 
+					setCmdReturnMsg("\nThis new shield has " + defenceDifference + " more points of armor than the old one!\n Defence increased\n"); 
+					
+					break; // stop looping
+				}
+				else if (eqNew.getDefenceGain() <= eqOld.getDefenceGain() ) // if the new shield is worse or equal
+				{
+					setCmdReturnMsg("\nThis new shield is worse than your current one, no use in taking it\n"); 
+					return true; // do not pick up
+				}
+			}
+			// if you don't have a sword or shield, or the item is something else, continue
+			
+		}
+		
 		// Add equipment gains.
 		if (item instanceof Equipment) {
 			Equipment eq = (Equipment) item;
 			damage += eq.getDamageGain();
 			defence += eq.getDefenceGain();
 		}
-
+        
 		weight += item.getWeight();
 		items.add(item);
 		return true;
@@ -180,16 +230,28 @@ public class Player extends Entity implements Serializable {
 				return false;
 			}
 			e.lowerHealth(damage);
+			
+			setCmdReturnMsg("\nYou strike true and hit the enemy for " + damage + " damage\n"); 
+			
+			System.out.println(); 
+			
 			if (e.getIsDead())
 				score += 5;
 
 			// Enemy e attempts to strike back at the attacking player.
-			if (rand.nextInt(defence) <= 8)
+			if (rand.nextInt(defence) <= 16)
+			{
+				setCmdReturnMsg("\nYou strike true and hit the enemy for " + damage + " damage\n"
+						+ "unfortunately the enemy does the same to you for " + e.getDamage() +" damage\n"); 
+				
 				lowerHealth(e.getDamage());
+			}
+			
 		}
 		return true;
 	}
-
+	
+	
 	/**
 	 * Gets string for this player's inventory.
 	 * 

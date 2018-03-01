@@ -27,4 +27,6 @@ public class Sword extends Equipment {
 	public int use(int currentHealth) {
 		return currentHealth;
 	}
+	
+	
 }
