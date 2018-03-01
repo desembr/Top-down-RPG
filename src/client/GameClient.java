@@ -2,7 +2,7 @@ package client;
 
 /**
  * Main class on the client-side program, which creates and kicks off core objects.
- * @author  Tom Bjurenlind
+ * @author Tom Bjurenlind
  * @version 2018-02-26
  */
 public class GameClient {

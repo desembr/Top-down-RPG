@@ -72,7 +72,7 @@ public class GameEngine {
 		rooms.add(outside15);
 		Room outside16 = new Room("In a forest, there's a structure to the north", "res/rooms/outside_NS.png", 1);
 		rooms.add(outside16);
-		Room entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_NS.png",
+		Room entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_S.png",
 				1);
 		rooms.add(entrance);
 
