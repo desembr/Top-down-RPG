@@ -36,9 +36,13 @@ public class Help extends Command {
 	 * @return The help string.
 	 */
 	private String printHelp() {
-		return "Your command words are: " // Christer: Tog bort meddelandet om "mazen", varför hade vi ens det? Det är ju från Zuul, finns sparat nere om någon vill ha tillbaks det
+		return "Your command words are: " // Christer: Tog bort meddelandet om
+											// "mazen", varför hade vi ens det?
+											// Det är ju från Zuul, finns sparat
+											// nere om någon vill ha tillbaks
+											// det
 				+ Parser.getParser().showCommands();
 	}
-	
-	//"You are lost. You are alone. You wander\naround the Maze.\n" + 
+
+	// "You are lost. You are alone. You wander\naround the Maze.\n" +
 }

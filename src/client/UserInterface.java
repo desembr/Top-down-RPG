@@ -43,7 +43,7 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private int WIDTH = 800, HEIGHT = 1000;
+	private int WIDTH = 800, HEIGHT = 720;
 
 	private Client client;
 	private JFrame myFrame;
@@ -58,7 +58,7 @@ public class UserInterface implements Observer {
 
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
-	
+
 	/**
 	 * Construct a UserInterface. As a parameter, a Client object, with will
 	 * handle all the communication with the server (sending commands and
@@ -68,7 +68,7 @@ public class UserInterface implements Observer {
 	 *            The Client to handle all communication with server.
 	 */
 	public UserInterface(Client client) {
-		
+
 		this.client = client;
 
 		monsterSprites = new ArrayList<>();
@@ -307,11 +307,10 @@ public class UserInterface implements Observer {
 		image.add(shadow4, BorderLayout.SOUTH);
 		image.add(shadow5, BorderLayout.SOUTH);
 		image.add(shadow6, BorderLayout.SOUTH);
-		
-		
+
 		panel.add(listScroller, BorderLayout.CENTER);
 		panel.add(entryField, BorderLayout.SOUTH);
-		
+
 		myFrame.getContentPane().add(panel, BorderLayout.CENTER);
 
 		// add some event listeners to some components
@@ -406,7 +405,7 @@ public class UserInterface implements Observer {
 			entryField.setText("Load " + user);
 			processCommand();
 		});
-		
+
 		JMenu helpMenu = new JMenu("Help");
 		menuBar.add(helpMenu);
 		JMenuItem help = new JMenuItem("Help");
@@ -460,7 +459,7 @@ public class UserInterface implements Observer {
 	private void printWelcome() {
 		println("Hello adventurer, your task is to \nexplore, fight and gather treasure.\n"
 				+ "Enter 'help' for commands.\nGoodluck!\n\nThere are two apples on the ground, try picking them up.\n");
-		
+
 	}
 
 	/**
@@ -488,17 +487,16 @@ public class UserInterface implements Observer {
 	public void update(Observable o, Object player) {
 		Player p = (Player) player;
 
-		if (p.getIsDead())
-		{
-			
-			println("\nYour journey is at an end... death comes for you\n") ; 
-			
-		    try {
+		if (p.getIsDead()) {
+
+			println("\nYour journey is at an end... death comes for you\n");
+
+			try {
 				TimeUnit.SECONDS.sleep(6);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		
+
 			exitGame();
 		}
 
@@ -506,14 +504,13 @@ public class UserInterface implements Observer {
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
-		
-		// kommenterade ut detta, bättre om vi bara tar vanlig long-description från rummet efter varje update
-		// det var irriterande när jag spelade det att man inte kunde se vad det fanns för saker i rummet utan 
-		//att behöva skriva look hela tiden
-        /*
-		println("***************\n" + p.showInventory() + ", Health: " + p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: "
-				+ p.getDefence() + ", Weight: " + p.getWeight() + "/" + p.getMaxWeight());
-	    */
+
+		/*
+		 * println("***************\n" + p.showInventory() + ", Health: " +
+		 * p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " +
+		 * p.getDefence() + ", Weight: " + p.getWeight() + "/" +
+		 * p.getMaxWeight());
+		 */
 
 		// Decide what to print/play depending on return message of command,
 		// which is optionally set by a command on the server on execution.
@@ -524,7 +521,9 @@ public class UserInterface implements Observer {
 				SoundPlayer.goRoom.playAudio();
 				break;
 			case "server.commands.Attack":
-				//println(p.getRoom().showEnemiesInRoom());
+				if (p.getAttackReturnMsg() != null) {
+					println(p.getAttackReturnMsg());
+				}
 				SoundPlayer.attackEnemy.playAudio();
 				break;
 			case "server.commands.Use":
@@ -541,11 +540,15 @@ public class UserInterface implements Observer {
 				break;
 			}
 		}
-		
-		println("\n" +  p.getRoom().getLongDescription() + "\n") ; // gives long description of room after each update
-		
-		// lade till detta eftersom jag saknade det medans jag spelade
-		println("Your health: " + p.getHealth() +", your defence: " + p.getDefence() +" ,your attack-rating: " + p.getDamage() +"\n" );
-		
+
+		println("\n" + p.getRoom().getLongDescription() + "\n"); // gives long
+																	// description
+																	// of room
+																	// after
+																	// each
+																	// update
+
+		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage() + "\n");
+
 	}
 }

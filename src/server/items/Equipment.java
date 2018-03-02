@@ -23,7 +23,18 @@ public abstract class Equipment extends Item {
 	protected Equipment(String name, int weight, String iconFilePath) {
 		super(name, weight, iconFilePath);
 	}
-	
+
+	/**
+	 * Returns the same health.
+	 * 
+	 * @param currentHealth
+	 *            The current health of the consuming/using player.
+	 * @return The same health for the consuming player to use (not usable).
+	 */
+	public int use(int currentHealth, int maxHealth) {
+		return currentHealth;
+	}
+
 	/**
 	 * Is the item usable or not.
 	 * 
@@ -50,14 +61,14 @@ public abstract class Equipment extends Item {
 	public int getDefenceGain() {
 		return defenceGain;
 	}
-	
+
 	/**
 	 * Returns the health increase of this equipment
+	 * 
 	 * @return the field value
 	 */
-	
-	public int getHealthIncrease()
-	{
-		return maxHealthIncrease; 
+
+	public int getHealthIncrease() {
+		return maxHealthIncrease;
 	}
 }

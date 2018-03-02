@@ -74,234 +74,267 @@ public class Room implements Serializable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+
+		fillRoom(roomLevel);
+	}
+
+	/**
+	 * Fills room with items and enemies.
+	 * 
+	 * @param roomLevel
+	 *            The level this room belongs to.
+	 */
+	private void fillRoom(int roomLevel) {
 		Random randomiser = new Random(System.currentTimeMillis()); // time used
-																	// to get a
-																	// semi-random
-																	// seed
-		
-		if (roomLevel == 0) // this is the starting room, give the player two apples to start him on his journey 
+		// to get a semi-random seed
+
+		if (roomLevel == 0) // this is the starting room, give the player two
+		// apples to start him on his journey
 		{
 			itemsInRoom.add(new Apple());
 			itemsInRoom.add(new Apple());
-			
 		}
-		
-		else if (roomLevel == 4) // this is the final room,no randomization needed
+
+		else if (roomLevel == 4) // this is the final room,no randomization
+		// needed
 		{
 			itemsInRoom.add(new Pie());
 			enemiesInRoom.add(new Boss());
 		}
-		
+
 		int zero_to_five = randomiser.nextInt(6); // random number between 0-5
-		for (int i = 0; i < zero_to_five; i++) // loop for adding monsters and items
+		for (int i = 0; i < zero_to_five; i++) // loop for adding monsters and
+		// items
 		{
-				
 			if (roomLevel == 1) // set when creating a room
 			{
 				int random = randomiser.nextInt(4); // random number between 0-3
 				if (random == 0) // 25% chance, add monster
 				{
 					enemiesInRoom.add(new Gremlin());
-					
-					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
 					{
 						itemsInRoom.add(new Apple());
 					}
-				} 
-				else if (random == 1) // 25% chance, add monster
+				} else if (random == 1) // 25% chance, add monster
 				{
 					enemiesInRoom.add(new Goblin());
-					
-					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
+
+					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
+					// item
 					{
 						itemsInRoom.add(new Pie());
 					}
-				} 
-				
-					// if random == 2 then do nothing, no risk or monster nor chance of bonus items, 25% chance
-				
-				else // // 25% chance, no monster + roll for items, possibility of weapons and armor
+				}
+
+				// if random == 2 then do nothing, no risk or monster nor chance
+				// of bonus items, 25% chance
+
+				else // // 25% chance, no monster + roll for items, possibility
+				// of weapons and armor
 				{
 					int randomStats = randomiser.nextInt(5); // 0-4
-					int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
+					int randomItem = randomiser.nextInt(8); // 0-7, 13% risk of
+					// no item
 					if (randomItem == 0) { // 13% chance
 						itemsInRoom.add(new Pie());
 					} else if (randomItem == 1) { // 13% chance
 						itemsInRoom.add(new Sword(5 + randomStats, 0));
 					} else if (randomItem == 2) { // 13% chance
 						itemsInRoom.add(new Shield(0, 12 + randomStats));
-					}
-					else if (randomItem == 3) { // 13% chance
-						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+					} else if (randomItem == 3) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
 						if (randomItem == 0)
-						itemsInRoom.add(new Helmet(0, 2, 10 ));
-					}
-					else if (randomItem == 4) { // 13% chance
-						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							itemsInRoom.add(new Helmet(0, 2, 10));
+					} else if (randomItem == 4) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
 						if (randomItem == 0)
-						itemsInRoom.add(new ChestArmor(0, 2, 10 ));
-					}
-					else if (randomItem == 5) { // 13% chance
-						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							itemsInRoom.add(new ChestArmor(0, 2, 10));
+					} else if (randomItem == 5) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
 						if (randomItem == 0)
-						itemsInRoom.add(new ArmArmor(0, 2, 10 ));
-					}
-					else if (randomItem == 6) { // 13% chance
-						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							itemsInRoom.add(new ArmArmor(0, 2, 10));
+					} else if (randomItem == 6) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
 						if (randomItem == 0)
-						itemsInRoom.add(new LegArmor(0, 2, 10 ));
+							itemsInRoom.add(new LegArmor(0, 2, 10));
 					}
-					
-					
 				}
 			}
-				
+
 			else if (roomLevel == 2) // set when creating a room
+			{
+				int random = randomiser.nextInt(5); // random number between 0-4
+				if (random == 0) // 20% chance, add monster
 				{
-					int random = randomiser.nextInt(5); // random number between 0-4
-					if (random == 0) // 20% chance, add monster
+					enemiesInRoom.add(new Gremlin());
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
 					{
-						enemiesInRoom.add(new Gremlin());
-						
-						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
-						{
-							itemsInRoom.add(new Apple());
-						}
-					} 
-					else if (random == 1) // 20% chance, add monster
-					{
-						enemiesInRoom.add(new Goblin());
-						
-						if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
-						{
-							itemsInRoom.add(new Pie());
-						}
-					} 
-					else if (random == 2) // 20% chance, add monster
-					{
-						enemiesInRoom.add(new Orc());
-						
-						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
-						{
-							itemsInRoom.add(new Apple());
-						}
-					} 
-					
-					// if random == 3 then do nothing, no risk or monster nor chance of bonus items, 20% chance
-					
-					else // // 20% chance, no monster +  roll for items, possibility of weapons and armor
-					{
-						int randomStats = randomiser.nextInt(9); // 0-8, possibility of finding better items than last level
-						int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
-						if (randomItem == 0) { // 13% chance
-							itemsInRoom.add(new Pie());
-						} else if (randomItem == 1) { // 13% chance
-							itemsInRoom.add(new Sword(5 + randomStats, 0));
-						} else if (randomItem == 2) { // 13% chance
-							itemsInRoom.add(new Shield(0, 12 + randomStats));
-						}
-						else if (randomItem == 3) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new Helmet(0, 2, 10 ));
-						}
-						else if (randomItem == 4) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new ChestArmor(0, 2, 10 ));
-						}
-						else if (randomItem == 5) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new ArmArmor(0, 2, 10 ));
-						}
-						else if (randomItem == 6) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new LegArmor(0, 2, 10 ));
-						}
-						
+						itemsInRoom.add(new Apple());
 					}
-			    }
-				
+				} else if (random == 1) // 20% chance, add monster
+				{
+					enemiesInRoom.add(new Goblin());
+
+					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
+					// item
+					{
+						itemsInRoom.add(new Pie());
+					}
+				} else if (random == 2) // 20% chance, add monster
+				{
+					enemiesInRoom.add(new Orc());
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
+					{
+						itemsInRoom.add(new Apple());
+					}
+				}
+
+				// if random == 3 then do nothing, no risk or monster nor chance
+				// of bonus items, 20% chance
+
+				else // // 20% chance, no monster + roll for items, possibility
+				// of weapons and armor
+				{
+					int randomStats = randomiser.nextInt(9); // 0-8, possibility
+					// of finding
+					// better items
+					// than last
+					// level
+					int randomItem = randomiser.nextInt(8); // 0-7, 13% risk of
+					// no item
+					if (randomItem == 0) { // 13% chance
+						itemsInRoom.add(new Pie());
+					} else if (randomItem == 1) { // 13% chance
+						itemsInRoom.add(new Sword(5 + randomStats, 0));
+					} else if (randomItem == 2) { // 13% chance
+						itemsInRoom.add(new Shield(0, 12 + randomStats));
+					} else if (randomItem == 3) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new Helmet(0, 2, 10));
+					} else if (randomItem == 4) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new ChestArmor(0, 2, 10));
+					} else if (randomItem == 5) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new ArmArmor(0, 2, 10));
+					} else if (randomItem == 6) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new LegArmor(0, 2, 10));
+					}
+				}
+			}
+
 			else if (roomLevel == 3) // set when creating a room
+			{
+				int random = randomiser.nextInt(6); // random number between 0-5
+				if (random == 0) // 17% chance, add monster
 				{
-					int random = randomiser.nextInt(6); // random number between 0-5
-					if (random == 0) // 17% chance, add monster
+					enemiesInRoom.add(new Gremlin());
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
 					{
-						enemiesInRoom.add(new Gremlin());
-						
-						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
-						{
-							itemsInRoom.add(new Apple());
-						}
-					} 
-					else if (random == 1) // 17% chance, add monster
-					{
-						enemiesInRoom.add(new Goblin());
-						
-						if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health item
-						{
-							itemsInRoom.add(new Pie());
-						}
-					} 
-					else if (random == 2) // 17% chance, add monster
-					{
-						enemiesInRoom.add(new Orc());
-						
-						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
-						{
-							itemsInRoom.add(new Apple());
-						}
-					} 
-					else if (random == 3) // 17% chance, add monster
-					{
-						enemiesInRoom.add(new Ogre());
-						
-						if (randomiser.nextInt(4) == 0) // 25% chance, bonus health item
-						{
-							itemsInRoom.add(new Pie());
-						}
-					} 
-					
-					// if random == 4 then do nothing, no risk or monster nor chance of bonus items, 17% chance
-					
-					else // // 17% chance, no monster +  roll for items, possibility of weapons and armor
-					{
-						int randomStats = randomiser.nextInt(13); // 0-12, possibility of finding even better items than last level 
-						int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
-						if (randomItem == 0) { // 13% chance
-							itemsInRoom.add(new Pie());
-						} else if (randomItem == 1) { // 13% chance
-							itemsInRoom.add(new Sword(5 + randomStats, 0));
-						} else if (randomItem == 2) { // 13% chance
-							itemsInRoom.add(new Shield(0, 12 + randomStats));
-						}
-						else if (randomItem == 3) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new Helmet(0, 2, 10 ));
-						}
-						else if (randomItem == 4) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new ChestArmor(0, 2, 10 ));
-						}
-						else if (randomItem == 5) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new ArmArmor(0, 2, 10 ));
-						}
-						else if (randomItem == 6) { // 13% chance
-							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
-							if (randomItem == 0)
-							itemsInRoom.add(new LegArmor(0, 2, 10 ));
-						}
-						
+						itemsInRoom.add(new Apple());
 					}
-			    }
-				
-			
+				} else if (random == 1) // 17% chance, add monster
+				{
+					enemiesInRoom.add(new Goblin());
+
+					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
+					// item
+					{
+						itemsInRoom.add(new Pie());
+					}
+				} else if (random == 2) // 17% chance, add monster
+				{
+					enemiesInRoom.add(new Orc());
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
+					{
+						itemsInRoom.add(new Apple());
+					}
+				} else if (random == 3) // 17% chance, add monster
+				{
+					enemiesInRoom.add(new Ogre());
+
+					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
+					// item
+					{
+						itemsInRoom.add(new Pie());
+					}
+				}
+
+				// if random == 4 then do nothing, no risk or monster nor chance
+				// of bonus items, 17% chance
+
+				else // // 17% chance, no monster + roll for items, possibility
+				// of weapons and armor
+				{
+					int randomStats = randomiser.nextInt(13); // 0-12,
+					// possibility of finding even better items than last level
+					int randomItem = randomiser.nextInt(8); // 0-7, 13% risk of
+					// no item
+					if (randomItem == 0) { // 13% chance
+						itemsInRoom.add(new Pie());
+					} else if (randomItem == 1) { // 13% chance
+						itemsInRoom.add(new Sword(5 + randomStats, 0));
+					} else if (randomItem == 2) { // 13% chance
+						itemsInRoom.add(new Shield(0, 12 + randomStats));
+					} else if (randomItem == 3) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new Helmet(0, 2, 10));
+					} else if (randomItem == 4) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new ChestArmor(0, 2, 10));
+					} else if (randomItem == 5) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new ArmArmor(0, 2, 10));
+					} else if (randomItem == 6) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit
+						// more difficult to
+						// find these
+						if (randomItem == 0)
+							itemsInRoom.add(new LegArmor(0, 2, 10));
+					}
+				}
+			}
 		}
 	}
 
