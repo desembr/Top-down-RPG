@@ -67,5 +67,5 @@ public abstract class Item implements Serializable {
 	 *            The current health of the consuming/using player.
 	 * @return The new increased health for the consuming player to use.
 	 */
-	public abstract int use(int currentHealth);
+	public abstract int use(int currentHealth, int maxHealth);
 }

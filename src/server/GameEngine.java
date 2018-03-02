@@ -72,107 +72,107 @@ public class GameEngine {
 		rooms.add(outside15);
 		Room outside16 = new Room("In a forest, there's a structure to the north", "res/rooms/outside_NS.png", 1);
 		rooms.add(outside16);
-		Room entrance = new Room("You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/outside_NS.png",
+		Room entrance = new Room("In a forest, You stand in front of an ominous ruin, there is sure to be treasures inside!", "res/rooms/entrance.png",
 				1);
 		rooms.add(entrance);
 		
 		// create the rooms for level 2 
-		Room dungeon1 = new Room("The entrance of the foreboding ruins...", "res/rooms/dungeon_NS.png", 2);
+		Room dungeon1 = new Room("In a dungeon, The entrance of the foreboding ruins...", "res/rooms/dungeon_NS.png", 2);
 		rooms.add(dungeon1);
 		
-		Room dungeon2 = new Room("The floor is littered with refuse...", "res/rooms/dungeon_E.png", 2);
+		Room dungeon2 = new Room("In a dungeon, The floor is littered with refuse...", "res/rooms/dungeon_E.png", 2);
 		rooms.add(dungeon2);
 		
-		Room dungeon3 = new Room("There is a stench coming from the west", "res/rooms/dungeon_EW.png", 2);
+		Room dungeon3 = new Room("In a dungeon, There is a stench coming from the west", "res/rooms/dungeon_EW.png", 2);
 		rooms.add(dungeon3);
 		
-		Room dungeon4 = new Room("There is a draft from the south", "res/rooms/dungeon_ESW.png", 2);
+		Room dungeon4 = new Room("In a dungeon, There is a draft from the south", "res/rooms/dungeon_ESW.png", 2);
 		rooms.add(dungeon4);
 		
-		Room dungeon5 = new Room("It is slightly chilly here", "res/rooms/dungeon_NEW.png", 2);
+		Room dungeon5 = new Room("In a dungeon, It is slightly chilly here", "res/rooms/dungeon_NEW.png", 2);
 		rooms.add(dungeon5);
 		
-		Room dungeon6 = new Room("The air is damp", "res/rooms/dungeon_NW.png", 2);
+		Room dungeon6 = new Room("In a dungeon, The air is damp", "res/rooms/dungeon_NW.png", 2);
 		rooms.add(dungeon6);
 		
-		Room dungeon7 = new Room("The cobwebs are thick in this room", "res/rooms/dungeon_ES.png", 2);
+		Room dungeon7 = new Room("In a dungeon, The cobwebs are thick in this room", "res/rooms/dungeon_ES.png", 2);
 		rooms.add(dungeon7);
 		
-		Room dungeon8 = new Room("The air is stale here", "res/rooms/dungeon_NESW.png", 2);
+		Room dungeon8 = new Room("In a dungeon, The air is stale here", "res/rooms/dungeon_NESW.png", 2);
 		rooms.add(dungeon8);
 		
-		Room dungeon9 = new Room("There is nothing of interest here", "res/rooms/dungeon_NW.png", 2);
+		Room dungeon9 = new Room("In a dungeon, There is nothing of interest here", "res/rooms/dungeon_NW.png", 2);
 		rooms.add(dungeon9);
 		
-		Room dungeon10 = new Room("Animal bones litter the floor", "res/rooms/dungeon_NS.png", 2);
+		Room dungeon10 = new Room("In a dungeon, Animal bones litter the floor", "res/rooms/dungeon_NS.png", 2);
 		rooms.add(dungeon10);
 		
-		Room dungeon11 = new Room("There are scratches on the walls", "res/rooms/dungeon_NS.png", 2);
+		Room dungeon11 = new Room("In a dungeon, There are scratches on the walls", "res/rooms/dungeon_NS.png", 2);
 		rooms.add(dungeon11);
 		
-		Room dungeon12 = new Room("There are wooden tables here", "res/rooms/dungeon_NE.png", 2);
+		Room dungeon12 = new Room("In a dungeon, There are wooden tables here", "res/rooms/dungeon_NE.png", 2);
 		rooms.add(dungeon12);
 		
-		Room dungeon13 = new Room("There are kettles and cleavers here", "res/rooms/dungeon_NESW.png", 2);
+		Room dungeon13 = new Room("In a dungeon, There are kettles and cleavers here", "res/rooms/dungeon_NESW.png", 2);
 		rooms.add(dungeon13);
 		
-		Room dungeon14 = new Room("There are empty weapon racks here", "res/rooms/dungeon_SW.png", 2);
+		Room dungeon14 = new Room("In a dungeon, There are empty weapon racks here", "res/rooms/dungeon_SW.png", 2);
 		rooms.add(dungeon14);
 		
-		Room dungeon15 = new Room("There are empty armor racks here", "res/rooms/dungeon_NES.png", 2);
+		Room dungeon15 = new Room("In a dungeon, There are empty armor racks here", "res/rooms/dungeon_NES.png", 2);
 		rooms.add(dungeon15);
 		
-		Room dungeon16 = new Room("Theres a primitive forge here", "res/rooms/dungeon_SW.png", 2);
+		Room dungeon16 = new Room("In a dungeon, Theres a primitive forge here", "res/rooms/dungeon_SW.png", 2);
 		rooms.add(dungeon16);
 		
-		Room dungeon17 = new Room("You've found some stairs leading further down...", "res/rooms/dungeon_down.png", 2);
+		Room dungeon17 = new Room("In a dungeon, You've found some stairs leading further down...", "res/rooms/dungeon_down.png", 2);
 		rooms.add(dungeon17);
 		
 		// create the rooms for level 3
 		
-		Room dungeon18 = new Room("There are stairs leading up to the south", "res/rooms/dungeon_ESW.png", 3);
+		Room dungeon18 = new Room("In a dungeon, There are stairs leading up to the south", "res/rooms/dungeon_ESW.png", 3);
 		rooms.add(dungeon18);
 		
-		Room dungeon19 = new Room("It is gloomy here...", "res/rooms/dungeon_NEW.png", 3);
+		Room dungeon19 = new Room("In a dungeon, It is gloomy here...", "res/rooms/dungeon_NEW.png", 3);
 		rooms.add(dungeon19);
 		
-		Room dungeon20 = new Room("This room is very dusty", "res/rooms/dungeon_NW.png", 3);
+		Room dungeon20 = new Room("In a dungeon, This room is very dusty", "res/rooms/dungeon_NW.png", 3);
 		rooms.add(dungeon20);
 		
-		Room dungeon21 = new Room("There are tapestries on the walls", "res/rooms/dungeon_NE.png", 3);
+		Room dungeon21 = new Room("In a dungeon, There are tapestries on the walls", "res/rooms/dungeon_NE.png", 3);
 		rooms.add(dungeon21);
 		
-		Room dungeon22 = new Room("There are several wooden chairs here", "res/rooms/dungeon_NEW.png", 3);
+		Room dungeon22 = new Room("In a dungeon, There are several wooden chairs here", "res/rooms/dungeon_NEW.png", 3);
 		rooms.add(dungeon22);
 		
-		Room dungeon23 = new Room("Theres a primitive brewery here", "res/rooms/dungeon_NES.png", 3);
+		Room dungeon23 = new Room("In a dungeon, Theres a primitive brewery here", "res/rooms/dungeon_NES.png", 3);
 		rooms.add(dungeon23);
 		
-		Room dungeon24 = new Room("Theres spilt beer on the floor here", "res/rooms/dungeon_SW.png", 3);
+		Room dungeon24 = new Room("In a dungeon, Theres spilt beer on the floor here", "res/rooms/dungeon_SW.png", 3);
 		rooms.add(dungeon24);
 		
-		Room dungeon25 = new Room("The walls are a bit cracked", "res/rooms/dungeon_ES.png", 3);
+		Room dungeon25 = new Room("In a dungeon, The walls are a bit cracked", "res/rooms/dungeon_ES.png", 3);
 		rooms.add(dungeon25);
 		
-		Room dungeon26 = new Room("Some roots have broken through the wall", "res/rooms/dungeon_NSW.png", 3);
+		Room dungeon26 = new Room("In a dungeon, Some roots have broken through the wall", "res/rooms/dungeon_NSW.png", 3);
 		rooms.add(dungeon26);
 		
-		Room dungeon27 = new Room("There's some tables full of mugs here", "res/rooms/dungeon_ES.png", 3);
+		Room dungeon27 = new Room("In a dungeon, There's some tables full of mugs here", "res/rooms/dungeon_ES.png", 3);
 		rooms.add(dungeon27);
 		
-		Room dungeon28 = new Room("There's human bones on the floor", "res/rooms/dungeon_EW.png", 3);
+		Room dungeon28 = new Room("In a dungeon, There's human bones on the floor", "res/rooms/dungeon_EW.png", 3);
 		rooms.add(dungeon28);
 		
-		Room dungeon29 = new Room("You feel a sense of foreboding danger from the north", "res/rooms/dungeon_NEW.png", 3);
+		Room dungeon29 = new Room("In a dungeon, You feel a sense of foreboding danger from the north", "res/rooms/dungeon_NEW.png", 3);
 		rooms.add(dungeon29);
 		
-		Room dungeon30 = new Room("There's some blood on the floor", "res/rooms/dungeon_EW.png", 3);
+		Room dungeon30 = new Room("In a dungeon, There's some blood on the floor", "res/rooms/dungeon_EW.png", 3);
 		rooms.add(dungeon30);
 		
-		Room dungeon31 = new Room("There seems to be a makeshift fighting area here", "res/rooms/dungeon_SW.png", 3);
+		Room dungeon31 = new Room("In a dungeon, There seems to be a makeshift fighting area here", "res/rooms/dungeon_SW.png", 3);
 		rooms.add(dungeon31);
 		
-		Room dungeon32 = new Room("This is it... you've encountered the leader of the monster horde, good luck", "res/rooms/dungeon_S.png", 3);
+		Room dungeon32 = new Room("In a dungeon, This is it... you've encountered the leader of the monster horde, good luck", "res/rooms/dungeon_S.png", 4);
 		rooms.add(dungeon32);
 		
 

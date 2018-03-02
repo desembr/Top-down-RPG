@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import server.entities.Boss;
 import server.entities.Enemy;
 import server.entities.Entity;
 import server.entities.Goblin;
@@ -16,7 +17,11 @@ import server.entities.Ogre;
 import server.entities.Orc;
 import server.entities.Player;
 import server.items.Apple;
+import server.items.ArmArmor;
+import server.items.ChestArmor;
+import server.items.Helmet;
 import server.items.Item;
+import server.items.LegArmor;
 import server.items.Pie;
 import server.items.Shield;
 import server.items.Sword;
@@ -78,6 +83,13 @@ public class Room implements Serializable {
 		{
 			itemsInRoom.add(new Apple());
 			itemsInRoom.add(new Apple());
+			
+		}
+		
+		else if (roomLevel == 4) // this is the final room,no randomization needed
+		{
+			itemsInRoom.add(new Pie());
+			enemiesInRoom.add(new Boss());
 		}
 		
 		int zero_to_five = randomiser.nextInt(6); // random number between 0-5
@@ -111,13 +123,35 @@ public class Room implements Serializable {
 				else // // 25% chance, no monster + roll for items, possibility of weapons and armor
 				{
 					int randomStats = randomiser.nextInt(5); // 0-4
-					if (randomiser.nextInt(5) == 0) { // 20% chance
+					int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
+					if (randomItem == 0) { // 13% chance
 						itemsInRoom.add(new Pie());
-					} else if (randomiser.nextInt(3) == 0) { // 30% chance
+					} else if (randomItem == 1) { // 13% chance
 						itemsInRoom.add(new Sword(5 + randomStats, 0));
-					} else if (randomiser.nextInt(3) == 0) { // 30% chance
+					} else if (randomItem == 2) { // 13% chance
 						itemsInRoom.add(new Shield(0, 12 + randomStats));
 					}
+					else if (randomItem == 3) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+						if (randomItem == 0)
+						itemsInRoom.add(new Helmet(0, 2, 10 ));
+					}
+					else if (randomItem == 4) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+						if (randomItem == 0)
+						itemsInRoom.add(new ChestArmor(0, 2, 10 ));
+					}
+					else if (randomItem == 5) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+						if (randomItem == 0)
+						itemsInRoom.add(new ArmArmor(0, 2, 10 ));
+					}
+					else if (randomItem == 6) { // 13% chance
+						randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+						if (randomItem == 0)
+						itemsInRoom.add(new LegArmor(0, 2, 10 ));
+					}
+					
 					
 				}
 			}
@@ -158,12 +192,33 @@ public class Room implements Serializable {
 					else // // 20% chance, no monster +  roll for items, possibility of weapons and armor
 					{
 						int randomStats = randomiser.nextInt(9); // 0-8, possibility of finding better items than last level
-						if (randomiser.nextInt(5) == 0) { // 20% chance
+						int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
+						if (randomItem == 0) { // 13% chance
 							itemsInRoom.add(new Pie());
-						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						} else if (randomItem == 1) { // 13% chance
 							itemsInRoom.add(new Sword(5 + randomStats, 0));
-						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						} else if (randomItem == 2) { // 13% chance
 							itemsInRoom.add(new Shield(0, 12 + randomStats));
+						}
+						else if (randomItem == 3) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new Helmet(0, 2, 10 ));
+						}
+						else if (randomItem == 4) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new ChestArmor(0, 2, 10 ));
+						}
+						else if (randomItem == 5) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new ArmArmor(0, 2, 10 ));
+						}
+						else if (randomItem == 6) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new LegArmor(0, 2, 10 ));
 						}
 						
 					}
@@ -213,27 +268,39 @@ public class Room implements Serializable {
 					
 					else // // 17% chance, no monster +  roll for items, possibility of weapons and armor
 					{
-						int randomStats = randomiser.nextInt(13); // 0-8, possibility of finding even better items than last level 
-						if (randomiser.nextInt(5) == 0) { // 20% chance
+						int randomStats = randomiser.nextInt(13); // 0-12, possibility of finding even better items than last level 
+						int randomItem = randomiser.nextInt(8);  // 0-7, 13% risk of no item
+						if (randomItem == 0) { // 13% chance
 							itemsInRoom.add(new Pie());
-						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						} else if (randomItem == 1) { // 13% chance
 							itemsInRoom.add(new Sword(5 + randomStats, 0));
-						} else if (randomiser.nextInt(3) == 0) { // 30% chance
+						} else if (randomItem == 2) { // 13% chance
 							itemsInRoom.add(new Shield(0, 12 + randomStats));
+						}
+						else if (randomItem == 3) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new Helmet(0, 2, 10 ));
+						}
+						else if (randomItem == 4) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new ChestArmor(0, 2, 10 ));
+						}
+						else if (randomItem == 5) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new ArmArmor(0, 2, 10 ));
+						}
+						else if (randomItem == 6) { // 13% chance
+							randomItem = randomiser.nextInt(4); // make it a bit more difficult to find these
+							if (randomItem == 0)
+							itemsInRoom.add(new LegArmor(0, 2, 10 ));
 						}
 						
 					}
 			    }
 				
-			else if (roomLevel == 4) // set when creating a room
-			{
-				// this is the final room, boss should be added here as a monster, and a pie
-			}
-				
-			
-			
-			
-			
 			
 		}
 	}

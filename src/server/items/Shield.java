@@ -24,7 +24,7 @@ public class Shield extends Equipment {
 	 *            The current health of the consuming/using player.
 	 * @return The same health for the consuming player to use (not usable).
 	 */
-	public int use(int currentHealth) {
+	public int use(int currentHealth, int maxHealth) {
 		return currentHealth;
 	}
 	
