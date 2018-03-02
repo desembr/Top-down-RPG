@@ -7,8 +7,6 @@ import server.commands.Command;
 import server.entities.Player;
 
 /**
- * This class is part of the "World of Zuul" application. "World of Zuul" is a
- * very simple, text based adventure game.
  * 
  * This class creates all rooms, creates the parser and starts the game. It also
  * evaluates and executes the commands that the parser returns.
@@ -175,7 +173,7 @@ public class GameEngine {
 		Room dungeon32 = new Room("In a dungeon, This is it... you've encountered the leader of the monster horde, good luck", "res/rooms/dungeon_S.png", 4);
 		rooms.add(dungeon32);
 		
-
+		
 		outside.setExit("north", outside4);
 		outside.setExit("east", outside2);
 		outside.setExit("west", outside1);
@@ -265,7 +263,7 @@ public class GameEngine {
 		dungeon8.setExit("west", dungeon7);
 		
 		dungeon9.setExit("north", dungeon11);
-		dungeon9.setExit("east", dungeon8);
+		dungeon9.setExit("west", dungeon8);
 		
 		dungeon10.setExit("north", dungeon13);
 		dungeon10.setExit("south", dungeon8);
@@ -342,7 +340,7 @@ public class GameEngine {
 		dungeon31.setExit("south", dungeon26);
 		dungeon31.setExit("west", dungeon30);
 		
-		dungeon32.setExit("south", dungeon29);
+		
 	}
 
 	/**
