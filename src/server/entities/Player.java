@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import server.GameEngine;
 import server.Room;
@@ -334,13 +335,25 @@ public class Player extends Entity implements Serializable {
 		Room r = currentRoom.getExit(direction);
 		if (r == null) {
 			return false;
-		} else {
+		} 
+		else 
+		{
+			for (Enemy enemy : currentRoom.getEnemies())
+			{
+				if (!enemy.isDead)
+				{
+					return false; // can not exit the room if enemies are present
+				}
+			}
+		}
+		
+		
 			previousRooms.add(currentRoom);
 			currentRoom.removePlayer(this);
 			currentRoom = r;
 			currentRoom.addPlayer(this);
 			return true;
-		}
+		
 	}
 
 	/**
@@ -405,10 +418,10 @@ public class Player extends Entity implements Serializable {
 	{
 		if (e instanceof Boss && e.getIsDead() )
 		{
-			victory = true; 
 			
 			setCmdReturnMsg("\nCONGRATULATIONS!!! You beat the game!\n"
 					+ "Your final score was: " + this.score +" points."); 
+			
 		}
 	}
 	

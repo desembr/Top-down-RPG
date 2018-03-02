@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -488,7 +489,18 @@ public class UserInterface implements Observer {
 		Player p = (Player) player;
 
 		if (p.getIsDead())
+		{
+			
+			println("\nYour journey is at an end... death comes for you\n") ; 
+			
+		    try {
+				TimeUnit.SECONDS.sleep(6);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		
 			exitGame();
+		}
 
 		showRoom(p.getRoom());
 		showPlayer(p.getIconFilePath());
