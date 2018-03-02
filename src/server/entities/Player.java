@@ -28,6 +28,15 @@ public class Player extends Entity implements Serializable {
 	private int score, weight;
 
 	private String cmdReturnMsg;
+	
+	private boolean wearsHelmet; 
+	private boolean wearsChestArmor; 
+	private boolean wearsLegArmor; 
+	private boolean wearsArmArmor; 
+	
+	private boolean victory; 
+	
+	private int maxHealth; 
 
 	/**
 	 * Constructor for Player
@@ -41,6 +50,15 @@ public class Player extends Entity implements Serializable {
 		items = new ArrayList<>();
 		previousRooms = new ArrayList<>();
 		score = weight = 0;
+		
+		wearsHelmet = false; 
+		wearsChestArmor = false; 
+		wearsLegArmor = false; 
+		wearsArmArmor = false; 
+		
+		victory = false; 
+		
+		maxHealth = 100; 
 
 		currentRoom.addPlayer(this);
 	}
@@ -66,7 +84,7 @@ public class Player extends Entity implements Serializable {
 			Item item = items.get(i);
 			if (item instanceof Food) {
 				if (item.getName().toLowerCase().equals(itemName.toLowerCase())) {
-					this.health = item.use(health);
+					this.health = item.use(health, maxHealth);
 					weight -= item.getWeight();
 					items.remove(i);
 					return true;
@@ -170,6 +188,63 @@ public class Player extends Entity implements Serializable {
 		// Add equipment gains.
 		if (item instanceof Equipment) {
 			Equipment eq = (Equipment) item;
+			
+			if (eq.getHealthIncrease() > 0) // equip a piece of armor if the current item is one, armor is not droppable
+			{
+				if (eq.getName().equals("Helmet") )
+				{
+					if (this.wearsHelmet == false)
+					{
+						this.wearsHelmet = true; 
+					}
+					else
+					{
+						setCmdReturnMsg("\nYou are already wearing a helmet\n"); 
+						return true; 
+					}
+				}
+				else if(eq.getName().equals("ChestArmor") )
+				{
+					if (this.wearsChestArmor == false)
+					{
+						this.wearsChestArmor = true; 
+					}
+					else
+					{
+						setCmdReturnMsg("\nYou are already wearing chest armor\n"); 
+						return true; 
+					}
+				}
+				else if(eq.getName().equals("ArmArmor") )
+				{
+					if (this.wearsArmArmor == false)
+					{
+						this.wearsArmArmor = true; 
+					}
+					else
+					{
+						setCmdReturnMsg("\nYou are already wearing arm armor\n"); 
+						return true; 
+					}
+				}
+				else if(eq.getName().equals("LegArmor") )
+				{
+					if (this.wearsLegArmor == false)
+					{
+						this.wearsLegArmor = true; 
+					}
+					else
+					{
+						setCmdReturnMsg("\nYou are already wearing leg armor\n"); 
+						return true; 
+					}
+				}
+				this.health += eq.getHealthIncrease(); 
+				this.maxHealth += eq.getHealthIncrease(); 
+			}
+			
+			updatePlayerGraphic(); // updates the player sprite in case there were any changes in armor
+			
 			damage += eq.getDamageGain();
 			defence += eq.getDefenceGain();
 		}
@@ -177,6 +252,75 @@ public class Player extends Entity implements Serializable {
 		weight += item.getWeight();
 		items.add(item);
 		return true;
+	}
+	
+	/**
+	 * Sets the player sprite to the correct one based on which pieces of armor he is wearing
+	 */
+	
+	private void updatePlayerGraphic()
+	{
+		if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // only arm armor
+		{
+			setIconFilePath("res/player/player1_arms.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // leg + arm
+		{
+			setIconFilePath("res/player/player1_arms_legs.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == false) // chest only
+		{
+			setIconFilePath("res/player/player1_chest.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // chest + arm
+		{
+			setIconFilePath("res/player/player1_chest_arm.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == true) // chest + arm + leg
+		{
+			setIconFilePath("res/player/player1_chest_arms_legs.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest + helmet + leg
+		{
+			setIconFilePath("res/player/player1_chest_helm_leg.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest + leg
+		{
+			setIconFilePath("res/player/player1_chest_legs.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == true) // full suit
+		{
+			setIconFilePath("res/player/player1_full_armor.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == false) // only helmet
+		{
+			setIconFilePath("res/player/player1_helm.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // helmet + arms
+		{
+			setIconFilePath("res/player/player1_helm_arms.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // helmet + arms + legs
+		{
+			setIconFilePath("res/player/player1_helm_arms_legs.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == false) // helmet + chest
+		{
+			setIconFilePath("res/player/player1_helm_chest.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // helmet + chest + arms
+		{
+			setIconFilePath("res/player/player1_helm_chest_arms.png");
+		}
+		else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // helmet + legs
+		{
+			setIconFilePath("res/player/player1_helm_legs.png");
+		}
+		else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // legs
+		{
+			setIconFilePath("res/player/player1_legs.png");
+		}
+		
 	}
 
 	/**
@@ -248,7 +392,24 @@ public class Player extends Entity implements Serializable {
 			}
 			
 		}
+		checkVictory(e); // check if the player won by killing the final boss or not
 		return true;
+	}
+	
+	/**
+	 * Checks to see if the player defeated the final boss or not, the victory condition of the game
+	 * @param e
+	 */
+	
+	public void checkVictory(Entity e)
+	{
+		if (e instanceof Boss && e.getIsDead() )
+		{
+			victory = true; 
+			
+			setCmdReturnMsg("\nCONGRATULATIONS!!! You beat the game!\n"
+					+ "Your final score was: " + this.score +" points."); 
+		}
 	}
 	
 	

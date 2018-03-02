@@ -42,7 +42,7 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private static final int WIDTH = 800, HEIGHT = 1000;
+	private int WIDTH = 800, HEIGHT = 1000;
 
 	private Client client;
 	private JFrame myFrame;
@@ -57,7 +57,7 @@ public class UserInterface implements Observer {
 
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
-
+	
 	/**
 	 * Construct a UserInterface. As a parameter, a Client object, with will
 	 * handle all the communication with the server (sending commands and
@@ -67,6 +67,7 @@ public class UserInterface implements Observer {
 	 *            The Client to handle all communication with server.
 	 */
 	public UserInterface(Client client) {
+		
 		this.client = client;
 
 		monsterSprites = new ArrayList<>();
@@ -255,11 +256,11 @@ public class UserInterface implements Observer {
 		monster4 = new JLabel();
 		monster5 = new JLabel();
 
-		monster1.setBounds(165, 100, 64, 64);
-		monster2.setBounds(265, 100, 64, 64);
-		monster3.setBounds(365, 100, 64, 64);
-		monster4.setBounds(465, 100, 64, 64);
-		monster5.setBounds(565, 100, 64, 64);
+		monster1.setBounds(133, 64, 128, 128);
+		monster2.setBounds(233, 64, 128, 128);
+		monster3.setBounds(333, 64, 128, 128);
+		monster4.setBounds(433, 64, 128, 128);
+		monster5.setBounds(533, 64, 128, 128);
 
 		monsterSprites.add(monster1);
 		monsterSprites.add(monster2);
@@ -305,10 +306,11 @@ public class UserInterface implements Observer {
 		image.add(shadow4, BorderLayout.SOUTH);
 		image.add(shadow5, BorderLayout.SOUTH);
 		image.add(shadow6, BorderLayout.SOUTH);
-
+		
+		
 		panel.add(listScroller, BorderLayout.CENTER);
 		panel.add(entryField, BorderLayout.SOUTH);
-
+		
 		myFrame.getContentPane().add(panel, BorderLayout.CENTER);
 
 		// add some event listeners to some components
@@ -403,7 +405,7 @@ public class UserInterface implements Observer {
 			entryField.setText("Load " + user);
 			processCommand();
 		});
-
+		
 		JMenu helpMenu = new JMenu("Help");
 		menuBar.add(helpMenu);
 		JMenuItem help = new JMenuItem("Help");

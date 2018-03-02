@@ -8,7 +8,7 @@ package server.items;
 public abstract class Equipment extends Item {
 	private static final long serialVersionUID = 1L;
 
-	protected int defenceGain, damageGain;
+	protected int defenceGain, damageGain, maxHealthIncrease;
 
 	/**
 	 * Constructor for Equipment.
@@ -23,7 +23,7 @@ public abstract class Equipment extends Item {
 	protected Equipment(String name, int weight, String iconFilePath) {
 		super(name, weight, iconFilePath);
 	}
-
+	
 	/**
 	 * Is the item usable or not.
 	 * 
@@ -49,5 +49,15 @@ public abstract class Equipment extends Item {
 	 */
 	public int getDefenceGain() {
 		return defenceGain;
+	}
+	
+	/**
+	 * Returns the health increase of this equipment
+	 * @return the field value
+	 */
+	
+	public int getHealthIncrease()
+	{
+		return maxHealthIncrease; 
 	}
 }

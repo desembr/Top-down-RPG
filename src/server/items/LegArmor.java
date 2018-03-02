@@ -1,20 +1,21 @@
 package server.items;
 
 /*
- * Class Sword - grants damage to a player.
- * @author Emir Zivcic
- * @version 2018-02-22
+ * Class LegArmor - grants defence/health to a player.
+ * @author Jan Rasmussen
+ * @version 2018-02-24
  */
-public class Sword extends Equipment {
+public class LegArmor extends Equipment {
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
-	 * Constructor for Sword.
+	 * Constructor for Shield.
 	 */
-	public Sword(int damageGain, int defenceGain) {
-		super("Sword", 25, "sword.png");
+	public LegArmor(int damageGain, int defenceGain, int maxHealthIncrease) {
+		super("LegArmor", 5, "LegArmor.png");
 		this.damageGain = damageGain;
 		this.defenceGain = defenceGain;
+		this.maxHealthIncrease = maxHealthIncrease; 
 	}
 
 	/**
@@ -28,5 +29,5 @@ public class Sword extends Equipment {
 		return currentHealth;
 	}
 	
-	
+
 }
