@@ -24,12 +24,17 @@ public class Drop extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(this.getClass().getName());
 		if (secondWord != null) {
 			if (p.dropItem(secondWord)) {
+				p.setCmdReturnMsg(this.getClass().getName());
 				return true;
 			}
+			else {
+				p.setCmdReturnMsg("You don't have " + secondWord + " in your inventory to drop!");
+				return false;
+			}
 		}
+		p.setCmdReturnMsg("You didn't specify what to drop!");
 		return false;
 	}
 }

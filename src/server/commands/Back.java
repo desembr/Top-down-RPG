@@ -24,10 +24,11 @@ public class Back extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(this.getClass().getName());
 		if (p.goBackARoom()) {
+			p.setCmdReturnMsg(this.getClass().getName());
 			return true;
 		}
+		p.setCmdReturnMsg("You must clear all monsters first!");
 		return false;
 	}
 }

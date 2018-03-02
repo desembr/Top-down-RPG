@@ -25,14 +25,13 @@ public class Attack extends Command {
 	 * @return Whether execution of this command changed some player state.
 	 */
 	public boolean execute(Player p) {
-		p.setCmdReturnMsg(this.getClass().getName());
 		if (secondWord != null) {
 			// Attack enemies
 			for (int i = 0; i < p.getRoom().getEnemies().size(); i++) {
 				Enemy e = p.getRoom().getEnemies().get(i);
 				if (e.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					if (p.attack(e)) {
-
+						p.setCmdReturnMsg(this.getClass().getName());
 						return true;
 					}
 				}
@@ -42,12 +41,13 @@ public class Attack extends Command {
 				Player pOther = p.getRoom().getPlayers().get(i);
 				if (pOther.getName().toLowerCase().equals(secondWord.toLowerCase())) {
 					if (p.attack(pOther)) {
-
+						p.setCmdReturnMsg(this.getClass().getName());
 						return true;
 					}
 				}
 			}
 		}
+		p.setCmdReturnMsg("Attack failed!");
 		return false;
 	}
 }

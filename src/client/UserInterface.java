@@ -352,7 +352,7 @@ public class UserInterface implements Observer {
 				}
 			}
 		});
-
+		// Add custom cursor and frame-icon
 		try {
 			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
 			BufferedImage cursor = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream("res/cursor.png"));
@@ -521,9 +521,6 @@ public class UserInterface implements Observer {
 				SoundPlayer.goRoom.playAudio();
 				break;
 			case "server.commands.Attack":
-				if (p.getAttackReturnMsg() != null) {
-					println(p.getAttackReturnMsg());
-				}
 				SoundPlayer.attackEnemy.playAudio();
 				break;
 			case "server.commands.Use":
@@ -540,15 +537,18 @@ public class UserInterface implements Observer {
 				break;
 			}
 		}
+		if (p.getAttackReturnMsg() != null) {
+			println(p.getAttackReturnMsg());
+		}
 
-		println("\n" + p.getRoom().getLongDescription() + "\n"); // gives long
-																	// description
-																	// of room
-																	// after
-																	// each
-																	// update
+		// gives long description of room after each update
+		println("\n" + p.getRoom().getLongDescription() + "\n");
 
-		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage() + "\n");
+		// print player inventory
+		println(p.showInventory());
 
+		// prints some player statistics
+		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage()
+				+ ",your weight: " + p.getWeight() + "/" + p.getMaxWeight() + "\n");
 	}
 }

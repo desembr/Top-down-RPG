@@ -69,12 +69,6 @@ public class Room implements Serializable {
 		itemsInRoom = new ArrayList<Item>();
 
 		// Add some enemies and items to this room.
-		try {
-			Thread.sleep(33); // To get better seed
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 		fillRoom(roomLevel);
 	}
 
@@ -85,6 +79,12 @@ public class Room implements Serializable {
 	 *            The level this room belongs to.
 	 */
 	private void fillRoom(int roomLevel) {
+		try {
+			Thread.sleep(33); // To get better seed
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		Random randomiser = new Random(System.currentTimeMillis()); // time used
 		// to get a semi-random seed
 

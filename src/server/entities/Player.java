@@ -6,9 +6,13 @@ import java.util.List;
 
 import server.GameEngine;
 import server.Room;
+import server.items.ArmArmor;
+import server.items.ChestArmor;
 import server.items.Equipment;
 import server.items.Food;
+import server.items.Helmet;
 import server.items.Item;
+import server.items.LegArmor;
 
 /*
  * Class Player - contains state for the player (current room, items etc).
@@ -106,8 +110,21 @@ public class Player extends Entity implements Serializable {
 					Equipment eq = (Equipment) item;
 					damage -= eq.getDamageGain();
 					defence -= eq.getDefenceGain();
-				}
 
+					// Update armor graphics on player
+					if (item instanceof ArmArmor)
+						wearsArmArmor = false;
+					else if (item instanceof ChestArmor)
+						wearsChestArmor = false;
+					else if (item instanceof LegArmor)
+						wearsLegArmor = false;
+					else if (item instanceof Helmet)
+						wearsHelmet = false;
+
+					updatePlayerGraphic();
+				}
+				// remove item from inventory, add it to room, decrease
+				// player-weight by item-weight.
 				weight -= item.getWeight();
 				currentRoom.addItem(item);
 				items.remove(i);
@@ -129,6 +146,7 @@ public class Player extends Entity implements Serializable {
 		if (weight + item.getWeight() > maxWeight) {
 			// Add the item back to the room if weight is too high.
 			currentRoom.addItem(item);
+			setCmdReturnMsg("Your inventory is currently full, try dropping something!");
 			return false;
 		}
 
@@ -162,7 +180,7 @@ public class Player extends Entity implements Serializable {
 																			// equal
 				{
 					setAttackReturnMsg("\nThis new sword is worse than your current one, no use in taking it\n");
-					return true; // do not pick up
+					return false; // do not pick up
 				}
 			} else if (checkItem.getName().equals("Shield") && item.getName().equals("Shield")) {
 				Equipment eqOld = (Equipment) checkItem;
@@ -191,7 +209,7 @@ public class Player extends Entity implements Serializable {
 																				// equal
 				{
 					setAttackReturnMsg("\nThis new shield is worse than your current one, no use in taking it\n");
-					return true; // do not pick up
+					return false; // do not pick up
 				}
 			}
 			// if you don't have a sword or shield, or the item is something
@@ -212,28 +230,28 @@ public class Player extends Entity implements Serializable {
 						this.wearsHelmet = true;
 					} else {
 						setAttackReturnMsg("\nYou are already wearing a helmet\n");
-						return true;
+						return false;
 					}
 				} else if (eq.getName().equals("ChestArmor")) {
 					if (this.wearsChestArmor == false) {
 						this.wearsChestArmor = true;
 					} else {
 						setAttackReturnMsg("\nYou are already wearing chest armor\n");
-						return true;
+						return false;
 					}
 				} else if (eq.getName().equals("ArmArmor")) {
 					if (this.wearsArmArmor == false) {
 						this.wearsArmArmor = true;
 					} else {
 						setAttackReturnMsg("\nYou are already wearing arm armor\n");
-						return true;
+						return false;
 					}
 				} else if (eq.getName().equals("LegArmor")) {
 					if (this.wearsLegArmor == false) {
 						this.wearsLegArmor = true;
 					} else {
 						setAttackReturnMsg("\nYou are already wearing leg armor\n");
-						return true;
+						return false;
 					}
 				}
 				this.health += eq.getHealthIncrease();
@@ -256,15 +274,12 @@ public class Player extends Entity implements Serializable {
 	 * Sets the player sprite to the correct one based on which pieces of armor
 	 * he is wearing
 	 */
-
 	private void updatePlayerGraphic() {
 		if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // only
 																													// arm
-																													// armor
 		{
 			setIconFilePath("res/player/player1_arms.png");
 		} else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // leg
-																														// +
 																														// arm
 		{
 			setIconFilePath("res/player/player1_arms_legs.png");
@@ -273,26 +288,18 @@ public class Player extends Entity implements Serializable {
 		{
 			setIconFilePath("res/player/player1_chest.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // chest
-																														// +
 																														// arm
 		{
 			setIconFilePath("res/player/player1_chest_arm.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == true) // chest
-																														// +
-																														// arm
-																														// +
 																														// leg
 		{
 			setIconFilePath("res/player/player1_chest_arms_legs.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest
 																														// +
-																														// helmet
-																														// +
-																														// leg
 		{
 			setIconFilePath("res/player/player1_chest_helm_leg.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest
-																														// +
 																														// leg
 		{
 			setIconFilePath("res/player/player1_chest_legs.png");
@@ -306,36 +313,30 @@ public class Player extends Entity implements Serializable {
 			setIconFilePath("res/player/player1_helm.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // helmet
 																														// +
-																														// arms
 		{
 			setIconFilePath("res/player/player1_helm_arms.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // helmet
 																														// +
-																														// arms
-																														// +
-																														// legs
 		{
 			setIconFilePath("res/player/player1_helm_arms_legs.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == false) // helmet
-																														// +
 																														// chest
 		{
 			setIconFilePath("res/player/player1_helm_chest.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // helmet
-																														// +
-																														// chest
-																														// +
 																														// arms
 		{
 			setIconFilePath("res/player/player1_helm_chest_arms.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // helmet
-																														// +
 																														// legs
 		{
 			setIconFilePath("res/player/player1_helm_legs.png");
 		} else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // legs
 		{
 			setIconFilePath("res/player/player1_legs.png");
+		} else // Wears nothing, update in case player dropped some armor
+		{
+			setIconFilePath("res/player/player1_no_armor.png");
 		}
 
 	}
@@ -376,6 +377,12 @@ public class Player extends Entity implements Serializable {
 	 */
 	public boolean goBackARoom() {
 		if (previousRooms.size() > 0) {
+			for (Enemy enemy : currentRoom.getEnemies()) {
+				if (!enemy.isDead) {
+					return false; // can not exit the room if enemies are
+									// present
+				}
+			}
 			Room r = previousRooms.remove(previousRooms.size() - 1);
 			currentRoom.removePlayer(this);
 			currentRoom = r;
@@ -428,7 +435,6 @@ public class Player extends Entity implements Serializable {
 	 * @param e
 	 *            The entity to check.
 	 */
-
 	public void checkVictory(Entity e) {
 		if (e instanceof Boss && e.getIsDead()) {
 
@@ -444,7 +450,7 @@ public class Player extends Entity implements Serializable {
 	 */
 	public String showInventory() {
 		String ret = "";
-		ret += "Items in inventory: ";
+		ret += "Items currently in your inventory: ";
 		if (items.size() > 0) {
 			for (Item i : items) {
 				ret += i.getName() + " ";
@@ -472,7 +478,15 @@ public class Player extends Entity implements Serializable {
 		this.damage = p.damage;
 		this.defence = p.defence;
 		this.weight = p.weight;
+		this.wearsArmArmor = p.wearsArmArmor;
+		this.wearsChestArmor = p.wearsChestArmor;
+		this.wearsHelmet = p.wearsHelmet;
+		this.wearsLegArmor = p.wearsLegArmor;
 
+		// Update player graphics with equipped armor items.
+		updatePlayerGraphic();
+
+		// Get updated version of saved room.
 		Room r = GameEngine.getRoom(p.getRoom().getShortDescription());
 		if (r != null) {
 			this.currentRoom = r;
