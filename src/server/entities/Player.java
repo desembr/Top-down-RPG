@@ -30,7 +30,7 @@ public class Player extends Entity implements Serializable {
 
 	private int score, weight;
 
-	private String cmdReturnMsg, attackReturnMsg;
+	private String cmdReturnMsg, printReturnMsg;
 
 	private boolean wearsHelmet;
 	private boolean wearsChestArmor;
@@ -86,10 +86,13 @@ public class Player extends Entity implements Serializable {
 					this.health = item.use(health, maxHealth);
 					weight -= item.getWeight();
 					items.remove(i);
+					setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + " and your weight is " + weight
+							+ "/" + maxWeight + "\n" + showInventory());
 					return true;
 				}
 			}
 		}
+		setPrintReturnMsg("That item doesn't exist!");
 		return false;
 	}
 
@@ -128,6 +131,8 @@ public class Player extends Entity implements Serializable {
 				weight -= item.getWeight();
 				currentRoom.addItem(item);
 				items.remove(i);
+				setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + ", your weight is " + weight + "/"
+						+ maxWeight + " and your max health is " + maxHealth + "\n" + showInventory());
 				return true;
 			}
 		}
@@ -166,8 +171,8 @@ public class Player extends Entity implements Serializable {
 													// holding
 
 					int damageDifference = eqNew.getDamageGain() - eqOld.getDamageGain();
-					setAttackReturnMsg("\nThis new sword does " + damageDifference
-							+ " points of damage more than the old!\n Attack-rating increased\n");
+					setPrintReturnMsg(
+							"This new sword does " + damageDifference + " points of damage more than the old!\n Attack-rating increased");
 
 					break; // stop looping
 				} else if (eqNew.getDamageGain() <= eqOld.getDamageGain()) // if
@@ -179,7 +184,7 @@ public class Player extends Entity implements Serializable {
 																			// or
 																			// equal
 				{
-					setAttackReturnMsg("\nThis new sword is worse than your current one, no use in taking it\n");
+					setPrintReturnMsg("This new sword is worse than your current one, no use in taking it");
 					return false; // do not pick up
 				}
 			} else if (checkItem.getName().equals("Shield") && item.getName().equals("Shield")) {
@@ -195,8 +200,8 @@ public class Player extends Entity implements Serializable {
 													// holding
 
 					int defenceDifference = eqNew.getDefenceGain() - eqOld.getDefenceGain();
-					setAttackReturnMsg(
-							"\nThis new shield has " + defenceDifference + " more points of armor than the old one!\n Defence increased\n");
+					setPrintReturnMsg(
+							"This new shield has " + defenceDifference + " more points of armor than the old one! Defence increased");
 
 					break; // stop looping
 				} else if (eqNew.getDefenceGain() <= eqOld.getDefenceGain()) // if
@@ -208,7 +213,7 @@ public class Player extends Entity implements Serializable {
 																				// or
 																				// equal
 				{
-					setAttackReturnMsg("\nThis new shield is worse than your current one, no use in taking it\n");
+					setPrintReturnMsg("This new shield is worse than your current one, no use in taking it");
 					return false; // do not pick up
 				}
 			}
@@ -229,28 +234,28 @@ public class Player extends Entity implements Serializable {
 					if (this.wearsHelmet == false) {
 						this.wearsHelmet = true;
 					} else {
-						setAttackReturnMsg("\nYou are already wearing a helmet\n");
+						setPrintReturnMsg("You are already wearing a helmet");
 						return false;
 					}
 				} else if (eq.getName().equals("ChestArmor")) {
 					if (this.wearsChestArmor == false) {
 						this.wearsChestArmor = true;
 					} else {
-						setAttackReturnMsg("\nYou are already wearing chest armor\n");
+						setPrintReturnMsg("You are already wearing chest armor");
 						return false;
 					}
 				} else if (eq.getName().equals("ArmArmor")) {
 					if (this.wearsArmArmor == false) {
 						this.wearsArmArmor = true;
 					} else {
-						setAttackReturnMsg("\nYou are already wearing arm armor\n");
+						setPrintReturnMsg("You are already wearing arm armor");
 						return false;
 					}
 				} else if (eq.getName().equals("LegArmor")) {
 					if (this.wearsLegArmor == false) {
 						this.wearsLegArmor = true;
 					} else {
-						setAttackReturnMsg("\nYou are already wearing leg armor\n");
+						setPrintReturnMsg("You are already wearing leg armor");
 						return false;
 					}
 				}
@@ -267,6 +272,12 @@ public class Player extends Entity implements Serializable {
 
 		weight += item.getWeight();
 		items.add(item);
+
+		if (printReturnMsg == null) {
+			setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + ", your weight is " + weight + "/"
+					+ maxWeight + " and your max health is " + maxHealth + "\n" + showInventory());
+		}
+
 		return true;
 	}
 
@@ -334,7 +345,8 @@ public class Player extends Entity implements Serializable {
 		} else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // legs
 		{
 			setIconFilePath("res/player/player1_legs.png");
-		} else // Wears nothing, update in case player dropped some armor
+		} else // Wears nothing, update in case player dropped last piece of
+				// armor
 		{
 			setIconFilePath("res/player/player1_no_armor.png");
 		}
@@ -351,20 +363,22 @@ public class Player extends Entity implements Serializable {
 	public boolean goRoom(String direction) {
 		Room r = currentRoom.getExit(direction);
 		if (r == null) {
+			setCmdReturnMsg("There is no room in that direction!");
 			return false;
 		} else {
 			for (Enemy enemy : currentRoom.getEnemies()) {
 				if (!enemy.isDead) {
+					setCmdReturnMsg("You must clear all monsters first!");
 					return false; // can not exit the room if enemies are
 									// present
 				}
 			}
 		}
-
 		previousRooms.add(currentRoom);
 		currentRoom.removePlayer(this);
 		currentRoom = r;
 		currentRoom.addPlayer(this);
+		setPrintReturnMsg(currentRoom.getLongDescription());
 		return true;
 
 	}
@@ -387,6 +401,7 @@ public class Player extends Entity implements Serializable {
 			currentRoom.removePlayer(this);
 			currentRoom = r;
 			currentRoom.addPlayer(this);
+			setPrintReturnMsg(currentRoom.getLongDescription());
 			return true;
 		}
 		return false;
@@ -407,19 +422,19 @@ public class Player extends Entity implements Serializable {
 			}
 			e.lowerHealth(damage);
 
-			setAttackReturnMsg("\nYou strike true and hit the enemy for " + damage + " damage\n");
-
-			System.out.println();
-
-			if (e.getIsDead())
-				score += 5;
+			setPrintReturnMsg("You strike true and hit the enemy for " + damage + " damage");
 
 			// Enemy e attempts to strike back at the attacking player.
 			if (rand.nextInt(defence) <= 16) {
-				setAttackReturnMsg("\nYou strike true and hit the enemy for " + damage + " damage\n"
-						+ "unfortunately the enemy does the same to you for " + e.getDamage() + " damage\n");
+				printReturnMsg += "\nunfortunately the enemy does the same to you for " + e.getDamage() + " damage.\n"
+						+ "Your health is now " + health;
 
 				lowerHealth(e.getDamage());
+			}
+			// If enemy died, grant score to player.
+			if (e.getIsDead()) {
+				score += 5;
+				printReturnMsg += "\nYou killed an enemy! Your score is now " + score + " points";
 			}
 
 		}
@@ -438,7 +453,7 @@ public class Player extends Entity implements Serializable {
 	public void checkVictory(Entity e) {
 		if (e instanceof Boss && e.getIsDead()) {
 
-			setAttackReturnMsg("\nCONGRATULATIONS!!! You beat the game!\n" + "Your final score was: " + this.score + " points.");
+			setPrintReturnMsg("\nCONGRATULATIONS!!! You beat the game!\n" + "Your final score was: " + this.score + " points.");
 
 		}
 	}
@@ -457,8 +472,6 @@ public class Player extends Entity implements Serializable {
 			}
 		} else
 			ret += "None";
-
-		ret += "\nScore: " + score;
 
 		return ret;
 	}
@@ -482,6 +495,9 @@ public class Player extends Entity implements Serializable {
 		this.wearsChestArmor = p.wearsChestArmor;
 		this.wearsHelmet = p.wearsHelmet;
 		this.wearsLegArmor = p.wearsLegArmor;
+
+		// Remove this player from current room.
+		getRoom().removePlayer(this);
 
 		// Update player graphics with equipped armor items.
 		updatePlayerGraphic();
@@ -557,24 +573,22 @@ public class Player extends Entity implements Serializable {
 	}
 
 	/**
-	 * Returns a message from the previous attack, if there was none null is
-	 * returned to signal this.
+	 * Returns a message from the previous command to be printed.
 	 * 
-	 * @return The attackReturnMsg
+	 * @return The message to be printed on Client.
 	 */
-	public String getAttackReturnMsg() {
-		return attackReturnMsg;
+	public String getPrintReturnMsg() {
+		return printReturnMsg;
 	}
 
 	/**
-	 * Sets a message from the previous attack, for corresponding Client to
-	 * display.
+	 * Sets a message from the previous command, to be printed.
 	 * 
 	 * @param msg
 	 *            The message to set.
 	 */
-	public void setAttackReturnMsg(String msg) {
-		attackReturnMsg = msg;
+	public void setPrintReturnMsg(String msg) {
+		printReturnMsg = msg;
 	}
 
 	/**

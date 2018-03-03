@@ -27,11 +27,6 @@ import server.items.Shield;
 import server.items.Sword;
 
 /*
- * Class Room - a room in an adventure game.
- *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
- *
  * A "Room" represents one location in the scenery of the game.  It is 
  * connected to other rooms via exits.  For each existing exit, the room 
  * stores a reference to the neighboring room.
@@ -84,7 +79,7 @@ public class Room implements Serializable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		Random randomiser = new Random(System.currentTimeMillis()); // time used
 		// to get a semi-random seed
 
@@ -444,6 +439,8 @@ public class Room implements Serializable {
 	/**
 	 * Return a string describing the room's exits, for example "Exits: north
 	 * west".
+	 * 
+	 * @return A description of the exits of this room.
 	 */
 	private String getExitString() {
 		String returnString = "Exits:";
@@ -456,6 +453,10 @@ public class Room implements Serializable {
 	/**
 	 * Return the room that is reached if we go from this room in direction
 	 * "direction". If there is no room in that direction, return null.
+	 * 
+	 * @param direction
+	 *            The direction to go to.
+	 * @return A room in the given direction.
 	 */
 	public Room getExit(String direction) {
 		return exits.get(direction);

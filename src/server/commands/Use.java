@@ -30,7 +30,7 @@ public class Use extends Command {
 				return true;
 			}
 		}
-		p.setCmdReturnMsg("You can't use that item!");
+		p.setCmdReturnMsg("You didn't specify what item to use!");
 		return false;
 	}
 }

@@ -88,7 +88,8 @@ public class ClientHandler {
 	 */
 	private void send() {
 		while (!Thread.interrupted()) {
-			if (getErrorCount() > 3 || (getPlayerDisconnect() && !getStateUpdated() && !getConcurrentStateChange())) {
+			// Break if marked for disconnection or 3 subsequent IO errors.
+			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
 			// Wait for some game state to change by handled client or
@@ -116,19 +117,15 @@ public class ClientHandler {
 						// in the same room as this handled client's. Don't
 						// update others.
 				setConcurrentStateChange(false);
-				if (p.getIsDead()) {
-					List<ClientHandler> clientHandlers = GameServer.getClientHandlers(p);
-
-					for (ClientHandler ch : clientHandlers)
-						if (ch != this)
-							ch.setConcurrentStateChange(true);
-				}
+				// Room state has changed, print out updated info.
+				p.setPrintReturnMsg(p.getRoom().getLongDescription());
 			}
 
 			setStateUpdated(false);
 			sendResponse();
 			resetErrorCounter();
 		}
+		// If we get here client disconnected.
 		engine.removePlayer(p);
 		GameServer.removeClientHandler(this);
 	}
@@ -138,6 +135,7 @@ public class ClientHandler {
 	 */
 	private void receive() {
 		while (!Thread.interrupted()) {
+			// Break if marked for disconnection or 3 subsequent IO errors.
 			if (getErrorCount() > 3 || getPlayerDisconnect()) {
 				break;
 			}
@@ -153,11 +151,11 @@ public class ClientHandler {
 				} else {
 					setShouldUpdateOthers(false);
 				}
-
+				// Mark for update
 				setStateUpdated(true);
 
 				resetErrorCounter();
-
+				// If player died, mark for disconnection
 				if (p.getIsDead()) {
 					setPlayerDisconnect(true);
 					break;
@@ -174,6 +172,8 @@ public class ClientHandler {
 				System.err.println(e.getMessage());
 			}
 		}
+		// If we get here, player disconnected, mark for disposal of this
+		// ClientHandler.
 		setPlayerDisconnect(true);
 	}
 
@@ -181,13 +181,17 @@ public class ClientHandler {
 	 * Sends response back to client.
 	 */
 	private void sendResponse() {
-		synchronized (engine) { // To avoid concurrentModificationException
+		synchronized (engine) { // To avoid concurrentModificationException.
 			try {
 				sendStream.writeObject(p);
 				sendStream.flush();
+				// Reset stream in order to send an updated version of the
+				// Player object to handled Client.
 				sendStream.reset();
 
+				// Reset command-execution-info after transmission.
 				p.setCmdReturnMsg((null));
+				p.setPrintReturnMsg(null);
 			} catch (IOException e) {
 				incErrorCounter();
 				System.err.println(e.getMessage());

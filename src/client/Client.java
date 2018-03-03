@@ -102,6 +102,7 @@ public class Client extends Observable {
 				sendCommand(nextCmd);
 			}
 		}
+		// If we get here, dispose of this Client.
 		synchronized (this) {
 			exit();
 		}
@@ -120,6 +121,7 @@ public class Client extends Observable {
 			// Wait for reply from server on a previous request.
 			receiveResponse();
 		}
+		// If we get here, dispose of this Client.
 		synchronized (this) {
 			exit();
 		}

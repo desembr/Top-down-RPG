@@ -458,7 +458,7 @@ public class UserInterface implements Observer {
 	 */
 	private void printWelcome() {
 		println("Hello adventurer, your task is to \nexplore, fight and gather treasure.\n"
-				+ "Enter 'help' for commands.\nGoodluck!\n\nThere are two apples on the ground, try picking them up.\n");
+				+ "Enter 'help' for commands.\nGoodluck!\nThere are two apples on the ground, try picking them up.");
 
 	}
 
@@ -486,7 +486,7 @@ public class UserInterface implements Observer {
 	 */
 	public void update(Observable o, Object player) {
 		Player p = (Player) player;
-
+		// Player dead, exit game
 		if (p.getIsDead()) {
 
 			println("\nYour journey is at an end... death comes for you\n");
@@ -499,21 +499,13 @@ public class UserInterface implements Observer {
 
 			exitGame();
 		}
-
+		// Update JLabels
 		showRoom(p.getRoom());
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
 
-		/*
-		 * println("***************\n" + p.showInventory() + ", Health: " +
-		 * p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " +
-		 * p.getDefence() + ", Weight: " + p.getWeight() + "/" +
-		 * p.getMaxWeight());
-		 */
-
-		// Decide what to print/play depending on return message of command,
-		// which is optionally set by a command on the server on execution.
+		// Decide what to print/play depending on return message of command.
 		if (p.getCmdReturnMsg() != null) {
 			switch (p.getCmdReturnMsg()) {
 			case "server.commands.Go":
@@ -537,18 +529,8 @@ public class UserInterface implements Observer {
 				break;
 			}
 		}
-		if (p.getAttackReturnMsg() != null) {
-			println(p.getAttackReturnMsg());
+		if (p.getPrintReturnMsg() != null) {
+			println(p.getPrintReturnMsg());
 		}
-
-		// gives long description of room after each update
-		println("\n" + p.getRoom().getLongDescription() + "\n");
-
-		// print player inventory
-		println(p.showInventory());
-
-		// prints some player statistics
-		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage()
-				+ ",your weight: " + p.getWeight() + "/" + p.getMaxWeight() + "\n");
 	}
 }

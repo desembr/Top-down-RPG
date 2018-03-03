@@ -174,6 +174,7 @@ public class GameEngine {
 				"res/rooms/dungeon_S.png", 4);
 		rooms.add(dungeon32);
 
+		// create all room associations
 		outside.setExit("north", outside4);
 		outside.setExit("east", outside2);
 		outside.setExit("west", outside1);
@@ -354,16 +355,15 @@ public class GameEngine {
 	 */
 	public synchronized boolean interpretCommand(String commandLine, Player p) {
 		Command command = parser.getCommand(commandLine);
-
+		// Unrecognized command received.
 		if (command == null) {
 			p.setCmdReturnMsg("Command was not recognized, type 'help' for help.");
 			return false;
 		}
 
 		boolean ret = command.execute(p);
-
+		// No state changed, return false to signal not to update other Clients.
 		if (ret == false) {
-			//p.setCmdReturnMsg("Command failed, type 'help' for help.");
 			return false;
 		}
 		return true;

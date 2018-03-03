@@ -34,7 +34,12 @@ public class Pick extends Command {
 					return true;
 				}
 			}
+			else {
+				p.setCmdReturnMsg("That item doesn't exist!");
+				return false;
+			}
 		}
+		p.setCmdReturnMsg("you didn't specify what to pick up!");
 		return false;
 	}
 }

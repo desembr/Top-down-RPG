@@ -41,7 +41,7 @@ public class Load extends Command {
 					return true;
 				}
 			} catch (Exception e) {
-				System.out.println(e.getStackTrace());
+				System.out.println(e.getMessage());
 			}
 		}
 		return false;

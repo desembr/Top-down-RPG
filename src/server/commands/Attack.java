@@ -34,6 +34,8 @@ public class Attack extends Command {
 						p.setCmdReturnMsg(this.getClass().getName());
 						return true;
 					}
+					else
+						return false;
 				}
 			}
 			// Attack other players
@@ -44,10 +46,12 @@ public class Attack extends Command {
 						p.setCmdReturnMsg(this.getClass().getName());
 						return true;
 					}
+					else
+						return false;
 				}
 			}
 		}
-		p.setCmdReturnMsg("Attack failed!");
+		p.setCmdReturnMsg("Target doesn't exist!");
 		return false;
 	}
 }

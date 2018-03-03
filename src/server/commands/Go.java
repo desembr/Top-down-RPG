@@ -30,8 +30,11 @@ public class Go extends Command {
 				p.setCmdReturnMsg(this.getClass().getName());
 				return true;
 			}
+			else {
+				return false;
+			}
 		}
-		p.setCmdReturnMsg("You must clear all monsters first!");
+		p.setCmdReturnMsg("Go where?");
 		return false;
 	}
 }
