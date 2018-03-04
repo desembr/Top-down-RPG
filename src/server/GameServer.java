@@ -27,8 +27,8 @@ public class GameServer extends Thread {
 	/**
 	 * Create the game and initialize its internal map.
 	 */
-	public GameServer() {
-		engine = new GameEngine();
+	public GameServer(boolean isLowRes) {
+		engine = new GameEngine(isLowRes);
 
 		clientHandlers = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class GameServer extends Thread {
 	/**
 	 * Entry point to server program.
 	 */
-	public static void main(String[] args) {
-		new GameServer();
+	public static void main(boolean isLowRes) {
+		new GameServer(isLowRes);
 	}
 }

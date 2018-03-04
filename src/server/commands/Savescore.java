@@ -1,12 +1,12 @@
 package server.commands;
 
 import java.io.*;
-import java.util.*;
+import java.util.Hashtable;
 
 import server.entities.Player;
 
 /**
- * Save p.getScore() to hashtable in score/top10 file, maps to secondWord.
+ * Save-player-state command.
  *
  * @author Jan Rasmussen
  * @version 2018-03-02
@@ -36,29 +36,19 @@ public class Savescore extends Command {
 
         if (secondWord != null) {
             try{
-            TreeMap<Integer, ArrayList<String>> top10 = null;
+            Hashtable top10 = null;
             try {
+                ;
                 FileInputStream fIS = new FileInputStream(new File("scores/top10"));
                 ObjectInputStream oIS = new ObjectInputStream(fIS);
-                top10 = (TreeMap) oIS.readObject();
+                top10 = (Hashtable) oIS.readObject();
             } catch (Exception e) {
             }
 
-            if (top10 == null) top10 = new TreeMap();
+            if (top10 == null) top10 = new Hashtable(10);
 
-            ArrayList<String> scoreHolders = top10.get(p.getScore());
-            if(scoreHolders == null) scoreHolders = new ArrayList<>();
-            scoreHolders.add(secondWord);
+            top10.put(secondWord.toString(), p.getScore());
 
-            top10.put(p.getScore(), scoreHolders);
-
-          /*
-            if (top10.get(p.getScore()) == null)  top10.put(p.getScore(), new ArrayList<String>());
-
-
-            List scoreadd = (ArrayList)top10.get(p.getScore());
-            scoreadd.add(secondWord);
-*/
             FileOutputStream fS = new FileOutputStream(new File("scores/top10"));
             ObjectOutputStream oS = new ObjectOutputStream(fS);
             oS.writeObject(top10);
