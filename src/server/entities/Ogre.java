@@ -13,7 +13,7 @@ public class Ogre extends Enemy {
 	/**
 	 * Constructor for Ogre.
 	 */
-	public Ogre() {
-		super("Ogre" + (++num), 20, 25, 70, "res/monsters/ogre.png");
+	public Ogre(String isLowRes) {
+		super("Ogre" + (++num), 20, 25, 70, "res/monsters/"+isLowRes+"ogre.png");
 	}
 }

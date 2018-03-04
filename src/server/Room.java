@@ -42,6 +42,9 @@ public class Room implements Serializable {
 	private ArrayList<Enemy> enemiesInRoom;
 	private ArrayList<Player> playersInRoom;
 	private ArrayList<Item> itemsInRoom;
+	
+	private String isLowRes = "low-res/"; 
+	private boolean lowRes; 
 
 	/**
 	 * Create a room described "description". Initially, it has no exits.
@@ -54,7 +57,7 @@ public class Room implements Serializable {
 	 * @param roomLevel
 	 *            The level this room belongs to.
 	 */
-	public Room(String description, String imageName, int roomLevel) {
+	public Room(String description, String imageName, int roomLevel, boolean isLowRes) {
 		this.description = description;
 		this.imageName = imageName;
 
@@ -62,9 +65,33 @@ public class Room implements Serializable {
 		enemiesInRoom = new ArrayList<Enemy>();
 		playersInRoom = new ArrayList<Player>();
 		itemsInRoom = new ArrayList<Item>();
+		
+		this.lowRes = true; 
+		if(isLowRes == false){
+			this.isLowRes = ""; 
+			this.lowRes = false; 
+		}
 
 		// Add some enemies and items to this room.
 		fillRoom(roomLevel);
+	}
+	
+	/**
+	 * Getter for the lowRes field
+	 * @return boolean
+	 */
+	
+	public boolean getResolution(){
+		return lowRes; 
+	}
+	
+	/**
+	 * Getter for the isLowRes field
+	 * @return String
+	 */
+	
+	public String getResolutionString(){
+		return isLowRes; 
 	}
 
 	/**
@@ -94,7 +121,7 @@ public class Room implements Serializable {
 		// needed
 		{
 			itemsInRoom.add(new Pie());
-			enemiesInRoom.add(new Boss());
+			enemiesInRoom.add(new Boss(isLowRes));
 		}
 
 		int zero_to_five = randomiser.nextInt(6); // random number between 0-5
@@ -106,7 +133,7 @@ public class Room implements Serializable {
 				int random = randomiser.nextInt(4); // random number between 0-3
 				if (random == 0) // 25% chance, add monster
 				{
-					enemiesInRoom.add(new Gremlin());
+					enemiesInRoom.add(new Gremlin(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item
@@ -115,7 +142,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 1) // 25% chance, add monster
 				{
-					enemiesInRoom.add(new Goblin());
+					enemiesInRoom.add(new Goblin(isLowRes));
 
 					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
 					// item
@@ -172,7 +199,7 @@ public class Room implements Serializable {
 				int random = randomiser.nextInt(5); // random number between 0-4
 				if (random == 0) // 20% chance, add monster
 				{
-					enemiesInRoom.add(new Gremlin());
+					enemiesInRoom.add(new Gremlin(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item
@@ -181,7 +208,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 1) // 20% chance, add monster
 				{
-					enemiesInRoom.add(new Goblin());
+					enemiesInRoom.add(new Goblin(isLowRes));
 
 					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
 					// item
@@ -190,7 +217,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 2) // 20% chance, add monster
 				{
-					enemiesInRoom.add(new Orc());
+					enemiesInRoom.add(new Orc(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item
@@ -251,7 +278,7 @@ public class Room implements Serializable {
 				int random = randomiser.nextInt(6); // random number between 0-5
 				if (random == 0) // 17% chance, add monster
 				{
-					enemiesInRoom.add(new Gremlin());
+					enemiesInRoom.add(new Gremlin(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item
@@ -260,7 +287,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 1) // 17% chance, add monster
 				{
-					enemiesInRoom.add(new Goblin());
+					enemiesInRoom.add(new Goblin(isLowRes));
 
 					if (randomiser.nextInt(5) == 0) // 20 % chance, bonus health
 					// item
@@ -269,7 +296,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 2) // 17% chance, add monster
 				{
-					enemiesInRoom.add(new Orc());
+					enemiesInRoom.add(new Orc(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item
@@ -278,7 +305,7 @@ public class Room implements Serializable {
 					}
 				} else if (random == 3) // 17% chance, add monster
 				{
-					enemiesInRoom.add(new Ogre());
+					enemiesInRoom.add(new Ogre(isLowRes));
 
 					if (randomiser.nextInt(4) == 0) // 25% chance, bonus health
 					// item

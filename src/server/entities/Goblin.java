@@ -13,7 +13,7 @@ public class Goblin extends Enemy {
 	/**
 	 * Constructor for Goblin.
 	 */
-	public Goblin() {
-		super("Goblin" + (++num), 7, 8, 20, "res/monsters/goblin.png");
+	public Goblin(String isLowRes) {
+		super("Goblin" + (++num), 7, 8, 20, "res/monsters/"+isLowRes+"goblin.png");
 	}
 }

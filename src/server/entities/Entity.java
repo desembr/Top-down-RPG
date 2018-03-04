@@ -134,12 +134,25 @@ public class Entity implements Serializable {
 		} else // only used if a monster is dead
 		{
 			String[] parts = iconFilePath.split("/");
-			String part1 = parts[0]; // res
-			// String part2 = parts[1]; // monsters
-			String part3 = parts[2]; // filename
-
-			String deadPath = part1 + "/dead/" + part3;
-
+			String deadPath; 
+			
+			if (parts.length > 3){ // low-res version
+				String part1 = parts[0]; // res
+				// String part2 = parts[1]; // monsters
+				String part3 = parts[2]; // low-res
+				String part4 = parts[3]; // filename
+				
+				deadPath = part1 + "/dead/" + part3 + "/" + part4;
+			}
+			else // high-res version
+			{
+				String part1 = parts[0]; // res
+				// String part2 = parts[1]; // monsters
+				String part3 = parts[2]; // filename
+				
+				deadPath = part1 + "/dead/" + part3;
+			}
+			
 			return deadPath;
 		}
 	}
