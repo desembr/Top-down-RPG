@@ -13,7 +13,7 @@ public class Orc extends Enemy {
 	/**
 	 * Constructor for Orc.
 	 */
-	public Orc() {
-		super("Orc" + (++num), 10, 15, 40, "res/monsters/orc.png");
+	public Orc(String isLowRes) {
+		super("Orc" + (++num), 10, 15, 40, "res/monsters/"+isLowRes+"orc.png");
 	}
 }
