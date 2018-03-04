@@ -28,8 +28,8 @@ public class Client extends Observable {
 
 	private Thread sendThread, recvThread;
 
-	private static final int serverPort = 44120;
-	private static final String serverAddress = "localhost";
+	private int serverPort = 44120;
+	private  String serverAddress = "localhost";
 
 	private ObjectInputStream recvStream;
 	private ObjectOutputStream sendStream;
@@ -69,6 +69,42 @@ public class Client extends Observable {
 			System.exit(1);
 		}
 		
+	}
+
+	/**
+	 * If you dont play on standard server(localhost)
+	 * @param serverIP
+	 * @param serverPort
+	 */
+	public Client(String serverIP, int serverPort) {
+		this.serverAddress = serverIP;
+		this.serverPort = serverPort;
+		sendThread = new Thread(this::send);
+		recvThread = new Thread(this::receive);
+		polledCommands = new ArrayList<>();
+
+		try {
+			clientSocket = new Socket(serverAddress, serverPort);
+			OutputStream os = clientSocket.getOutputStream();
+			os.flush();
+			sendStream = new ObjectOutputStream(os);
+			sendStream.flush();
+			InputStream is = clientSocket.getInputStream();
+			recvStream = new ObjectInputStream(is);
+		} catch (SocketException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		} catch (UnknownHostException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
+
 	}
 
 	/**

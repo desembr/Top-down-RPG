@@ -1,15 +1,9 @@
 package client;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,18 +14,9 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import server.GameServer;
 import server.Room;
 import server.entities.Enemy;
 import server.entities.Player;
@@ -82,7 +67,7 @@ public class UserInterface implements Observer {
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
 
-		createGUI();
+		createGUI(this.WIDTH);
 
 		printWelcome();
 
@@ -90,6 +75,144 @@ public class UserInterface implements Observer {
 		// if running multiple instances of GameClient locally (lags).
 		// SoundPlayer.background.playAudio();
 	}
+
+	public UserInterface(){
+		initMenu();
+	}
+
+	public static void main(String[] args){
+		new UserInterface();
+	}
+
+	public void initMenu(){
+		JPanel myPanel = new JPanel();
+		myPanel.setLayout(new BorderLayout(5, 5));
+
+		JPanel panelUno = new JPanel();
+		JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
+		JButton buttonN = new JButton("New Game");
+
+		panel.add(buttonN);
+
+		JButton button = new JButton("Load Game");
+		panel.add(button);
+
+		JButton button2 = new JButton("Highscore");
+		panel.add(button2);
+
+		JButton mpButton = new JButton("Join someones game");
+		panel.add(mpButton);
+
+		panelUno.add(panel);
+
+		JPanel buttonPanel = new JPanel();
+		JButton button3 = new JButton("Exit");
+		buttonPanel.add(button3);
+
+
+
+		myPanel.add(panelUno, BorderLayout.CENTER);
+		myPanel.add(buttonPanel, BorderLayout.PAGE_END);
+
+		myFrame = new JFrame("TOPDOWNRPG");
+		myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		myFrame.setBounds(0,0,WIDTH, HEIGHT);
+
+		JPanel centerPanel = new JPanel();
+		myFrame.getContentPane().setLayout(new BorderLayout(5, 5));
+		centerPanel.setBackground(Color.DARK_GRAY);
+		myFrame.add(centerPanel, BorderLayout.CENTER);
+
+		myFrame.add(myPanel, BorderLayout.LINE_END);
+
+		button.addActionListener(new ActionListener() {
+									 public void actionPerformed(ActionEvent e) {
+									 	String loads = "";
+										File folder = new File("saves");
+										File[] listOfFiles = folder.listFiles();
+										for(int i = 0; i < listOfFiles.length; i++) {
+											loads += "\n" + listOfFiles[i].getName();
+										}
+										 String loadgame = JOptionPane.showInputDialog(null, "Available loadfiles: " + loads + "\n\n Please enter name of file to load: ", "Load game", JOptionPane.PLAIN_MESSAGE);
+										 if (loadgame == null) {
+											 return;
+										 }
+										 int h = 0;
+										 int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
+										 if (laptopResolutionOrNot == 0) h = 720;
+										 else h = 1020;
+										 myFrame.getContentPane().removeAll();
+										 GameServer gs = new GameServer();
+										 client = new Client();
+										 setClient(client);
+										 client.addObserver(getThis());
+										 client.start();
+										 createGUI(h);
+										 entryField.setText("Load " + loadgame);
+										 processCommand();
+									 }
+								 });
+
+		mpButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				int h = 0;
+				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
+				if (laptopResolutionOrNot == 0) h = 720;
+				else h = 1020;
+
+				String serverIP = JOptionPane.showInputDialog(null, "Please enter server IP: ", "ServerIP Input", JOptionPane.PLAIN_MESSAGE);
+				if (serverIP == null) {
+					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				String serverPort = JOptionPane.showInputDialog(null, "Please enter server port: ", "Server port Input", JOptionPane.PLAIN_MESSAGE);
+				if (serverPort == null) {
+					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				System.out.println(serverIP + serverPort
+				);
+
+				if (serverIP.length() > 0 && serverPort.length() > 0){
+						myFrame.getContentPane().removeAll();
+						client = new Client(serverIP, Integer.parseInt(serverPort));
+						setClient(client);
+						client.addObserver(getThis());
+						client.start();
+						createGUI(h);
+				} else JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		buttonN.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				int h = 0;
+				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
+				if (laptopResolutionOrNot == 0) h = 720;
+					else h = 1020;
+				myFrame.getContentPane().removeAll();
+				GameServer gs = new GameServer();
+				client = new Client();
+				setClient(client);
+				client.addObserver(getThis());
+				client.start();
+				createGUI(h);
+			}
+		});
+		//frame.pack();
+		myFrame.setVisible(true);
+	}
+
+
+	private void setClient(Client c){
+		this.client = c;
+	}
+
+	private UserInterface getThis(){
+		return this;
+	}
+
 
 	/**
 	 * Forces the user to choose between two resolutions
@@ -287,8 +410,12 @@ public class UserInterface implements Observer {
 	/**
 	 * Set up graphical user interface.
 	 */
-	private void createGUI() {
-		myFrame = new JFrame("TOPDOWNRPG");
+	private void createGUI(int h) {
+		this.HEIGHT = h;
+		monsterSprites = new ArrayList<>();
+		shadows = new ArrayList<>();
+		cmdCache = new ArrayList<>();
+		//myFrame = new JFrame("TOPDOWNRPG");
 
 		entryField = new JTextField(34);
 
@@ -503,6 +630,7 @@ public class UserInterface implements Observer {
 			selectedCmd = cmdCache.size();
 		}
 	}
+
 
 	/**
 	 * Show the images for all objects contained in this client's player
