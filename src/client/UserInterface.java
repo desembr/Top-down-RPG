@@ -60,11 +60,13 @@ public class UserInterface implements Observer {
 
 		this.client = client;
 
+		//chooseResolution();
+
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
 
-		createGUI(800);
+		//createGUI(800); 
 
 		printWelcome();
 
@@ -161,10 +163,16 @@ public class UserInterface implements Observer {
 										 }
 										 int h = 0;
 										 int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
-										 if (laptopResolutionOrNot == 0) h = 720;
-										 else h = 1020;
+										 if (laptopResolutionOrNot == 0) {
+											 h = 720;
+											 isLowRes = true; 
+										 }
+										 else {
+											 h = 1020;
+											 isLowRes = false; 
+										 }
 										 myFrame.getContentPane().removeAll();
-										 GameServer gs = new GameServer();
+										 GameServer gs = new GameServer(isLowRes);
 										 client = new Client();
 										 setClient(client);
 										 client.addObserver(getThis());
@@ -179,8 +187,14 @@ public class UserInterface implements Observer {
 			public void actionPerformed(ActionEvent e) {
 				int h = 0;
 				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
-				if (laptopResolutionOrNot == 0) h = 720;
-				else h = 1020;
+				if (laptopResolutionOrNot == 0) {
+					h = 720;
+					isLowRes = true; 
+				}
+				else {
+					h = 1020;
+					isLowRes = false; 
+				}
 
 				String serverIP = JOptionPane.showInputDialog(null, "Please enter server IP: ", "ServerIP Input", JOptionPane.PLAIN_MESSAGE);
 				if (serverIP == null) {
@@ -210,10 +224,16 @@ public class UserInterface implements Observer {
 			public void actionPerformed(ActionEvent e){
 				int h = 0;
 				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
-				if (laptopResolutionOrNot == 0) h = 720;
-					else h = 1020;
+				if (laptopResolutionOrNot == 0) {
+					h = 720;
+					isLowRes = true; 
+				}
+					else {
+						h = 1020;
+						isLowRes = false; 
+					}
 				myFrame.getContentPane().removeAll();
-				GameServer gs = new GameServer();
+				GameServer gs = new GameServer(isLowRes);
 				client = new Client();
 				setClient(client);
 				client.addObserver(getThis());
@@ -233,6 +253,7 @@ public class UserInterface implements Observer {
 	private UserInterface getThis(){
 		return this;
 	}
+
 
 	/**
 	 * Print out some text into the text area.
@@ -333,11 +354,16 @@ public class UserInterface implements Observer {
 	 *            a List of enemies
 	 */
 	private void showShadows(List<Enemy> enemies) {
+		URL imageURL; 
 
 		for (int i = 0; i < 5; i++) {
 			if (i < enemies.size()) {
-
-				URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+				if (isLowRes){
+					imageURL = this.getClass().getClassLoader().getResource("res/misc/low-res/shadow3.png");
+				}
+				else{
+					imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+				}
 
 				if (imageURL == null)
 					System.out.println("image not found");
@@ -356,7 +382,12 @@ public class UserInterface implements Observer {
 		}
 		// add the player shadow last
 
-		URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+		if (isLowRes){
+			imageURL = this.getClass().getClassLoader().getResource("res/misc/low-res/shadow3.png");
+		}
+		else{
+			imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+		}
 
 		if (imageURL == null)
 			System.out.println("image not found");
@@ -407,26 +438,34 @@ public class UserInterface implements Observer {
 
 		// Create all entity labels
 		playerSprite = new JLabel();
-		playerSprite.setBounds(365, 400, 64, 64); // position, size
+		if (isLowRes == false){
+			playerSprite.setBounds(365, 400, 64, 64); // position, size
+		}
+		else{
+			playerSprite.setBounds(182, 200, 32, 32); // position, size
+		}
 
 		monster1 = new JLabel();
 		monster2 = new JLabel();
 		monster3 = new JLabel();
 		monster4 = new JLabel();
 		monster5 = new JLabel();
-
-		monster1.setBounds(133, 64, 128, 128);
-		monster2.setBounds(233, 64, 128, 128);
-		monster3.setBounds(333, 64, 128, 128);
-		monster4.setBounds(433, 64, 128, 128);
-		monster5.setBounds(533, 64, 128, 128);
-
-		monster1.setBounds(25, 64, 64, 64);
-		monster2.setBounds(50, 64, 64, 64);
-		monster3.setBounds(75, 64, 64, 64);
-		monster4.setBounds(100, 64, 64, 64);
-		monster5.setBounds(125, 64, 64, 64);
-
+		
+		if (isLowRes == false){
+			monster1.setBounds(133, 64, 128, 128);
+			monster2.setBounds(233, 64, 128, 128);
+			monster3.setBounds(333, 64, 128, 128);
+			monster4.setBounds(433, 64, 128, 128);
+			monster5.setBounds(533, 64, 128, 128);
+		}
+		else{
+			monster1.setBounds(66,  32, 64, 64);
+			monster2.setBounds(116, 32, 64, 64);
+			monster3.setBounds(166, 32, 64, 64);
+			monster4.setBounds(216, 32, 64, 64);
+			monster5.setBounds(266, 32, 64, 64);
+		}
+		
 		monsterSprites.add(monster1);
 		monsterSprites.add(monster2);
 		monsterSprites.add(monster3);
@@ -446,13 +485,23 @@ public class UserInterface implements Observer {
 		shadows.add(shadow4);
 		shadows.add(shadow5);
 		shadows.add(shadow6);
-
-		shadow1.setBounds(165, 128, 64, 64);
-		shadow2.setBounds(265, 128, 64, 64);
-		shadow3.setBounds(365, 128, 64, 64);
-		shadow4.setBounds(465, 128, 64, 64);
-		shadow5.setBounds(565, 128, 64, 64);
-		shadow6.setBounds(365, 428, 64, 64);
+		
+		if (isLowRes == false){
+			shadow1.setBounds(165, 128, 64, 64);
+			shadow2.setBounds(265, 128, 64, 64);
+			shadow3.setBounds(365, 128, 64, 64);
+			shadow4.setBounds(465, 128, 64, 64);
+			shadow5.setBounds(565, 128, 64, 64);
+			shadow6.setBounds(365, 428, 64, 64);
+		}
+		else{
+			shadow1.setBounds(82, 64, 32, 32);
+			shadow2.setBounds(132, 64, 32, 32);
+			shadow3.setBounds(182, 64, 32, 32);
+			shadow4.setBounds(232, 64, 32, 32);
+			shadow5.setBounds(282, 64, 32, 32);
+			shadow6.setBounds(182, 212, 32, 32);
+		}
 
 		panel.setLayout(new BorderLayout());
 		panel.add(image, BorderLayout.NORTH);
