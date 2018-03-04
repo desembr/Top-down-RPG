@@ -4,13 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -125,6 +124,30 @@ public class UserInterface implements Observer {
 		myFrame.add(centerPanel, BorderLayout.CENTER);
 
 		myFrame.add(myPanel, BorderLayout.LINE_END);
+
+		button2.addActionListener(new ActionListener() {
+                                      public void actionPerformed(ActionEvent e) {
+                                          TreeMap top10 = null;
+                                          String hs = "Top 10 highscores: ";
+                                          int i = 10;
+                                          try {
+                                              FileInputStream fIS = new FileInputStream("scores/top10");
+                                              ObjectInputStream oIS = new ObjectInputStream(fIS);
+                                              top10 = (TreeMap) oIS.readObject();
+                                          } catch (Exception eee) {
+                                              System.out.println(eee.toString());
+                                              return;
+                                          }
+                                          if (top10.size() < 10) i = top10.size();
+                                            for(int a = i-1; a > -1; a--){
+                                                hs += "\n" +top10.values().toArray()[a]  + "             " + top10.keySet().toArray()[a];
+                                            }
+                                          JOptionPane.showMessageDialog(null, hs);
+
+                                      }
+
+
+        });
 
 		button.addActionListener(new ActionListener() {
 									 public void actionPerformed(ActionEvent e) {
