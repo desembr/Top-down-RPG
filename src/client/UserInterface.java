@@ -67,7 +67,7 @@ public class UserInterface implements Observer {
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
 
-		createGUI(this.WIDTH);
+		createGUI(800);
 
 		printWelcome();
 
@@ -415,8 +415,7 @@ public class UserInterface implements Observer {
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
-		//myFrame = new JFrame("TOPDOWNRPG");
-
+		if (myFrame == null) myFrame = new JFrame("TOPDOWNRPG");
 		entryField = new JTextField(34);
 
 		log = new JTextArea();
