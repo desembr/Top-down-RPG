@@ -60,8 +60,6 @@ public class UserInterface implements Observer {
 
 		this.client = client;
 
-		chooseResolution();
-
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
@@ -234,50 +232,6 @@ public class UserInterface implements Observer {
 
 	private UserInterface getThis(){
 		return this;
-	}
-
-
-	/**
-	 * Forces the user to choose between two resolutions
-	 */
-
-	private void chooseResolution() {
-		Scanner userInput = new Scanner(System.in);
-
-		while (true) {
-
-			System.out.println(
-					"Press 1 for high-resolution desktop version or 2 for low resolution laptop version, then press enter\n");
-			System.out.println("Desktop computer recommended for this game\n");
-
-			int input = 0;
-
-			if (userInput.hasNextInt()) {
-				input = userInput.nextInt();
-
-			}
-
-			if (input == 1) {
-				this.HEIGHT = 1000;
-
-				userInput.close();
-				isLowRes = false;
-				break;
-			} else if (input == 2) {
-				this.HEIGHT = 720;
-
-				userInput.close();
-				isLowRes = true;
-				break;
-			} else {
-				System.out.print("That is not a valid choice, try again.\n\n");
-
-				userInput.next();
-
-			}
-
-		}
-
 	}
 
 	/**
