@@ -34,11 +34,10 @@ public class Client extends Observable {
 	private ObjectInputStream recvStream;
 	private ObjectOutputStream sendStream;
 
-	private List<String> polledCommands; // UserInterface places user input
-											// commands in here, for sending.
+	private List<String> polledCommands; // UserInterface places user input commands in here, for sending.
 
-	private int counter = 0; // Attempts to detect that the server has gone
-								// down.
+	private int counter = 0; // Attempts to detect that the server has gone down. 
+	
 
 	/**
 	 * Constructor for Client.
@@ -47,7 +46,7 @@ public class Client extends Observable {
 		sendThread = new Thread(this::send);
 		recvThread = new Thread(this::receive);
 		polledCommands = new ArrayList<>();
-
+		
 		try {
 			clientSocket = new Socket(serverAddress, serverPort);
 			OutputStream os = clientSocket.getOutputStream();
@@ -69,6 +68,7 @@ public class Client extends Observable {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
+		
 	}
 
 	/**
@@ -102,7 +102,6 @@ public class Client extends Observable {
 				sendCommand(nextCmd);
 			}
 		}
-		// If we get here, dispose of this Client.
 		synchronized (this) {
 			exit();
 		}
@@ -121,7 +120,6 @@ public class Client extends Observable {
 			// Wait for reply from server on a previous request.
 			receiveResponse();
 		}
-		// If we get here, dispose of this Client.
 		synchronized (this) {
 			exit();
 		}
@@ -167,7 +165,7 @@ public class Client extends Observable {
 			// Update UserInterface with the updated game state.
 			setChanged();
 			notifyObservers(p);
-
+			
 			resetErrorCounter();
 		} catch (EOFException e) {
 			incErrorCounter();
@@ -180,6 +178,7 @@ public class Client extends Observable {
 			System.err.println(e.getMessage());
 		}
 	}
+	
 
 	/**
 	 * Increments error-counter.
@@ -194,11 +193,11 @@ public class Client extends Observable {
 	private synchronized void resetErrorCounter() {
 		counter = 0;
 	}
-
+	
 	/**
 	 * Gets the number of errors (exceptions) in sequence currently. 3
-	 * exceptions in sequence indicates that the server has gone down, meaning
-	 * this Client should dispose itself.
+	 * exceptions in sequence indicates that the server has
+	 * gone down, meaning this Client should dispose itself.
 	 * 
 	 * @return The current amount of errors in sequence.
 	 */
@@ -221,4 +220,6 @@ public class Client extends Observable {
 			System.err.println(e.getMessage());
 		}
 	}
+	
+
 }

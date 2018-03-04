@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -43,14 +44,16 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private int WIDTH = 800, HEIGHT = 720;
+	private int WIDTH = 800, HEIGHT = 720; // Height satt till något dumt så att
+											// man lätt ser ifall setResolution
+											// inte funkar
 
 	private Client client;
 	private JFrame myFrame;
 	private JTextField entryField;
 	private JTextArea log;
-	private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3, shadow4, shadow5,
-			shadow6;
+	private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3,
+			shadow4, shadow5, shadow6;
 
 	private ArrayList<JLabel> monsterSprites;
 	private ArrayList<JLabel> shadows;
@@ -58,6 +61,8 @@ public class UserInterface implements Observer {
 
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
+
+	private boolean isLowRes;
 
 	/**
 	 * Construct a UserInterface. As a parameter, a Client object, with will
@@ -71,6 +76,8 @@ public class UserInterface implements Observer {
 
 		this.client = client;
 
+		chooseResolution();
+
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
@@ -82,6 +89,49 @@ public class UserInterface implements Observer {
 		// Background sounds playing repeatedly, don't play this
 		// if running multiple instances of GameClient locally (lags).
 		// SoundPlayer.background.playAudio();
+	}
+
+	/**
+	 * Forces the user to choose between two resolutions
+	 */
+
+	private void chooseResolution() {
+		Scanner userInput = new Scanner(System.in);
+
+		while (true) {
+
+			System.out.println(
+					"Press 1 for high-resolution desktop version or 2 for low resolution laptop version, then press enter\n");
+			System.out.println("Desktop computer recommended for this game\n");
+
+			int input = 0;
+
+			if (userInput.hasNextInt()) {
+				input = userInput.nextInt();
+
+			}
+
+			if (input == 1) {
+				this.HEIGHT = 1000;
+
+				userInput.close();
+				isLowRes = false;
+				break;
+			} else if (input == 2) {
+				this.HEIGHT = 720;
+
+				userInput.close();
+				isLowRes = true;
+				break;
+			} else {
+				System.out.print("That is not a valid choice, try again.\n\n");
+
+				userInput.next();
+
+			}
+
+		}
+
 	}
 
 	/**
@@ -183,9 +233,12 @@ public class UserInterface implements Observer {
 	 *            a List of enemies
 	 */
 	private void showShadows(List<Enemy> enemies) {
+
 		for (int i = 0; i < 5; i++) {
 			if (i < enemies.size()) {
+
 				URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+
 				if (imageURL == null)
 					System.out.println("image not found");
 				else {
@@ -202,7 +255,9 @@ public class UserInterface implements Observer {
 
 		}
 		// add the player shadow last
+
 		URL imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
+
 		if (imageURL == null)
 			System.out.println("image not found");
 		else {
@@ -262,6 +317,12 @@ public class UserInterface implements Observer {
 		monster3.setBounds(333, 64, 128, 128);
 		monster4.setBounds(433, 64, 128, 128);
 		monster5.setBounds(533, 64, 128, 128);
+
+		monster1.setBounds(25, 64, 64, 64);
+		monster2.setBounds(50, 64, 64, 64);
+		monster3.setBounds(75, 64, 64, 64);
+		monster4.setBounds(100, 64, 64, 64);
+		monster5.setBounds(125, 64, 64, 64);
 
 		monsterSprites.add(monster1);
 		monsterSprites.add(monster2);
@@ -352,10 +413,12 @@ public class UserInterface implements Observer {
 				}
 			}
 		});
-		// Add custom cursor and frame-icon
+
 		try {
-			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
-			BufferedImage cursor = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream("res/cursor.png"));
+			BufferedImage icon = ImageIO
+					.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
+			BufferedImage cursor = ImageIO
+					.read(UserInterface.class.getClassLoader().getResourceAsStream("res/cursor.png"));
 			Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(cursor, new Point(0, 0), "custom");
 			myFrame.setCursor(c);
 			myFrame.setIconImage(icon);
@@ -458,7 +521,7 @@ public class UserInterface implements Observer {
 	 */
 	private void printWelcome() {
 		println("Hello adventurer, your task is to \nexplore, fight and gather treasure.\n"
-				+ "Enter 'help' for commands.\nGoodluck!\nThere are two apples on the ground, try picking them up.");
+				+ "Enter 'help' for commands.\nGoodluck!\n\nThere are two apples on the ground, try picking them up.\n");
 
 	}
 
@@ -486,7 +549,7 @@ public class UserInterface implements Observer {
 	 */
 	public void update(Observable o, Object player) {
 		Player p = (Player) player;
-		// Player dead, exit game
+
 		if (p.getIsDead()) {
 
 			println("\nYour journey is at an end... death comes for you\n");
@@ -499,13 +562,26 @@ public class UserInterface implements Observer {
 
 			exitGame();
 		}
-		// Update JLabels
+
 		showRoom(p.getRoom());
 		showPlayer(p.getIconFilePath());
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
 
-		// Decide what to print/play depending on return message of command.
+		// kommenterade ut detta, bättre om vi bara tar vanlig long-description
+		// från rummet efter varje update
+		// det var irriterande när jag spelade det att man inte kunde se vad det
+		// fanns för saker i rummet utan
+		// att behöva skriva look hela tiden
+		/*
+		 * println("***************\n" + p.showInventory() + ", Health: " +
+		 * p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " +
+		 * p.getDefence() + ", Weight: " + p.getWeight() + "/" +
+		 * p.getMaxWeight());
+		 */
+
+		// Decide what to print/play depending on return message of command,
+		// which is optionally set by a command on the server on execution.
 		if (p.getCmdReturnMsg() != null) {
 			switch (p.getCmdReturnMsg()) {
 			case "server.commands.Go":
@@ -513,6 +589,7 @@ public class UserInterface implements Observer {
 				SoundPlayer.goRoom.playAudio();
 				break;
 			case "server.commands.Attack":
+				// println(p.getRoom().showEnemiesInRoom());
 				SoundPlayer.attackEnemy.playAudio();
 				break;
 			case "server.commands.Use":
@@ -529,8 +606,17 @@ public class UserInterface implements Observer {
 				break;
 			}
 		}
-		if (p.getPrintReturnMsg() != null) {
-			println(p.getPrintReturnMsg());
-		}
+
+		println("\n" + p.getRoom().getLongDescription() + "\n"); // gives long
+																	// description
+																	// of room
+																	// after
+																	// each
+																	// update
+
+		// lade till detta eftersom jag saknade det medans jag spelade
+		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: "
+				+ p.getDamage() + "\n");
+
 	}
 }
