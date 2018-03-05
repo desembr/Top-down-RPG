@@ -26,9 +26,10 @@ public class GameServer extends Thread {
 
 	/**
 	 * Create the game and initialize its internal map.
+	 * 
 	 */
-	public GameServer(boolean isLowRes) {
-		engine = new GameEngine(isLowRes);
+	public GameServer() {
+		engine = new GameEngine();
 
 		clientHandlers = new ArrayList<>();
 
@@ -56,7 +57,10 @@ public class GameServer extends Thread {
 				System.out.println("New client connected");
 				Player newPlayer = new Player(engine.getStartRoom());
 				engine.addPlayer(newPlayer);
-				clientHandlers.add(new ClientHandler(clientSocket, engine, newPlayer));
+
+				synchronized (clientHandlers) {
+					clientHandlers.add(new ClientHandler(clientSocket, engine, newPlayer));
+				}
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
 			}
@@ -85,11 +89,13 @@ public class GameServer extends Thread {
 			return null;
 
 		List<ClientHandler> res = new ArrayList<>();
-		for (ClientHandler ch : clientHandlers) {
-			synchronized (ch) {
-				Room r = ch.getPlayer().getRoom();
-				if (r == p.getRoom() || r == p.getPreviousRoom())
-					res.add(ch);
+		synchronized (clientHandlers) {
+			for (ClientHandler ch : clientHandlers) {
+				synchronized (ch) {
+					Room r = ch.getPlayer().getRoom();
+					if (r == p.getRoom() || r == p.getPreviousRoom())
+						res.add(ch);
+				}
 			}
 		}
 		return res;
@@ -107,9 +113,12 @@ public class GameServer extends Thread {
 	}
 
 	/**
-	 * Entry point to server program.
+	 * Entry point to server, can also be run from GameClient.
+	 * 
+	 * @param args
+	 *            The command-line arguments.
 	 */
-	public static void main(boolean isLowRes) {
-		new GameServer(isLowRes);
+	public static void main(String[] args) {
+		new GameServer();
 	}
 }

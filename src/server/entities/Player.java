@@ -38,8 +38,6 @@ public class Player extends Entity implements Serializable {
 	private boolean wearsArmArmor;
 
 	private int maxHealth;
-	
-	private boolean isLowRes; 
 
 	/**
 	 * Constructor for Player
@@ -48,13 +46,11 @@ public class Player extends Entity implements Serializable {
 	 *            The starting room.
 	 */
 	public Player(Room startRoom) {
-		
-		
-		super("Player" + (++num), 15, 32, 100, "res/player/"+startRoom.getResolutionString()+"player1_no_armor.png");
-		
-		isLowRes = startRoom.getResolution(); 
+
+		super("Player" + (++num), 15, 32, 100, "res/player/player1_no_armor.png");
+
 		this.currentRoom = startRoom;
-		
+
 		items = new ArrayList<>();
 		previousRooms = new ArrayList<>();
 		score = weight = 0;
@@ -93,8 +89,6 @@ public class Player extends Entity implements Serializable {
 					this.health = item.use(health, maxHealth);
 					weight -= item.getWeight();
 					items.remove(i);
-					setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + " and your weight is " + weight
-							+ "/" + maxWeight + "\n" + showInventory());
 					return true;
 				}
 			}
@@ -138,8 +132,6 @@ public class Player extends Entity implements Serializable {
 				weight -= item.getWeight();
 				currentRoom.addItem(item);
 				items.remove(i);
-				setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + ", your weight is " + weight + "/"
-						+ maxWeight + " and your max health is " + maxHealth + "\n" + showInventory());
 				return true;
 			}
 		}
@@ -280,11 +272,6 @@ public class Player extends Entity implements Serializable {
 		weight += item.getWeight();
 		items.add(item);
 
-		if (printReturnMsg == null) {
-			setPrintReturnMsg("Your attack is now " + damage + ", your defence is " + defence + ", your weight is " + weight + "/"
-					+ maxWeight + " and your max health is " + maxHealth + "\n" + showInventory());
-		}
-
 		return true;
 	}
 
@@ -296,66 +283,66 @@ public class Player extends Entity implements Serializable {
 		if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // only
 																													// arm
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_arms.png");
+			setIconFilePath("res/player/player1_arms.png");
 		} else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // leg
 																														// arm
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_arms_legs.png");
+			setIconFilePath("res/player/player1_arms_legs.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == false) // chest
 																														// only
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_chest.png");
+			setIconFilePath("res/player/player1_chest.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // chest
 																														// arm
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_chest_arm.png");
+			setIconFilePath("res/player/player1_chest_arm.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == true) // chest
 																														// leg
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_chest_arms_legs.png");
+			setIconFilePath("res/player/player1_chest_arms_legs.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest
 																														// +
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_chest_helm_leg.png");
+			setIconFilePath("res/player/player1_chest_helm_leg.png");
 		} else if (wearsHelmet == false && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == true) // chest
 																														// leg
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_chest_legs.png");
+			setIconFilePath("res/player/player1_chest_legs.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == true) // full
 																														// suit
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_full_armor.png");
+			setIconFilePath("res/player/player1_full_armor.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == false) // only
 																														// helmet
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm.png");
+			setIconFilePath("res/player/player1_helm.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == false) // helmet
 																														// +
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm_arms.png");
+			setIconFilePath("res/player/player1_helm_arms.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == true && wearsLegArmor == true) // helmet
 																														// +
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm_arms_legs.png");
+			setIconFilePath("res/player/player1_helm_arms_legs.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == false && wearsLegArmor == false) // helmet
 																														// chest
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm_chest.png");
+			setIconFilePath("res/player/player1_helm_chest.png");
 		} else if (wearsHelmet == true && wearsChestArmor == true && wearsArmArmor == true && wearsLegArmor == false) // helmet
 																														// arms
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm_chest_arms.png");
+			setIconFilePath("res/player/player1_helm_chest_arms.png");
 		} else if (wearsHelmet == true && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // helmet
 																														// legs
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_helm_legs.png");
+			setIconFilePath("res/player/player1_helm_legs.png");
 		} else if (wearsHelmet == false && wearsChestArmor == false && wearsArmArmor == false && wearsLegArmor == true) // legs
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_legs.png");
+			setIconFilePath("res/player/player1_legs.png");
 		} else // Wears nothing, update in case player dropped last piece of
 				// armor
 		{
-			setIconFilePath("res/player/"+currentRoom.getResolutionString()+"player1_no_armor.png");
+			setIconFilePath("res/player/player1_no_armor.png");
 		}
 
 	}
@@ -385,7 +372,6 @@ public class Player extends Entity implements Serializable {
 		currentRoom.removePlayer(this);
 		currentRoom = r;
 		currentRoom.addPlayer(this);
-		setPrintReturnMsg(currentRoom.getLongDescription());
 		return true;
 
 	}
@@ -408,7 +394,6 @@ public class Player extends Entity implements Serializable {
 			currentRoom.removePlayer(this);
 			currentRoom = r;
 			currentRoom.addPlayer(this);
-			setPrintReturnMsg(currentRoom.getLongDescription());
 			return true;
 		}
 		return false;

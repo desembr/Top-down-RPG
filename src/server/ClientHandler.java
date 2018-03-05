@@ -118,7 +118,7 @@ public class ClientHandler {
 						// update others.
 				setConcurrentStateChange(false);
 				// Room state has changed, print out updated info.
-				p.setPrintReturnMsg(p.getRoom().getLongDescription());
+				// p.setPrintReturnMsg(p.getRoom().getLongDescription());
 			}
 
 			setStateUpdated(false);

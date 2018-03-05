@@ -1,21 +1,46 @@
 package client;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
-import server.GameServer;
 import server.Room;
 import server.entities.Enemy;
 import server.entities.Player;
@@ -28,16 +53,14 @@ import server.entities.Player;
  * @version 2018-02-28
  */
 public class UserInterface implements Observer {
-	private int WIDTH = 800, HEIGHT = 720; // Height satt till något dumt så att
-											// man lätt ser ifall setResolution
-											// inte funkar
+	private int WIDTH = 800, HEIGHT = 720;
 
 	private Client client;
 	private JFrame myFrame;
 	private JTextField entryField;
 	private JTextArea log;
-	private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3,
-			shadow4, shadow5, shadow6;
+	private JLabel image, playerSprite, monster1, monster2, monster3, monster4, monster5, shadow1, shadow2, shadow3, shadow4, shadow5,
+			shadow6;
 
 	private ArrayList<JLabel> monsterSprites;
 	private ArrayList<JLabel> shadows;
@@ -46,61 +69,28 @@ public class UserInterface implements Observer {
 	// Used for scrolling through previous entered commands.
 	private int selectedCmd = 0;
 
-	private boolean isLowRes;
-
 	/**
-	 * Construct a UserInterface. As a parameter, a Client object, with will
-	 * handle all the communication with the server (sending commands and
-	 * receiving responses).
-	 * 
-	 * @param client
-	 *            The Client to handle all communication with server.
+	 * Construct a UserInterface.
 	 */
-	public UserInterface(Client client) {
-
-		this.client = client;
-
-		//chooseResolution();
-
-		monsterSprites = new ArrayList<>();
-		shadows = new ArrayList<>();
-		cmdCache = new ArrayList<>();
-
-		//createGUI(800); 
-
-		printWelcome();
-
-		// Background sounds playing repeatedly, don't play this
-		// if running multiple instances of GameClient locally (lags).
-		// SoundPlayer.background.playAudio();
-	}
-
-	public UserInterface(){
+	public UserInterface() {
 		initMenu();
 	}
 
-	public static void main(String[] args){
-		new UserInterface();
-	}
-
-	public void initMenu(){
+	/**
+	 * Create start-menu.
+	 */
+	public void initMenu() {
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BorderLayout(5, 5));
 
 		JPanel panelUno = new JPanel();
 		JPanel panel = new JPanel(new GridLayout(6, 1, 5, 5));
-		JButton buttonN = new JButton("New Game");
 
-		panel.add(buttonN);
-
-		JButton button = new JButton("Load Game");
-		panel.add(button);
+		JButton joinButton = new JButton("Join server");
+		panel.add(joinButton);
 
 		JButton button2 = new JButton("Highscore");
 		panel.add(button2);
-
-		JButton mpButton = new JButton("Join someones game");
-		panel.add(mpButton);
 
 		panelUno.add(panel);
 
@@ -108,15 +98,12 @@ public class UserInterface implements Observer {
 		JButton button3 = new JButton("Exit");
 		buttonPanel.add(button3);
 
-
-
 		myPanel.add(panelUno, BorderLayout.CENTER);
 		myPanel.add(buttonPanel, BorderLayout.PAGE_END);
 
 		myFrame = new JFrame("TOPDOWNRPG");
 		myFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		myFrame.setBounds(0,0,WIDTH, HEIGHT);
+		myFrame.setBounds(0, 0, WIDTH, HEIGHT);
 
 		JPanel centerPanel = new JPanel();
 		myFrame.getContentPane().setLayout(new BorderLayout(5, 5));
@@ -126,134 +113,124 @@ public class UserInterface implements Observer {
 		myFrame.add(myPanel, BorderLayout.LINE_END);
 
 		button2.addActionListener(new ActionListener() {
-                                      public void actionPerformed(ActionEvent e) {
-                                          TreeMap top10 = null;
-                                          String hs = "Top 10 highscores: ";
-                                          int i = 10;
-                                          try {
-                                              FileInputStream fIS = new FileInputStream("scores/top10");
-                                              ObjectInputStream oIS = new ObjectInputStream(fIS);
-                                              top10 = (TreeMap) oIS.readObject();
-                                          } catch (Exception eee) {
-                                              System.out.println(eee.toString());
-                                              return;
-                                          }
-                                          if (top10.size() < 10) i = top10.size();
-                                            for(int a = i-1; a > -1; a--){
-                                                hs += "\n" +top10.values().toArray()[a]  + "             " + top10.keySet().toArray()[a];
-                                            }
-                                          JOptionPane.showMessageDialog(null, hs);
+			@SuppressWarnings({ "resource", "rawtypes" })
+			public void actionPerformed(ActionEvent e) {
+				final String scoresFilePath = "scores/";
+				File scoresFolder = new File(scoresFilePath);
+				// Create if not exists.
+				if (!scoresFolder.exists()) {
+					scoresFolder.mkdir();
+				}
 
-                                      }
+				TreeMap top10 = null;
+				String hs = "Top 10 highscores: ";
+				int i = 10;
+				try {
+					File scoresFile = new File(scoresFolder + "/top10");
+					// Create if not exists.
+					if (!scoresFile.exists()) {
+						scoresFile.createNewFile();
+					}
 
+					FileInputStream fIS = new FileInputStream(scoresFile.getPath());
+					ObjectInputStream oIS = new ObjectInputStream(fIS);
+					top10 = (TreeMap) oIS.readObject();
+				} catch (Exception eee) {
+					System.out.println(eee.toString());
+					return;
+				}
+				if (top10.size() < 10)
+					i = top10.size();
+				for (int a = i - 1; a > -1; a--) {
+					hs += "\n" + top10.values().toArray()[a] + "             " + top10.keySet().toArray()[a];
+				}
+				JOptionPane.showMessageDialog(null, hs);
 
-        });
+			}
 
-		button.addActionListener(new ActionListener() {
-									 public void actionPerformed(ActionEvent e) {
-									 	String loads = "";
-										File folder = new File("saves");
-										File[] listOfFiles = folder.listFiles();
-										for(int i = 0; i < listOfFiles.length; i++) {
-											loads += "\n" + listOfFiles[i].getName();
-										}
-										 String loadgame = JOptionPane.showInputDialog(null, "Available loadfiles: " + loads + "\n\n Please enter name of file to load: ", "Load game", JOptionPane.PLAIN_MESSAGE);
-										 if (loadgame == null) {
-											 return;
-										 }
-										 int h = 0;
-										 int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
-										 if (laptopResolutionOrNot == 0) {
-											 h = 720;
-											 isLowRes = true; 
-										 }
-										 else {
-											 h = 1020;
-											 isLowRes = false; 
-										 }
-										 myFrame.getContentPane().removeAll();
-										 GameServer gs = new GameServer(isLowRes);
-										 client = new Client();
-										 setClient(client);
-										 client.addObserver(getThis());
-										 client.start();
-										 createGUI(h);
-										 entryField.setText("Load " + loadgame);
-										 processCommand();
-									 }
-								 });
+		});
 
-		mpButton.addActionListener(new ActionListener(){
+		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		myFrame.setLocation((int) d.getWidth() / 2 - WIDTH / 2, 0);
+
+		// Create custom cursor and frame-icon.
+		try {
+			BufferedImage icon = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
+			BufferedImage cursor = ImageIO.read(UserInterface.class.getClassLoader().getResourceAsStream("res/cursor.png"));
+			Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(cursor, new Point(0, 0), "custom");
+			myFrame.setCursor(c);
+			myFrame.setIconImage(icon);
+		} catch (IOException ee) {
+			ee.printStackTrace();
+		}
+
+		joinButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int h = 0;
-				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
+				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)",
+						"Resolution", JOptionPane.YES_NO_OPTION);
 				if (laptopResolutionOrNot == 0) {
 					h = 720;
-					isLowRes = true; 
-				}
-				else {
+				} else {
 					h = 1020;
-					isLowRes = false; 
 				}
 
-				String serverIP = JOptionPane.showInputDialog(null, "Please enter server IP: ", "ServerIP Input", JOptionPane.PLAIN_MESSAGE);
+				String serverIP = JOptionPane.showInputDialog(null, "Please enter server IP: ", "ServerIP Input",
+						JOptionPane.PLAIN_MESSAGE);
 				if (serverIP == null) {
-					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				String serverPort = JOptionPane.showInputDialog(null, "Please enter server port: ", "Server port Input", JOptionPane.PLAIN_MESSAGE);
+				String serverPort = JOptionPane.showInputDialog(null, "Please enter server port: ", "Server port Input",
+						JOptionPane.PLAIN_MESSAGE);
 				if (serverPort == null) {
-					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING",
+							JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				System.out.println(serverIP + serverPort
-				);
+				System.out.println(serverIP + serverPort);
 
-				if (serverIP.length() > 0 && serverPort.length() > 0){
-						myFrame.getContentPane().removeAll();
-						client = new Client(serverIP, Integer.parseInt(serverPort));
-						setClient(client);
-						client.addObserver(getThis());
-						client.start();
-						createGUI(h);
-				} else JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING", JOptionPane.ERROR_MESSAGE);
+				if (serverIP.length() > 0 && serverPort.length() > 0) {
+					myFrame.getContentPane().removeAll();
+					client = new Client(serverIP, Integer.parseInt(serverPort));
+					setClient(client);
+					client.addObserver(getThis());
+					client.start();
+					createGUI(h);
+				} else
+					JOptionPane.showMessageDialog(null, "Did you really input values? Please check again.", "WARNING",
+							JOptionPane.ERROR_MESSAGE);
 			}
 		});
 
-		buttonN.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				int h = 0;
-				int laptopResolutionOrNot = JOptionPane.showConfirmDialog(null, "Are you on a laptop? (For resolution purposes)", "Resolution", JOptionPane.YES_NO_OPTION);
-				if (laptopResolutionOrNot == 0) {
-					h = 720;
-					isLowRes = true; 
-				}
-					else {
-						h = 1020;
-						isLowRes = false; 
-					}
-				myFrame.getContentPane().removeAll();
-				GameServer gs = new GameServer(isLowRes);
-				client = new Client();
-				setClient(client);
-				client.addObserver(getThis());
-				client.start();
-				createGUI(h);
+		button3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
 			}
 		});
-		//frame.pack();
+
 		myFrame.setVisible(true);
 	}
 
-
-	private void setClient(Client c){
+	/**
+	 * Sets the client object of this GUI.
+	 * 
+	 * @param c
+	 *            The client.
+	 */
+	private void setClient(Client c) {
 		this.client = c;
 	}
 
-	private UserInterface getThis(){
+	/**
+	 * Gets this GUI.
+	 * 
+	 * @return This GUI.
+	 */
+	private UserInterface getThis() {
 		return this;
 	}
-
 
 	/**
 	 * Print out some text into the text area.
@@ -289,10 +266,9 @@ public class UserInterface implements Observer {
 			URL imageURL = this.getClass().getClassLoader().getResource(imageName);
 
 			if (imageURL == null) {
-				// System.out.println("image not found"); // debug
+				System.out.println("image not found"); // debug
 
-				// System.out.println("Working Directory = " +
-				// System.getProperty("user.dir")); // debug
+				System.out.println("Working Directory = " + System.getProperty("user.dir")); // debug
 			} else {
 				ImageIcon icon = new ImageIcon(imageURL);
 				image.setIcon(icon);
@@ -354,16 +330,11 @@ public class UserInterface implements Observer {
 	 *            a List of enemies
 	 */
 	private void showShadows(List<Enemy> enemies) {
-		URL imageURL; 
+		URL imageURL;
 
 		for (int i = 0; i < 5; i++) {
 			if (i < enemies.size()) {
-				if (isLowRes){
-					imageURL = this.getClass().getClassLoader().getResource("res/misc/low-res/shadow3.png");
-				}
-				else{
-					imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
-				}
+				imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
 
 				if (imageURL == null)
 					System.out.println("image not found");
@@ -381,13 +352,7 @@ public class UserInterface implements Observer {
 
 		}
 		// add the player shadow last
-
-		if (isLowRes){
-			imageURL = this.getClass().getClassLoader().getResource("res/misc/low-res/shadow3.png");
-		}
-		else{
-			imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
-		}
+		imageURL = this.getClass().getClassLoader().getResource("res/misc/shadow3.png");
 
 		if (imageURL == null)
 			System.out.println("image not found");
@@ -423,7 +388,8 @@ public class UserInterface implements Observer {
 		monsterSprites = new ArrayList<>();
 		shadows = new ArrayList<>();
 		cmdCache = new ArrayList<>();
-		if (myFrame == null) myFrame = new JFrame("TOPDOWNRPG");
+		if (myFrame == null)
+			myFrame = new JFrame("TOPDOWNRPG");
 		entryField = new JTextField(34);
 
 		log = new JTextArea();
@@ -438,34 +404,20 @@ public class UserInterface implements Observer {
 
 		// Create all entity labels
 		playerSprite = new JLabel();
-		if (isLowRes == false){
-			playerSprite.setBounds(365, 400, 64, 64); // position, size
-		}
-		else{
-			playerSprite.setBounds(182, 200, 32, 32); // position, size
-		}
+		playerSprite.setBounds(365, 400, 64, 64); // position, size
 
 		monster1 = new JLabel();
 		monster2 = new JLabel();
 		monster3 = new JLabel();
 		monster4 = new JLabel();
 		monster5 = new JLabel();
-		
-		if (isLowRes == false){
-			monster1.setBounds(133, 64, 128, 128);
-			monster2.setBounds(233, 64, 128, 128);
-			monster3.setBounds(333, 64, 128, 128);
-			monster4.setBounds(433, 64, 128, 128);
-			monster5.setBounds(533, 64, 128, 128);
-		}
-		else{
-			monster1.setBounds(66,  32, 64, 64);
-			monster2.setBounds(116, 32, 64, 64);
-			monster3.setBounds(166, 32, 64, 64);
-			monster4.setBounds(216, 32, 64, 64);
-			monster5.setBounds(266, 32, 64, 64);
-		}
-		
+
+		monster1.setBounds(133, 64, 128, 128);
+		monster2.setBounds(233, 64, 128, 128);
+		monster3.setBounds(333, 64, 128, 128);
+		monster4.setBounds(433, 64, 128, 128);
+		monster5.setBounds(533, 64, 128, 128);
+
 		monsterSprites.add(monster1);
 		monsterSprites.add(monster2);
 		monsterSprites.add(monster3);
@@ -485,23 +437,13 @@ public class UserInterface implements Observer {
 		shadows.add(shadow4);
 		shadows.add(shadow5);
 		shadows.add(shadow6);
-		
-		if (isLowRes == false){
-			shadow1.setBounds(165, 128, 64, 64);
-			shadow2.setBounds(265, 128, 64, 64);
-			shadow3.setBounds(365, 128, 64, 64);
-			shadow4.setBounds(465, 128, 64, 64);
-			shadow5.setBounds(565, 128, 64, 64);
-			shadow6.setBounds(365, 428, 64, 64);
-		}
-		else{
-			shadow1.setBounds(82, 64, 32, 32);
-			shadow2.setBounds(132, 64, 32, 32);
-			shadow3.setBounds(182, 64, 32, 32);
-			shadow4.setBounds(232, 64, 32, 32);
-			shadow5.setBounds(282, 64, 32, 32);
-			shadow6.setBounds(182, 212, 32, 32);
-		}
+
+		shadow1.setBounds(165, 128, 64, 64);
+		shadow2.setBounds(265, 128, 64, 64);
+		shadow3.setBounds(365, 128, 64, 64);
+		shadow4.setBounds(465, 128, 64, 64);
+		shadow5.setBounds(565, 128, 64, 64);
+		shadow6.setBounds(365, 428, 64, 64);
 
 		panel.setLayout(new BorderLayout());
 		panel.add(image, BorderLayout.NORTH);
@@ -529,7 +471,7 @@ public class UserInterface implements Observer {
 		// add some event listeners to some components
 		myFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				// Update other clients about this client's disconnection.
+				// Disconnect from server.
 				entryField.setText("Exit");
 				processCommand();
 			}
@@ -566,22 +508,10 @@ public class UserInterface implements Observer {
 			}
 		});
 
-		try {
-			BufferedImage icon = ImageIO
-					.read(UserInterface.class.getClassLoader().getResourceAsStream(("res/icon.png")));
-			BufferedImage cursor = ImageIO
-					.read(UserInterface.class.getClassLoader().getResourceAsStream("res/cursor.png"));
-			Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(cursor, new Point(0, 0), "custom");
-			myFrame.setCursor(c);
-			myFrame.setIconImage(icon);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		// Create the MenuBar.
 		makeMenuBar();
 
-		myFrame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		myFrame.setPreferredSize(new Dimension(WIDTH, h));
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		myFrame.setLocation((int) d.getWidth() / 2 - WIDTH / 2, 0);
@@ -589,6 +519,8 @@ public class UserInterface implements Observer {
 		myFrame.pack();
 		entryField.requestFocus();
 		myFrame.setVisible(true);
+
+		printWelcome();
 	}
 
 	/**
@@ -656,7 +588,6 @@ public class UserInterface implements Observer {
 		}
 	}
 
-
 	/**
 	 * Show the images for all objects contained in this client's player
 	 * object's current room.
@@ -683,8 +614,10 @@ public class UserInterface implements Observer {
 	 */
 	private void exitGame() {
 		println("Goodbye...");
-		synchronized (client) {
-			client.exit();
+		if (client != null) {
+			synchronized (client) {
+				client.exit();
+			}
 		}
 		System.exit(0);
 	}
@@ -721,20 +654,7 @@ public class UserInterface implements Observer {
 		showEnemies(p.getRoom().getEnemies());
 		showShadows(p.getRoom().getEnemies());
 
-		// kommenterade ut detta, bättre om vi bara tar vanlig long-description
-		// från rummet efter varje update
-		// det var irriterande när jag spelade det att man inte kunde se vad det
-		// fanns för saker i rummet utan
-		// att behöva skriva look hela tiden
-		/*
-		 * println("***************\n" + p.showInventory() + ", Health: " +
-		 * p.getHealth() + ", Damage: " + p.getDamage() + ", Defence: " +
-		 * p.getDefence() + ", Weight: " + p.getWeight() + "/" +
-		 * p.getMaxWeight());
-		 */
-
-		// Decide what to print/play depending on return message of command,
-		// which is optionally set by a command on the server on execution.
+		// Decide what to print/play depending on return message of command.
 		if (p.getCmdReturnMsg() != null) {
 			switch (p.getCmdReturnMsg()) {
 			case "server.commands.Go":
@@ -742,7 +662,6 @@ public class UserInterface implements Observer {
 				SoundPlayer.goRoom.playAudio();
 				break;
 			case "server.commands.Attack":
-				// println(p.getRoom().showEnemiesInRoom());
 				SoundPlayer.attackEnemy.playAudio();
 				break;
 			case "server.commands.Use":
@@ -760,6 +679,10 @@ public class UserInterface implements Observer {
 			}
 		}
 
+		if (p.getPrintReturnMsg() != null) {
+			println(p.getPrintReturnMsg());
+		}
+
 		println("\n" + p.getRoom().getLongDescription() + "\n"); // gives long
 																	// description
 																	// of room
@@ -767,9 +690,8 @@ public class UserInterface implements Observer {
 																	// each
 																	// update
 
-		// lade till detta eftersom jag saknade det medans jag spelade
-		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: "
-				+ p.getDamage() + "\n");
+		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage()
+				+ ", your weight: " + p.getWeight() + "/" + p.getMaxWeight() + " and your score: " + p.getScore() + "\n");
 
 	}
 }

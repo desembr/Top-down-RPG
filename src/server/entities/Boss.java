@@ -13,10 +13,7 @@ public class Boss extends Enemy {
 	/**
 	 * Constructor for Boss.
 	 */
-	public Boss(String isLowRes) {
-		
-		
-		
-		super("Boss" + (++num), 50, 50, 200, "res/monsters/"+isLowRes+"boss_stage_1.png");
+	public Boss() {
+		super("Boss" + (++num), 50, 50, 200, "res/monsters/boss_stage_1.png");
 	}
 }
