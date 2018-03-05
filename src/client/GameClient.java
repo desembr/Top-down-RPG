@@ -7,12 +7,14 @@ package client;
  * @version 2018-02-26
  */
 public class GameClient {
+	@SuppressWarnings("unused")
+	private UserInterface gui;
 
 	/**
 	 * Constructor of this class.
 	 */
 	public GameClient() {
-		new UserInterface();
+		gui = new UserInterface();
 	}
 
 	/**

@@ -4,10 +4,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>168</x>
-      <y>144</y>
+      <x>16</x>
+      <y>80</y>
       <w>248</w>
-      <h>432</h>
+      <h>440</h>
     </coordinates>
     <panel_attributes>UserInterface:Observer
 --
@@ -25,7 +25,10 @@ shadow2,shadow3,shadow4,shadow6:JLabel
 -cmdCache:ArrayList&lt;String&gt;
 -selectedCmd:String
 --
-+UserInterface(client:Client):UserInterface
++UserInterface():UserInterface
+-initMenu():void
+-setClient(c:Client):void
+-getThis():UserInterface
 -print(text:String):void
 -println(text:String):void
 -enable(on:boolean):void
@@ -49,29 +52,27 @@ handles user input and updates of gui.</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>520</x>
-      <y>184</y>
+      <x>368</x>
+      <y>120</y>
       <w>216</w>
       <h>136</h>
     </coordinates>
     <panel_attributes>GameClient
 --
--gui:UserInterface
--client:Client
 --
 +GameClient():GameClient
 +main(arg:String[]):static void
 --
 Responsibilities
 -- Main class on the client-side, which
-creates core objects and stores state.</panel_attributes>
+creates the GUI, and kicks it off.</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>824</x>
-      <y>192</y>
+      <x>672</x>
+      <y>128</y>
       <w>216</w>
       <h>304</h>
     </coordinates>
@@ -105,8 +106,8 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>232</y>
+      <x>256</x>
+      <y>168</y>
       <w>128</w>
       <h>32</h>
     </coordinates>
@@ -118,34 +119,21 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>728</x>
-      <y>240</y>
-      <w>112</w>
+      <x>256</x>
+      <y>288</y>
+      <w>432</w>
       <h>32</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=1</panel_attributes>
-    <additional_attributes>10.0;10.0;120.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>408</x>
-      <y>368</y>
-      <w>432</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=1
-m2=1</panel_attributes>
-    <additional_attributes>520.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>520</x>
-      <y>472</y>
+      <x>368</x>
+      <y>408</y>
       <w>232</w>
       <h>184</h>
     </coordinates>
@@ -170,8 +158,8 @@ Responsibilities
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>488</y>
+      <x>256</x>
+      <y>424</y>
       <w>128</w>
       <h>32</h>
     </coordinates>
@@ -183,8 +171,8 @@ m2=1</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>576</x>
-      <y>80</y>
+      <x>424</x>
+      <y>16</y>
       <w>112</w>
       <h>56</h>
     </coordinates>

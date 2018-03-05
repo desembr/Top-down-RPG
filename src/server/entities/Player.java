@@ -457,13 +457,13 @@ public class Player extends Entity implements Serializable {
 	 */
 	public String showInventory() {
 		String ret = "";
-		ret += "Items currently in your inventory: ";
+		ret += "Your inventory: ";
 		if (items.size() > 0) {
 			for (Item i : items) {
 				ret += i.getName() + " ";
 			}
 		} else
-			ret += "None";
+			ret += "Empty";
 
 		return ret;
 	}

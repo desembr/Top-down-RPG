@@ -79,7 +79,7 @@ public class UserInterface implements Observer {
 	/**
 	 * Create start-menu.
 	 */
-	public void initMenu() {
+	private void initMenu() {
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BorderLayout(5, 5));
 
@@ -115,8 +115,7 @@ public class UserInterface implements Observer {
 		button2.addActionListener(new ActionListener() {
 			@SuppressWarnings({ "resource", "rawtypes" })
 			public void actionPerformed(ActionEvent e) {
-				final String scoresFilePath = "scores/";
-				File scoresFolder = new File(scoresFilePath);
+				File scoresFolder = new File("scores");
 				// Create if not exists.
 				if (!scoresFolder.exists()) {
 					scoresFolder.mkdir();
@@ -126,13 +125,13 @@ public class UserInterface implements Observer {
 				String hs = "Top 10 highscores: ";
 				int i = 10;
 				try {
-					File scoresFile = new File(scoresFolder + "/top10");
+					File scoresFile = new File("scores/top10");
 					// Create if not exists.
 					if (!scoresFile.exists()) {
 						scoresFile.createNewFile();
 					}
 
-					FileInputStream fIS = new FileInputStream(scoresFile.getPath());
+					FileInputStream fIS = new FileInputStream("scores/top10");
 					ObjectInputStream oIS = new ObjectInputStream(fIS);
 					top10 = (TreeMap) oIS.readObject();
 				} catch (Exception eee) {
@@ -513,8 +512,6 @@ public class UserInterface implements Observer {
 
 		myFrame.setPreferredSize(new Dimension(WIDTH, h));
 		myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		myFrame.setLocation((int) d.getWidth() / 2 - WIDTH / 2, 0);
 		myFrame.setResizable(false);
 		myFrame.pack();
 		entryField.requestFocus();
@@ -690,6 +687,7 @@ public class UserInterface implements Observer {
 																	// each
 																	// update
 
+		println(p.showInventory());
 		println("Your health: " + p.getHealth() + ", your defence: " + p.getDefence() + " ,your attack-rating: " + p.getDamage()
 				+ ", your weight: " + p.getWeight() + "/" + p.getMaxWeight() + " and your score: " + p.getScore() + "\n");
 

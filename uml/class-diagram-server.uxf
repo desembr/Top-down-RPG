@@ -316,9 +316,9 @@ used (consumed) for health.</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>1057</x>
-      <y>301</y>
+      <y>259</y>
       <w>210</w>
-      <h>371</h>
+      <h>399</h>
     </coordinates>
     <panel_attributes>Player:Serializable
 --
@@ -328,7 +328,7 @@ used (consumed) for health.</panel_attributes>
 -currentRoom:Room
 -items:List&lt;Item&gt;
 -previousRooms:List&lt;Room&gt;
--cmdReturnMsg, attackReturnMsg:String
+-cmdReturnMsg, printReturnMsg:String
 -serialVersionUID:static final long
 -wearsHelmet,wearsChestArmor,wearsLegArmor,
 wearsArmArmor:boolean
@@ -348,8 +348,8 @@ wearsArmArmor:boolean
 +getMaxWeight():int
 +getCmdReturnString():String
 +setCmdReturnString(s:String):void
-+getAttackReturnString():String
-+setAttackReturnString(s:String):void
++getPrintReturnString():String
++setPrintReturnString(s:String):void
 +getPreviousRoom():Room
 +loadPlayer(p:Player):boolean
 +showInventory():String
@@ -376,14 +376,14 @@ Responsibilities
     <id>Relation</id>
     <coordinates>
       <x>1064</x>
-      <y>665</y>
+      <y>651</y>
       <w>21</w>
-      <h>63</h>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -1408,5 +1408,34 @@ m2=*</panel_attributes>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>7</y>
+      <w>189</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Savescore
+--
+--
++Savescore():Savescore
++execute(p:Player):boolean
+--
+Responsibilities
+-- Save-player-score command.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>392</x>
+      <y>84</y>
+      <w>98</w>
+      <h>245</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>120.0;330.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -32,13 +32,19 @@ public class Savescore extends Command {
 		p.setCmdReturnMsg("Saving score: " + p.getScore());
 
 		// To make the runnable jar files work.
-		File savesDir = new File("scores");
-		if (!savesDir.exists()) {
-			savesDir.mkdir();
+		File scoresDir = new File("scores");
+		if (!scoresDir.exists()) {
+			scoresDir.mkdir();
 		}
 
 		if (secondWord != null) {
 			try {
+				File scoresFile = new File("scores/top10");
+				// Create if not exists.
+				if (!scoresFile.exists()) {
+					scoresFile.createNewFile();
+				}
+				
 				TreeMap<Integer, ArrayList<String>> top10 = null;
 				try {
 					FileInputStream fIS = new FileInputStream(new File("scores/top10"));
